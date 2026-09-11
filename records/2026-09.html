@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年9月 训练记录</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+:root {
+  --bg: #0a0e14;
+  --bg-card: #12171f;
+  --bg-card-hover: #181e28;
+  --border: #1e2a3a;
+  --text: #e4e8ee;
+  --text-secondary: #8899aa;
+  --text-muted: #556677;
+  --accent: #ff6b35;
+  --accent-glow: rgba(255,107,53,0.3);
+  --green: #00c896;
+  --green-glow: rgba(0,200,150,0.25);
+  --blue: #3b9eff;
+  --blue-glow: rgba(59,158,255,0.25);
+  --yellow: #ffb627;
+  --yellow-glow: rgba(255,182,39,0.25);
+  --purple: #a277ff;
+  --purple-glow: rgba(162,119,255,0.25);
+  --red: #ff5c72;
+  --red-glow: rgba(255,92,114,0.25);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,107,53,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(59,158,255,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 20% 60%, rgba(0,200,150,0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Back link */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  transition: all var(--transition);
+  margin-bottom: 24px;
+}
+.back-link:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+}
+
+/* Header */
+.header {
+  padding: 36px 0 28px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.header h1 {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+.header .sub {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Section */
+.section {
+  margin-bottom: 40px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.section-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.section-header .icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Card */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: all var(--transition);
+}
+.card:hover {
+  background: var(--bg-card-hover);
+}
+.card-header {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Table */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead th {
+  background: rgba(255,255,255,0.02);
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 9px 14px;
+  border-bottom: 1px solid rgba(30,42,58,0.5);
+  color: var(--text-secondary);
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(255,255,255,0.01); color: var(--text); }
+td strong { color: var(--text); font-weight: 600; }
+
+/* Calendar */
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.calendar-nav-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+.calendar-nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+.calendar-nav-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.calendar-nav-btn:hover:not(:disabled) {
+  background: var(--bg-card-hover);
+  color: var(--text);
+  border-color: rgba(255,255,255,0.15);
+}
+.calendar-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+.calendar-header-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.calendar-header-row span {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 0;
+}
+.calendar-day {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px solid transparent;
+  transition: all var(--transition);
+  cursor: default;
+  position: relative;
+  min-height: 68px;
+  gap: 3px;
+  text-decoration: none;
+}
+.calendar-day.empty {
+  background: transparent;
+  border: none;
+  color: transparent;
+  min-height: 0;
+}
+.calendar-day.trained {
+  background: linear-gradient(135deg, rgba(255,107,53,0.12), rgba(255,107,53,0.04));
+  border-color: rgba(255,107,53,0.3);
+  color: var(--accent);
+  box-shadow: 0 2px 8px rgba(255,107,53,0.08);
+  cursor: pointer;
+}
+.calendar-day.trained:hover {
+  background: linear-gradient(135deg, rgba(255,107,53,0.22), rgba(255,107,53,0.1));
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+.calendar-day.trained .day-num { color: var(--accent); }
+.calendar-day .day-num {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+.calendar-day .day-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--accent);
+  text-align: center;
+  line-height: 1.2;
+  white-space: normal;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.calendar-day.trained.multi .day-label {
+  font-size: 9px;
+}
+
+/* Training tags */
+.training-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.tag-strength { background: rgba(255,107,53,0.15); color: var(--accent); }
+.tag-power { background: rgba(255,182,39,0.15); color: var(--yellow); }
+.tag-speed { background: rgba(59,158,255,0.15); color: var(--blue); }
+.tag-cardio { background: rgba(0,200,150,0.15); color: var(--green); }
+.tag-bball { background: rgba(162,119,255,0.15); color: var(--purple); }
+.tag-status {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.training-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+/* Detail section title */
+.detail-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 18px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.detail-section-title:first-child { margin-top: 0; }
+
+/* Score Grid */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+}
+.score-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+}
+.score-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.score-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  margin: 0 auto 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  position: relative;
+}
+.score-circle.high {
+  background: rgba(0,200,150,0.1);
+  color: var(--green);
+  border: 2px solid rgba(0,200,150,0.3);
+}
+.score-circle.mid {
+  background: rgba(255,182,39,0.1);
+  color: var(--yellow);
+  border: 2px solid rgba(255,182,39,0.3);
+}
+.score-circle.low {
+  background: rgba(255,92,114,0.1);
+  color: var(--red);
+  border: 2px solid rgba(255,92,114,0.3);
+}
+.score-note {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Improvement */
+.improvement-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.improvement-list li {
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--border);
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.improvement-list li.priority-high { border-left-color: var(--red); }
+.improvement-list li.priority-mid { border-left-color: var(--yellow); }
+.improvement-list li.priority-low { border-left-color: var(--blue); }
+.priority-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.priority-badge.high { background: rgba(255,92,114,0.15); color: var(--red); }
+.priority-badge.mid { background: rgba(255,182,39,0.15); color: var(--yellow); }
+.priority-badge.low { background: rgba(59,158,255,0.15); color: var(--blue); }
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  animation: fadeInUp 0.5s cubic-bezier(0.4,0,0.2,1) both;
+}
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.1s; }
+.delay-3 { animation-delay: 0.15s; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 36px 0 24px;
+  color: var(--text-muted);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+@media (max-width: 600px) {
+  .score-grid { grid-template-columns: repeat(2, 1fr); }
+  .calendar-day { font-size: 11px; min-height: 56px; padding: 6px 6px; }
+  .calendar-day .day-num { font-size: 12px; }
+  .calendar-day .day-label { font-size: 9px; }
+  .container { padding: 0 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Back Link -->
+  <div style="padding-top:24px;">
+    <a href="../dashboard.html" class="back-link">&larr; 返回仪表盘</a>
+  </div>
+
+  <!-- Header -->
+  <header class="header animate-in">
+    <h1>2026年9月 训练记录</h1>
+    <div class="sub">September 2026 Training Log</div>
+  </header>
+
+  <!-- ===================== CALENDAR ===================== -->
+  <section class="section animate-in delay-1" id="calendarSection">
+    <div class="section-header">
+      <div class="icon" style="background:rgba(255,107,53,0.15);">📅</div>
+      <h2>训练日历 · 点击查看详情</h2>
+    </div>
+    <div class="card">
+      <div class="calendar-nav">
+        <div class="calendar-nav-title">2026 年 9 月</div>
+        <div class="calendar-nav-buttons">
+          <button class="calendar-nav-btn" disabled>‹ 上月</button>
+          <button class="calendar-nav-btn" disabled>下月 ›</button>
+        </div>
+      </div>
+      <div class="calendar-header-row">
+        <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+      </div>
+      <div class="calendar-grid" id="calendar"></div>
+    </div>
+  </section>
+
+  <!-- ===================== TRAINING DETAIL ===================== -->
+  <section class="section" id="detail-2026-09-09">
+    <div class="section-header">
+      <div class="icon" style="background:rgba(255,182,39,0.15);">🏋️</div>
+      <h2>训练详情 · 2026-09-09</h2>
+    </div>
+
+    <div class="card">
+      <div class="training-meta">
+        <span class="training-tag tag-strength">🏋️ 力量</span>
+        <span class="training-tag tag-power">⚡ 爆发力</span>
+        <span class="training-tag tag-speed">🦵 下肢</span>
+        <span class="training-tag tag-status">强度中等</span>
+        <span class="training-tag tag-status">动作控制良好</span>
+        <span class="training-tag tag-status" style="border-color:rgba(255,92,114,0.3);color:var(--red);">核心偏弱</span>
+      </div>
+
+      <!-- 准备阶段 -->
+      <div class="detail-section-title">🔥 准备阶段</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>项目</th><th>组数×次数</th><th>负荷</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>下肢动态拉伸</td><td>—</td><td>—</td><td>3个动作</td></tr>
+            <tr><td>髋关节灵活性训练</td><td>—</td><td>—</td><td>1个动作</td></tr>
+            <tr><td>壶铃摇摆</td><td>3×12</td><td>12kg</td><td>控制髋部发力，避免下背代偿</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 激活阶段 -->
+      <div class="detail-section-title">⚡ 激活阶段（爆发力）</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>项目</th><th>组数×次数</th><th>负荷</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>单脚前后踮脚跳</td><td>3×20次/腿</td><td>自重</td><td>快速触地，保持节奏</td></tr>
+            <tr><td>双手哑铃负重原地跳</td><td>3×8</td><td>单边 5kg</td><td>落地缓冲，膝角不过度折叠</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 训练阶段 -->
+      <div class="detail-section-title">🏋️ 训练阶段</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>项目</th><th>组数×次数</th><th>负荷</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td><strong>六角杠铃深蹲</strong>（热身）</td><td>1×7</td><td>单边 20kg（总40kg）</td><td>控制深度与节奏</td></tr>
+            <tr><td><strong>六角杠铃深蹲</strong>（正式）</td><td>3×7</td><td>单边 25kg（总50kg）</td><td>动作稳定，底部停顿可控</td></tr>
+            <tr><td><strong>哑铃前弓步蹲</strong></td><td>2×10/腿</td><td>单边 5kg</td><td>躯干直立，膝角约90°</td></tr>
+            <tr><td><strong>哑铃后弓步蹲</strong></td><td>2×10/腿</td><td>单边 5kg</td><td>后腿控制落地，前腿发力回位</td></tr>
+            <tr><td><strong>侧支撑单腿外展</strong></td><td>3×12/腿</td><td>自重</td><td>侧支撑稳定，外展幅度充分</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 核心训练 -->
+      <div class="detail-section-title">🎯 核心训练</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>项目</th><th>组数×次数</th><th>负荷</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>死虫变式（双手双腿同时）</td><td>3×10</td><td>双手 5kg</td><td>下背贴地，核心持续收紧。<span style="color:var(--red);">负重后稳定性下降明显</span></td></tr>
+            <tr><td>悬挂负重举腿</td><td>3×7</td><td>脚夹 12kg 哑铃</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 训练后反馈 -->
+      <div class="detail-section-title">📊 训练后反馈</div>
+      <div class="score-grid" style="margin-bottom:0;">
+        <div class="score-card">
+          <div class="score-label">整体完成度</div>
+          <div class="score-circle high">8</div>
+          <div class="score-note">计划完成率较高</div>
+        </div>
+        <div class="score-card">
+          <div class="score-label">下肢力量感</div>
+          <div class="score-circle mid">7</div>
+          <div class="score-note">深蹲重量仍有余量</div>
+        </div>
+        <div class="score-card">
+          <div class="score-label">核心控制</div>
+          <div class="score-circle low">5</div>
+          <div class="score-note">&#9888;&#65039; 死虫负重后稳定性差，举腿下腹控制不足</div>
+        </div>
+        <div class="score-card">
+          <div class="score-label">恢复状态</div>
+          <div class="score-circle mid">7</div>
+          <div class="score-note">训练前睡眠一般，训练中精力尚可</div>
+        </div>
+      </div>
+
+      <!-- 改进方向 -->
+      <div style="margin-top:20px;">
+        <div class="card-header">&#128295; 改进方向</div>
+        <ul class="improvement-list">
+          <li class="priority-high">
+            <span class="priority-badge high">高</span>
+            <span><strong>核心</strong>：降低死虫负重（3kg→2.5kg或自重），优先保证控制质量；悬挂举腿可暂用轻负重或自重，提升腹肌募集</span>
+          </li>
+          <li class="priority-mid">
+            <span class="priority-badge mid">中</span>
+            <span><strong>深蹲</strong>：保持单边25kg×7质量稳定后，可尝试递增至单边27.5kg或增加一组</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 训练总结与优化建议 -->
+      <div style="margin-top:20px;">
+        <div class="card-header">&#128221; 训练总结与优化建议</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>问题</th><th>建议</th><th>优先级</th></tr></thead>
+            <tbody>
+              <tr><td>前后弓步蹲都做，单腿累计20次</td><td>每次选一种（前弓步或后弓步），加组数但控总量</td><td><span class="priority-badge mid">中</span></td></tr>
+              <tr><td>弓步蹲单边5kg偏轻（深蹲50kg对比）</td><td>下轮尝试单边10-12.5kg起步</td><td><span class="priority-badge mid">中</span></td></tr>
+              <tr><td>侧支撑单腿外展放在训练阶段</td><td>移至核心训练，归类更合理</td><td><span class="priority-badge low">低</span></td></tr>
+              <tr><td>激活阶段负重跳3组偏多</td><td>改为2组，减少正式组前疲劳积累</td><td><span class="priority-badge low">低</span></td></tr>
+              <tr><td>死虫5kg负重导致稳定性崩</td><td>降负重优先保控制质量</td><td><span class="priority-badge high">高</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TRAINING DETAIL: 2026-09-11 ===================== -->
+  <section class="section" id="detail-2026-09-10">
+    <div class="section-header">
+      <div class="icon" style="background:rgba(162,119,255,0.15);">🏀</div>
+      <h2>训练详情 · 2026-09-10</h2>
+    </div>
+
+    <div class="card">
+      <div class="training-meta">
+        <span class="training-tag tag-bball">🏀 篮球技巧</span>
+        <span class="training-tag tag-bball">运球</span>
+        <span class="training-tag tag-bball">终结</span>
+        <span class="training-tag tag-bball">实战</span>
+        <span class="training-tag tag-status">休闲轻度</span>
+        <span class="training-tag tag-status" style="border-color:rgba(255,92,114,0.3);color:var(--red);">完成度低</span>
+      </div>
+
+      <!-- 训练阶段 -->
+      <div class="detail-section-title">🏀 训练阶段</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>项目</th><th>组数×次数</th><th>负荷</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>半场 2v2 娱乐局</td><td>30分钟</td><td>—</td><td>实战对抗</td></tr>
+            <tr><td>一次运球变向（体前/胯下/背后随机）</td><td>约15组</td><td>自重</td><td>中线→三分线运球后左侧反手上篮</td></tr>
+            <tr><td>二次运球变向（体前/胯下/背后随机组合）</td><td>约15组</td><td>自重</td><td>中线→三分线运球后左侧反手上篮</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 训练后反馈 -->
+      <div class="detail-section-title">📊 训练后反馈</div>
+      <div class="score-grid" style="margin-bottom:0;">
+        <div class="score-card">
+          <div class="score-label">整体完成度</div>
+          <div class="score-circle low">3</div>
+          <div class="score-note">事前无计划，随意练习</div>
+        </div>
+        <div class="score-card">
+          <div class="score-label">控球感</div>
+          <div class="score-circle mid">6</div>
+          <div class="score-note">右手变向衔接左手不稳定（体前/胯下/背后均存在）；几乎不使用转身技巧</div>
+        </div>
+      </div>
+
+      <!-- 改进方向 -->
+      <div style="margin-top:20px;">
+        <div class="card-header">🔧 改进方向</div>
+        <ul class="improvement-list">
+          <li class="priority-high">
+            <span class="priority-badge high">高</span>
+            <span><strong>反手终结</strong>：左侧反手上篮终结不稳定，需专门练习篮下反手打板角度和手感</span>
+          </li>
+          <li class="priority-high">
+            <span class="priority-badge high">高</span>
+            <span><strong>三步上篮步幅</strong>：步幅偏小，加大步幅后最后一步跳不起来且上篮无力——可能涉及单腿爆发力不足和步幅协调问题</span>
+          </li>
+          <li class="priority-mid">
+            <span class="priority-badge mid">中</span>
+            <span><strong>左手运球衔接</strong>：右手体前/胯下/背后变向后衔接左手不稳定，需专门练习弱侧手控球</span>
+          </li>
+          <li class="priority-mid">
+            <span class="priority-badge mid">中</span>
+            <span><strong>转身技巧</strong>：实战中几乎不使用转身，需从基础转身运球开始练习并尝试在对抗中运用</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 训练总结与优化建议 -->
+      <div style="margin-top:20px;">
+        <div class="card-header">📝 训练总结与优化建议</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>问题</th><th>建议</th><th>优先级</th></tr></thead>
+            <tbody>
+              <tr><td>训练前无计划，完成度低（3/10）</td><td>下次篮球技巧日提前明确训练项目和组次目标</td><td><span class="priority-badge high">高</span></td></tr>
+              <tr><td>反手篮下终结不稳定</td><td>安排专门的反手上篮练习：定点反手打板 3×10/侧，逐步加入运球后衔接</td><td><span class="priority-badge high">高</span></td></tr>
+              <tr><td>三步上篮步幅小、起跳无力</td><td>可能与单腿爆发力不足相关，力量日加入保加利亚分腿蹲和单腿跳箱训练</td><td><span class="priority-badge mid">中</span></td></tr>
+              <tr><td>弱侧手（左手）运球衔接差</td><td>下次运球练习以左手为主导：左手体前变向、左手胯下、左手背后，各3×10</td><td><span class="priority-badge mid">中</span></td></tr>
+              <tr><td>转身技巧缺失</td><td>从基础转身运球开始（原地→行进间），每次技巧日加入5-10分钟转身专项</td><td><span class="priority-badge mid">中</span></td></tr>
+              <tr><td>本次无防伤激活</td><td>即使是休闲篮球日，也应完成 Level 2 膝部激活动作</td><td><span class="priority-badge mid">中</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p><a href="../dashboard.html" style="color:var(--accent);text-decoration:none;">&larr; 返回仪表盘</a></p>
+    <p style="margin-top:8px;">训练管理系统 · Athlete Performance Dashboard</p>
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  const calendar = document.getElementById('calendar');
+  const daysInMonth = 30;
+  const startDay = 1; // Sep 1 2026 is Tuesday (0=Mon, 1=Tue)
+  const trainingDays = {
+    9:  { labels: ['力量·爆发力·下肢'], tags: ['核心偏弱'] },
+    10: { labels: ['篮球技巧·运球+终结'], tags: ['反手不稳·左手弱·转身缺'] },
+  };
+
+  function buildCalendar() {
+    calendar.innerHTML = '';
+    // Leading empty cells
+    for (let i = 0; i < startDay; i++) {
+      const empty = document.createElement('div');
+      empty.className = 'calendar-day empty';
+      calendar.appendChild(empty);
+    }
+    // Month days
+    for (let d = 1; d <= daysInMonth; d++) {
+      if (d in trainingDays) {
+        const t = trainingDays[d];
+        const link = document.createElement('a');
+        link.className = 'calendar-day trained';
+        const pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+        link.href = '#detail-2026-09-' + pad(d);
+        if (t.labels.length > 1) link.classList.add('multi');
+        const labelsHtml = t.labels.map(function(l) { return '<span class="day-label">' + l + '</span>'; }).join('');
+        link.innerHTML = '<span class="day-num">' + d + '</span>' + labelsHtml;
+        link.title = t.labels.join(' + ') + (t.tags.length ? ' | ' + t.tags.join(', ') : '');
+        calendar.appendChild(link);
+      } else {
+        const day = document.createElement('div');
+        day.className = 'calendar-day';
+        day.innerHTML = '<span class="day-num">' + d + '</span>';
+        calendar.appendChild(day);
+      }
+    }
+  }
+
+  buildCalendar();
+})();
+</script>
+
+</body>
+</html>
