@@ -299,6 +299,15 @@ td strong { color: var(--text); font-weight: 600; }
 .calendar-day.trained.multi .day-label {
   font-size: 9px;
 }
+/* 休息日/停训日：有备注但不高亮、不可点击 */
+.calendar-day.rest {
+  background: transparent;
+  border-color: rgba(85,102,119,0.35);
+  color: var(--text-muted);
+  cursor: default;
+}
+.calendar-day.rest .day-num { color: var(--text-muted); }
+.calendar-day.rest .day-label { color: var(--text-muted); }
 
 /* Training tags */
 .training-tag {
@@ -724,6 +733,92 @@ td strong { color: var(--text); font-weight: 600; }
     </div>
   </section>
 
+  <!-- ===================== TRAINING DETAIL: 2026-09-11 ===================== -->
+  <section class="section" id="detail-2026-09-11">
+    <div class="section-header">
+      <div class="icon" style="background:rgba(162,119,255,0.15);">🏀</div>
+      <h2>训练详情 · 2026-09-11</h2>
+    </div>
+
+    <div class="card">
+      <div class="training-meta">
+        <span class="training-tag tag-bball">🏀 篮球技巧</span>
+        <span class="training-tag tag-bball">实战</span>
+        <span class="training-tag tag-status">全场娱乐局</span>
+        <span class="training-tag tag-status" style="border-color:rgba(255,92,114,0.3);color:var(--red);">体能不足</span>
+        <span class="training-tag tag-status" style="border-color:rgba(255,182,39,0.3);color:var(--yellow);">终结选择待改善</span>
+      </div>
+
+      <!-- 准备阶段 -->
+      <div class="detail-section-title">🔥 准备阶段（L2 膝部防伤激活）</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>项目</th><th>组数×次数</th><th>负荷</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>弹力带侧走</td><td>2×12步/方向</td><td>弹力带</td><td>臀中肌激活，半蹲位横向跨步</td></tr>
+            <tr><td>站姿膝控</td><td>2×10/腿</td><td>自重</td><td>膝周本体感觉，支撑腿膝盖稳定</td></tr>
+            <tr><td>负重早安式</td><td>2×10</td><td>5kg哑铃片</td><td>髋铰链激活，腘绳肌/臀大肌</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 训练阶段 -->
+      <div class="detail-section-title">🏀 训练阶段</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>项目</th><th>组数×次数</th><th>负荷</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>全场 5v5 娱乐局</td><td>3节 × 每节30分</td><td>—</td><td>全场对抗实战</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 训练后反馈 -->
+      <div class="detail-section-title">📊 训练后反馈</div>
+      <div class="score-grid" style="margin-bottom:0;">
+        <div class="score-card">
+          <div class="score-label">体能</div>
+          <div class="score-circle low">4</div>
+          <div class="score-note">⚠️ 体能依然是弱项，随体能下降投篮和上篮成功率下滑明显</div>
+        </div>
+      </div>
+
+      <!-- 改进方向 -->
+      <div style="margin-top:20px;">
+        <div class="card-header">🔧 改进方向</div>
+        <ul class="improvement-list">
+          <li class="priority-high">
+            <span class="priority-badge high">高</span>
+            <span><strong>体能</strong>：需要系统化体能训练（间歇跑/冲刺等），提升全场持续输出能力</span>
+          </li>
+          <li class="priority-mid">
+            <span class="priority-badge mid">中</span>
+            <span><strong>快攻对抗时机</strong>：快攻推进时无法把握对抗时机，需练习阅读防守+选择对抗节点</span>
+          </li>
+          <li class="priority-mid">
+            <span class="priority-badge mid">中</span>
+            <span><strong>突破禁区终结选择</strong>：落阵地突破禁区后终结选择不好，下次尝试没有好的终结机会可以慢下来或停下来观察，选择分球获取中投，或骗过防守后再上前终结</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 训练总结与优化建议 -->
+      <div style="margin-top:20px;">
+        <div class="card-header">📝 训练总结与优化建议</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>问题</th><th>建议</th><th>优先级</th></tr></thead>
+            <tbody>
+              <tr><td>体能持续为弱项，全场三节后命中率明显下滑</td><td>下次训练日加入体能板块（间歇跑/折返跑），每周至少1次系统化体能训练</td><td><span class="priority-badge high">高</span></td></tr>
+              <tr><td>快攻推进时无法把握对抗时机</td><td>下次篮球日加入快攻 1v1/2v1 练习，专门训练对抗时机判断</td><td><span class="priority-badge mid">中</span></td></tr>
+              <tr><td>突破禁区后终结选择不好</td><td>练习突破后慢下来/停球观察 + 分球中投选项，或假动作后终结</td><td><span class="priority-badge mid">中</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
     <p><a href="../dashboard.html" style="color:var(--accent);text-decoration:none;">&larr; 返回仪表盘</a></p>
     <p style="margin-top:8px;">训练管理系统 · Athlete Performance Dashboard</p>
@@ -739,7 +834,18 @@ td strong { color: var(--text); font-weight: 600; }
   const trainingDays = {
     9:  { labels: ['力量·爆发力·下肢'], tags: ['核心偏弱'] },
     10: { labels: ['篮球技巧·运球+终结'], tags: ['反手不稳·左手弱·转身缺'] },
+    11: { labels: ['篮球技巧·实战'], tags: ['体能不足·终结选择待改善'] },
+    12: { labels: ['🧘 休息'], tags: [] },
+    13: { labels: ['🧘 休息'], tags: ['体检：血小板偏低'] },
+    14: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    15: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    16: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    17: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    18: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    19: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    20: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
   };
+  const REST_DAYS = [12, 13, 14, 15, 16, 17, 18, 19, 20];
 
   function buildCalendar() {
     calendar.innerHTML = '';
@@ -753,15 +859,23 @@ td strong { color: var(--text); font-weight: 600; }
     for (let d = 1; d <= daysInMonth; d++) {
       if (d in trainingDays) {
         const t = trainingDays[d];
-        const link = document.createElement('a');
-        link.className = 'calendar-day trained';
-        const pad = function(n) { return n < 10 ? '0' + n : '' + n; };
-        link.href = '#detail-2026-09-' + pad(d);
-        if (t.labels.length > 1) link.classList.add('multi');
         const labelsHtml = t.labels.map(function(l) { return '<span class="day-label">' + l + '</span>'; }).join('');
-        link.innerHTML = '<span class="day-num">' + d + '</span>' + labelsHtml;
-        link.title = t.labels.join(' + ') + (t.tags.length ? ' | ' + t.tags.join(', ') : '');
-        calendar.appendChild(link);
+        if (REST_DAYS.indexOf(d) !== -1) {
+          const day = document.createElement('div');
+          day.className = 'calendar-day rest';
+          day.innerHTML = '<span class="day-num">' + d + '</span>' + labelsHtml;
+          day.title = t.labels.join(' + ') + (t.tags.length ? ' | ' + t.tags.join(', ') : '');
+          calendar.appendChild(day);
+        } else {
+          const link = document.createElement('a');
+          link.className = 'calendar-day trained';
+          const pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+          link.href = '#detail-2026-09-' + pad(d);
+          if (t.labels.length > 1) link.classList.add('multi');
+          link.innerHTML = '<span class="day-num">' + d + '</span>' + labelsHtml;
+          link.title = t.labels.join(' + ') + (t.tags.length ? ' | ' + t.tags.join(', ') : '');
+          calendar.appendChild(link);
+        }
       } else {
         const day = document.createElement('div');
         day.className = 'calendar-day';
