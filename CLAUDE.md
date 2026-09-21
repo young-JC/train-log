@@ -48,7 +48,9 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 - `12周计划安排.md` 提供 A 版 3 日与 B 版 4–5 日计划，每 4 周按进入、增量、高刺激、Deload+测试推进。
 - `篮球运动员版动作库 2.0.md` 是面向篮球专项能力的扩展动作库，也是 Dashboard 动作详情的内容来源。
 - `records/YYYY-MM.md` 是 Readiness、实际训练、Session Load 和疼痛数据的唯一事实源。
-- `records/YYYY-MM.html` 与 `dashboard.html` 是月度记录的同步展示层，不是独立数据源。
+- `weakness-tracking.md` 是 2.0 弱点管理的唯一事实源；Dashboard 完整镜像其弱点项、板块、发现日期、状态、目标和备注。
+- `ability-assessment.md` 是 2.0 能力评估的唯一事实源；只从正式训练记录提取可比较的真实动作结果，首次有效结果建立基线，后续仅由更优结果更新，并保留每项首次日期、最佳结果日期和更新时间。
+- `records/YYYY-MM.html` 与 `dashboard.html` 是月度记录、弱点管理和能力评估的同步展示层，不是独立数据源。Dashboard 能力评估保持只读，不使用手工输入或 localStorage。
 
 旧 `localStorage` 中的 Readiness 和 Session 数据不迁移、不主动清除，也不得用于补齐正式历史。除非用户明确要求迁移，不要在 1.0 和 2.0 之间自动同步数据。
 
@@ -67,15 +69,17 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 
 ## 2.0 推荐与记录工作流
 
-- `.claude/skills/recommend-training-2/skill.md` 负责采集睡眠、疲劳、酸痛、疼痛和训练意愿，计算当日 Readiness，并结合当前周期、最近 3 个训练周、恢复间隔、疼痛、弱点及四份 2.0 训练文档推荐今日训练。疼痛限制优先于 Readiness 总分；推荐内容不能写成已完成训练。
-- `.claude/skills/record-training-2/skill.md` 负责解析用户实际完成的训练，按需引导补充总时长、Session RPE、疼痛和 Readiness。一次最多询问 2–3 项；用户记不清的字段标记为未记录，不得推测。
+- `.claude/skills/recommend-training-2/skill.md` 负责采集睡眠、疲劳、酸痛、疼痛和训练意愿，计算当日 Readiness，并结合当前周期、最近 3 个训练周、恢复间隔、疼痛、`train2.0/weakness-tracking.md` 的现存弱点及四份 2.0 训练文档推荐今日训练。疼痛限制优先于 Readiness 总分；推荐内容不能写成已完成训练。
+- `.claude/skills/record-training-2/skill.md` 负责解析用户实际完成的训练，按需引导补充总时长、Session RPE、疼痛和 Readiness，并主动维护 `train2.0/weakness-tracking.md` 与 `train2.0/ability-assessment.md`：弱点仅根据明确反馈、动作表现、左右差异或测试数据新增/更新，同义项不得重复；能力评估只接受正式训练中完整、真实且可比较的动作结果，首次有效数据创建条目，之后仅在严格更优时更新最佳值和更新时间。一次最多询问 2–3 项；用户记不清的字段标记为未记录，不得推测。
 - `Session Load = 训练时长（分钟）× Session RPE`。任一输入缺失时不得估算；同日重复记录更新原条目，不重复增加训练天数或负荷。
 
 一次 2.0 正式训练记录按以下顺序同步，所有原始值、派生值和备注必须一致：
 
 1. `train2.0/records/YYYY-MM.md`
-2. `train2.0/records/YYYY-MM.html`
-3. `train2.0/dashboard.html`
+2. `train2.0/weakness-tracking.md`（本次有可直接证实的新增弱点或已有弱点新证据时）
+3. `train2.0/ability-assessment.md`（本次有首次有效动作结果、更优结果或正式记录纠错时）
+4. `train2.0/records/YYYY-MM.html`
+5. `train2.0/dashboard.html`
 
 若月度模板或 Dashboard 对应模块尚未建立，应报告未同步项并停止，不得发明临时数据结构。月度 Markdown 可以只记录当天 Readiness 而不创建虚假的已完成训练；休息日不计入训练天数或 Session Load。
 
