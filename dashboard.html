@@ -413,6 +413,15 @@ td strong { color: var(--text); font-weight: 600; }
   font-size: 9px;
 }
 .calendar-day.trained .day-num { color: var(--accent); }
+/* 休息日/停训日：有备注但不高亮、不可点击 */
+.calendar-day.rest {
+  background: transparent;
+  border-color: rgba(85,102,119,0.35);
+  color: var(--text-muted);
+  cursor: default;
+}
+.calendar-day.rest .day-num { color: var(--text-muted); }
+.calendar-day.rest .day-label { color: var(--text-muted); }
 
 /* Score Grid */
 .score-grid {
@@ -886,7 +895,7 @@ td strong { color: var(--text); font-weight: 600; }
   <div class="stats-row">
     <div class="stat-card accent animate-in delay-1">
       <div class="stat-label">本月训练天数</div>
-      <div class="stat-value accent">2</div>
+      <div class="stat-value accent">3</div>
       <div class="stat-sub">2026-09</div>
     </div>
     <div class="stat-card green animate-in delay-2">
@@ -936,22 +945,21 @@ td strong { color: var(--text); font-weight: 600; }
   <section class="section animate-in delay-2" id="recentTraining">
     <div class="section-header">
       <div class="icon" style="background:rgba(255,182,39,0.15);">🏋️</div>
-      <h2>最近训练 · 09/10</h2>
+      <h2>最近训练 · 09/11</h2>
     </div>
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
         <div>
           <div class="training-meta" style="margin-bottom:0;">
             <span class="training-tag tag-bball">🏀 篮球技巧</span>
-            <span class="training-tag tag-bball">运球</span>
             <span class="training-tag tag-bball">实战</span>
-            <span class="training-tag tag-status">休闲轻度</span>
+            <span class="training-tag tag-status">全场娱乐局</span>
           </div>
           <div style="margin-top:6px;font-size:13px;color:var(--text-secondary);">
-            完成度 <strong style="color:var(--red);">3</strong>/10 · 控球感 <strong style="color:var(--yellow);">6</strong>/10 · <span style="color:var(--red);">反手不稳 · 左手弱 · 转身缺</span>
+            体能 <strong style="color:var(--red);">4</strong>/10 · <span style="color:var(--red);">体能不足 · 终结选择差 · 快攻时机不准</span>
           </div>
         </div>
-        <a href="records/2026-09.html#detail-2026-09-10" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,107,53,0.12);color:var(--accent);border:1px solid rgba(255,107,53,0.3);border-radius:var(--radius-sm);text-decoration:none;font-size:13px;font-weight:600;transition:all var(--transition);">
+        <a href="records/2026-09.html#detail-2026-09-11" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,107,53,0.12);color:var(--accent);border:1px solid rgba(255,107,53,0.3);border-radius:var(--radius-sm);text-decoration:none;font-size:13px;font-weight:600;transition:all var(--transition);">
           📋 查看完整详情 &rarr;
         </a>
       </div>
@@ -1032,6 +1040,9 @@ td strong { color: var(--text); font-weight: 600; }
             <tr><td>三步上篮步幅小/起跳无力</td><td>篮球技巧</td><td>2026-09-10</td><td>待改善</td><td>大步幅三步上篮顺畅有力</td><td>可能与单腿爆发力相关</td></tr>
             <tr><td>转身技巧缺失</td><td>篮球技巧</td><td>2026-09-10</td><td>待改善</td><td>实战中能自然运用转身</td><td>从基础转身运球开始</td></tr>
             <tr><td>左侧核心稳定弱于右侧</td><td>核心</td><td>2026-09-10</td><td>待改善</td><td>双侧核心稳定对称</td><td>侧支撑/鸟狗式等单侧核心训练</td></tr>
+            <tr><td>体能不足影响全场持续输出</td><td>体能</td><td>2026-09-11</td><td>待改善</td><td>全场三节不降速，投篮上篮稳定性保持</td><td>间歇跑/折返跑每周至少1次</td></tr>
+            <tr><td>快攻对抗时机把握不准</td><td>篮球技巧</td><td>2026-09-11</td><td>待改善</td><td>快攻中准确判断对抗节点</td><td>快攻1v1/2v1练习</td></tr>
+            <tr><td>突破禁区终结选择差</td><td>篮球技巧</td><td>2026-09-11</td><td>待改善</td><td>根据防守做出正确终结决策</td><td>慢下来观察/分球中投/假动作后终结</td></tr>
           </tbody>
         </table>
       </div>
@@ -1103,7 +1114,7 @@ td strong { color: var(--text); font-weight: 600; }
             <table>
               <thead><tr><th>项目</th><th>基线</th><th>当前</th><th>目标</th><th>进度</th></tr></thead>
               <tbody>
-                <tr><td style="color:var(--text-muted);">—</td><td style="color:var(--text-muted);">—</td><td style="color:var(--text-muted);">—</td><td style="color:var(--text-muted);">—</td><td style="color:var(--text-muted);">—</td></tr>
+                <tr><td>全场持续输出</td><td>4/10（2026-09-11）</td><td>—</td><td>7/10</td><td>间歇跑+折返跑每周≥1次</td></tr>
               </tbody>
             </table>
           </div>
@@ -1113,7 +1124,7 @@ td strong { color: var(--text); font-weight: 600; }
           <div class="progress-item">
             <div class="progress-header">
               <span class="progress-name">控球感</span>
-              <span class="progress-values">基线 6/10（2026-09-11） / 当前 — / 目标 8/10</span>
+              <span class="progress-values">基线 6/10（2026-09-10） / 当前 — / 目标 8/10</span>
             </div>
             <div class="progress-track">
               <div class="progress-fill purple" data-width="60"></div>
@@ -1184,23 +1195,24 @@ td strong { color: var(--text); font-weight: 600; }
     <div class="card" style="border-color:rgba(255,107,53,0.2);">
       <div class="card-header">&#127919; 下次训练推荐</div>
       <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
-        <p><strong style="color:var(--text);">推荐类型：</strong>&#127947;&#65039; 上肢力量 + &#127919; 核心（Day 2）</p>
+        <p><strong style="color:var(--text);">推荐类型：</strong>🏋️ 上肢力量 + 🎯 核心（Day 2）</p>
         <p><strong style="color:var(--text);">依据：</strong></p>
         <ol style="margin-left:20px;margin-top:4px;">
-          <li><strong>板块频率：</strong>近3天内已完成下肢力量（09-09）和篮球技巧（09-11），上肢力量和核心尚未覆盖，需补上 Day 2</li>
+          <li><strong>板块频率：</strong>近3天完成下肢力量（09-09）、篮球技巧（09-10）、篮球实战（09-11），上肢+核心（Day 2）尚未覆盖，需补上</li>
           <li><strong>核心弱项延续：</strong>09-09 核心评分仅 5/10，死虫 5kg 稳定性崩，需降负重持续强化</li>
-          <li><strong>下肢恢复：</strong>距 09-09 下肢日已过 48h+，Day 2 上肢日不影响恢复</li>
+          <li><strong>下肢恢复充分：</strong>距 09-09 下肢日已过 48h+，Day 2 上肢日不影响恢复</li>
+          <li><strong>新发现体能弱项：</strong>09-11 全场三节后体能崩盘，命中率明显下滑 — 建议下次 Day 3 加入系统化体能训练（间歇跑/折返跑）</li>
         </ol>
         <p style="margin-top:8px;"><strong style="color:var(--text);">建议内容：</strong></p>
         <ul style="margin-left:20px;margin-top:4px;">
-          <li>上肢推：哑铃卧推 3&#120;8-10（单边 10-12.5kg 起步试探）或 俯卧撑 3&#120;尽量</li>
-          <li>上肢拉：哑铃单臂划船 3&#120;8-10/臂（单边 10-12.5kg）+ 俯身飞鸟 2&#120;12</li>
-          <li>核心：死虫变式 3&#120;10（降重至自重或 2.5kg）+ 平板支撑 3&#120;30-45s + 侧支撑 2&#120;20s/侧</li>
+          <li>上肢推：哑铃卧推 3×8-10（单边 10-12.5kg 起步试探）或 俯卧撑 3×尽量</li>
+          <li>上肢拉：哑铃单臂划船 3×8-10/臂（单边 10-12.5kg）+ 俯身飞鸟 2×12</li>
+          <li>核心：死虫变式 3×10（降重至自重或 2.5kg）+ 平板支撑 3×30-45s + 侧支撑 2×20s/侧</li>
           <li>训前膝部激活：弹力带侧走 + 站姿膝控（Level 2 必做）</li>
-          <li>训练后：单腿提踵 2&#120;15/腿 + 单腿站立平衡 2&#120;30s/腿</li>
+          <li>训练后：单腿提踵 2×15/腿 + 单腿站立平衡 2×30s/腿</li>
         </ul>
         <p style="margin-top:8px;font-size:12px;color:var(--text-muted);">
-          &#128161; 下次篮球日规划：针对本次暴露的左手运球衔接、反手终结、转身技巧做结构化训练，参考动作库「篮球技巧」板块
+          💡 下次篮球日（Day 3）规划：针对 09-10/09-11 暴露的左手运球衔接、反手终结、转身技巧、快攻对抗时机、突破终结选择做结构化训练 + 加入体能板块（间歇跑 6-8 轮）
         </p>
       </div>
     </div>
@@ -1511,28 +1523,28 @@ td strong { color: var(--text); font-weight: 600; }
     </div>
 
     <div class="card" style="margin-bottom:16px;">
-      <div class="card-header">&#128270; 本次训练 L2 防伤检查（2026-09-10 · 篮球技巧日）</div>
+      <div class="card-header">&#128270; 本次训练 L2 防伤检查（2026-09-11 · 篮球实战日）</div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>检查项</th><th>状态</th><th>今日要求</th><th>说明</th></tr></thead>
           <tbody>
             <tr>
               <td>弹力带侧走</td>
-              <td style="color:var(--red);">&#10060; 未完成</td>
+              <td style="color:var(--green);">&#9989; 已完成</td>
               <td>必选</td>
-              <td>所有训练日必做</td>
+              <td>2×12步/方向，臀中肌激活</td>
             </tr>
             <tr>
               <td>站姿膝控</td>
-              <td style="color:var(--red);">&#10060; 未完成</td>
+              <td style="color:var(--green);">&#9989; 已完成</td>
               <td>必选</td>
-              <td>技巧日需激活膝周本体感觉</td>
+              <td>2×10/腿，膝周本体感觉激活</td>
             </tr>
             <tr>
               <td>腘绳肌拉长激活</td>
-              <td style="color:var(--text-muted);">— 可跳过</td>
+              <td style="color:var(--green);">&#9989; 已完成</td>
               <td>可选</td>
-              <td>篮球技巧日可跳过</td>
+              <td>以负重早安式（5kg×2×10）替代，髋铰链+腘绳肌激活</td>
             </tr>
             <tr>
               <td>踝背屈活动度</td>
@@ -1669,8 +1681,19 @@ td strong { color: var(--text); font-weight: 600; }
   const trainingDays = {
     9:  { labels: ['<a href="records/2026-09.html#detail-2026-09-09">力量·爆发力·下肢</a>'], tags: ['核心偏弱'] },
     10: { labels: ['<a href="records/2026-09.html#detail-2026-09-10">篮球技巧·运球+终结</a>'], tags: ['反手不稳·左手弱·转身缺'] },
+    11: { labels: ['<a href="records/2026-09.html#detail-2026-09-11">篮球技巧·实战</a>'], tags: ['体能不足·终结选择待改善'] },
+    12: { labels: ['🧘 休息'], tags: [] },
+    13: { labels: ['🧘 休息'], tags: ['体检：血小板偏低'] },
+    14: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    15: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    16: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    17: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    18: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    19: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
+    20: { labels: ['🧘 停训'], tags: ['血小板偏低'] },
     // 多条训练示例：{ labels: ['<a href="...">力量·上肢</a>', '<a href="...">篮球技巧·投篮</a>'], tags: ['肩部疲劳'] }
   };
+  const REST_DAYS = [12, 13, 14, 15, 16, 17, 18, 19, 20];
 
   function buildCalendar() {
     calendar.innerHTML = '';
@@ -1684,15 +1707,23 @@ td strong { color: var(--text); font-weight: 600; }
     for (let d = 1; d <= daysInMonth; d++) {
       if (d in trainingDays) {
         const t = trainingDays[d];
-        const link = document.createElement('a');
-        link.className = 'calendar-day trained';
-        const pad = function(n) { return n < 10 ? '0' + n : '' + n; };
-        link.href = 'records/2026-09.html#detail-2026-09-' + pad(d);
-        if (t.labels.length > 1) link.classList.add('multi');
         const labelsHtml = t.labels.map(function(l) { return '<span class="day-label">' + l + '</span>'; }).join('');
-        link.innerHTML = '<span class="day-num">' + d + '</span>' + labelsHtml;
-        link.title = t.labels.join(' + ') + (t.tags.length ? ' | ' + t.tags.join(', ') : '');
-        calendar.appendChild(link);
+        if (REST_DAYS.indexOf(d) !== -1) {
+          const day = document.createElement('div');
+          day.className = 'calendar-day rest';
+          day.innerHTML = '<span class="day-num">' + d + '</span>' + labelsHtml;
+          day.title = t.labels.join(' + ') + (t.tags.length ? ' | ' + t.tags.join(', ') : '');
+          calendar.appendChild(day);
+        } else {
+          const link = document.createElement('a');
+          link.className = 'calendar-day trained';
+          const pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+          link.href = 'records/2026-09.html#detail-2026-09-' + pad(d);
+          if (t.labels.length > 1) link.classList.add('multi');
+          link.innerHTML = '<span class="day-num">' + d + '</span>' + labelsHtml;
+          link.title = t.labels.join(' + ') + (t.tags.length ? ' | ' + t.tags.join(', ') : '');
+          calendar.appendChild(link);
+        }
       } else {
         const day = document.createElement('div');
         day.className = 'calendar-day';
