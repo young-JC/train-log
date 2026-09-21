@@ -39,19 +39,20 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 3. `train1.0/training-log.md`
 4. `train1.0/dashboard.html`
 
-### `train2.0/`：周期化训练系统
+### `train2.0/`：周期化训练与记录系统
 
-这是独立的 12 周周期化体系，与 1.0 并存，不是 1.0 记录文件的派生层：
+这是独立的 12 周周期化体系，与 1.0 并存，不是 1.0 记录文件的派生层。正式周期从 2026-09-21 开始，默认采用 3 日版计划：
 
 - `篮球运动训练理念.md` 定义能力模型与动作选择原则。
 - `训练周期安排建议.md` 定义大周期、中周期、周微周期和每日训练之间的层级。
 - `12周计划安排.md` 提供 A 版 3 日与 B 版 4–5 日计划，每 4 周按进入、增量、高刺激、Deload+测试推进。
-- `篮球运动员版动作库 2.0.md` 是面向篮球专项能力的扩展动作库。
-- `dashboard.html` 是交互式单页应用；Readiness、今日训练、Session Load 和学习打卡写入浏览器 `localStorage`，键统一以 `athlete_` 开头，不会回写 Markdown。
+- `篮球运动员版动作库 2.0.md` 是面向篮球专项能力的扩展动作库，也是 Dashboard 动作详情的内容来源。
+- `records/YYYY-MM.md` 是 Readiness、实际训练、Session Load 和疼痛数据的唯一事实源。
+- `records/YYYY-MM.html` 与 `dashboard.html` 是月度记录的同步展示层，不是独立数据源。
 
-除非用户明确要求迁移或同步，不要把 1.0 的文件数据自动写入 2.0，也不要把 2.0 浏览器数据视为仓库数据。
+旧 `localStorage` 中的 Readiness 和 Session 数据不迁移、不主动清除，也不得用于补齐正式历史。除非用户明确要求迁移，不要在 1.0 和 2.0 之间自动同步数据。
 
-## 训练记录工作流
+## 1.0 训练记录工作流
 
 `.claude/skills/record-training/skill.md` 是完整 SOP。该技能文档中的 `records/`、`training-log.md`、`training-plans.md` 和 `dashboard.html` 均应解释为相对于 `train1.0/` 的路径。
 
@@ -64,6 +65,20 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 5. HTML 中新增训练详情应插入 `<footer class="footer">` 前；编辑中文或 emoji 内容时优先用纯 ASCII 结构作为定位锚点。
 6. 下次训练推荐必须同时读取 `train1.0/training-plans.md`、最近 3 周月度记录和 `train1.0/training-log.md` 的弱点追踪。动作与重量必须有计划或历史数据依据；未练过的动作标注“新动作，从轻重量开始试”。
 
+## 2.0 推荐与记录工作流
+
+- `.claude/skills/recommend-training-2/skill.md` 负责采集睡眠、疲劳、酸痛、疼痛和训练意愿，计算当日 Readiness，并结合当前周期、最近 3 个训练周、恢复间隔、疼痛、弱点及四份 2.0 训练文档推荐今日训练。疼痛限制优先于 Readiness 总分；推荐内容不能写成已完成训练。
+- `.claude/skills/record-training-2/skill.md` 负责解析用户实际完成的训练，按需引导补充总时长、Session RPE、疼痛和 Readiness。一次最多询问 2–3 项；用户记不清的字段标记为未记录，不得推测。
+- `Session Load = 训练时长（分钟）× Session RPE`。任一输入缺失时不得估算；同日重复记录更新原条目，不重复增加训练天数或负荷。
+
+一次 2.0 正式训练记录按以下顺序同步，所有原始值、派生值和备注必须一致：
+
+1. `train2.0/records/YYYY-MM.md`
+2. `train2.0/records/YYYY-MM.html`
+3. `train2.0/dashboard.html`
+
+若月度模板或 Dashboard 对应模块尚未建立，应报告未同步项并停止，不得发明临时数据结构。月度 Markdown 可以只记录当天 Readiness 而不创建虚假的已完成训练；休息日不计入训练天数或 Session Load。
+
 ## 训练领域约定
 
 - 训练日顺序：热身（5–10 分钟，含 Level 2 防伤）→ 爆发/速度 → 主项力量 → 辅助 → 核心 → 拉伸。
@@ -75,6 +90,6 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 
 ## 验证与 Git
 
-修改训练记录后至少核对：月度 Markdown 与 HTML 的详情一致；两个日历链接到正确日期；`training-log.md` 与 1.0 仪表盘中的统计、弱点和进步一致；休息日与训练日视觉状态正确。2.0 仪表盘改动还需验证刷新后的 `localStorage` 持久化及清空数据功能。
+修改训练记录后至少核对：对应系统的月度 Markdown 与 HTML 详情一致，Dashboard 日历链接到正确日期，训练天数、Readiness、疼痛和 Session Load 没有因同日更新重复累计；休息日与训练日视觉状态正确。2.0 Dashboard 改动还需验证动作级联、详情弹层、刷新后的正式数据展示，以及旧 `localStorage` 数据不会被纳入训练历史。
 
 提交信息使用中文说明和 conventional 前缀，例如 `feat(records):`、`feat(training):`。仓库路径包含中文，文件工具始终使用完整绝对 Windows 路径，如 `D:\个人文件\train-log\train1.0\dashboard.html`。

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 年 9 月训练记录 · 2.0</title>
+<style>
+:root{--bg:#070b10;--panel:#101720;--panel-2:#0c131c;--line:#243244;--text:#eef4fb;--muted:#96a6b8;--muted-2:#65778c;--orange:#ff7043;--green:#13c89a;--blue:#52a8ff;--purple:#a88bff;--yellow:#ffc44d;--radius:14px;--shadow:0 18px 48px rgba(0,0,0,.28)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 85% 0,rgba(255,112,67,.08),transparent 34%),var(--bg);color:var(--text);font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.container{width:min(1120px,calc(100% - 32px));margin:0 auto;padding:28px 0 56px}
+.header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:22px}
+.eyebrow{color:var(--orange);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
+h1{margin:4px 0 4px;font-size:clamp(24px,4vw,38px);line-height:1.2}
+.subtitle{margin:0;color:var(--muted);font-size:13px}
+.back{display:inline-flex;align-items:center;min-height:40px;padding:8px 13px;border:1px solid var(--line);border-radius:10px;background:var(--panel);text-decoration:none;font-size:12px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat,.card{background:linear-gradient(145deg,rgba(20,29,40,.96),rgba(12,19,28,.96));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.stat{padding:16px}.stat span{display:block;color:var(--muted);font-size:11px}.stat strong{display:block;margin-top:2px;font-size:22px}.stat small{color:var(--muted-2);font-size:10px}
+.card{padding:20px;margin-bottom:20px}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px}
+.section-head h2{margin:0;font-size:18px}.section-head p{margin:3px 0 0;color:var(--muted);font-size:11px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:10px}.legend span{display:flex;align-items:center;gap:5px}.legend i{width:9px;height:9px;border-radius:3px;background:var(--panel-2);border:1px solid var(--line)}.legend .training{background:rgba(19,200,154,.24);border-color:var(--green)}.legend .rest{background:rgba(168,139,255,.22);border-color:var(--purple)}.legend .ready{background:rgba(82,168,255,.2);border-color:var(--blue)}
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;min-width:0;overflow:hidden}
+.weekday{min-width:0;padding:4px;text-align:center;color:var(--muted);font-size:10px;font-weight:800}
+.day{position:relative;min-width:0;min-height:105px;overflow:hidden;padding:10px;border:1px solid var(--line);border-radius:11px;background:var(--panel-2)}
+.day.outside{border-color:transparent;background:transparent}
+.day.cycle-start{border-color:rgba(255,112,67,.7);box-shadow:inset 0 0 0 1px rgba(255,112,67,.15)}
+.day.training{border-color:rgba(19,200,154,.55);background:rgba(19,200,154,.07)}
+.day.readiness{border-color:rgba(82,168,255,.55);background:rgba(82,168,255,.06)}
+.day.rest{border-color:rgba(168,139,255,.45);background:rgba(168,139,255,.06)}
+.day-link{display:block;height:100%;color:inherit;text-decoration:none}
+.day-number{font-size:15px;font-weight:800}.day-label{display:block;margin-top:22px;color:var(--muted);font-size:10px;line-height:1.35}.day-status{display:block;margin-top:5px;font-size:10px;font-weight:800}.day.training .day-status{color:var(--green)}.day.readiness .day-status{color:var(--blue)}.day.rest .day-status{color:var(--purple)}
+.phase{position:absolute;top:10px;right:9px;color:var(--orange);font-size:9px;font-weight:800}
+.empty{padding:32px 18px;text-align:center;border:1px dashed var(--line);border-radius:11px;background:var(--panel-2)}.empty strong{display:block;font-size:14px}.empty p{margin:5px auto 0;max-width:560px;color:var(--muted);font-size:11px}
+.detail{scroll-margin-top:20px;padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2)}.detail+.detail{margin-top:12px}.detail h3{margin:0 0 10px;font-size:16px}.detail-meta{display:flex;flex-wrap:wrap;gap:7px}.pill{padding:4px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:10px}
+.footer{padding:10px 0;text-align:center;color:var(--muted-2);font-size:10px}
+@media(max-width:760px){.container{width:min(100% - 20px,1120px);padding-top:18px}.header{display:grid}.back{justify-self:start}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:13px}.section-head{align-items:flex-start;display:grid}.calendar{gap:4px}.weekday{padding-inline:0;font-size:9px}.day{min-height:78px;padding:7px 5px}.day-label{display:none}.day-status{margin-top:14px;font-size:8px}.phase{top:7px;right:4px;font-size:7px}}
+@media(max-width:430px){.stats{grid-template-columns:1fr 1fr}.stat{padding:12px}.calendar{gap:3px}.day{min-height:64px;border-radius:8px}.day-number{font-size:12px}.day-status{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.phase{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<main class="container">
+<header class="header">
+<div><div class="eyebrow">Training Records · Cycle 2.0</div><h1>2026 年 9 月训练记录</h1><p class="subtitle">12 周周期第 1–2 周 · 正式周期始于 2026-09-21 · 3 日版</p></div>
+<a class="back" href="../dashboard.html">返回训练 Dashboard</a>
+</header>
+
+<section class="stats" aria-label="月度统计">
+<div class="stat"><span>训练天数</span><strong id="trainingCount">0</strong><small>不含休息日</small></div>
+<div class="stat"><span>Session Load</span><strong id="sessionLoad">0</strong><small>AU</small></div>
+<div class="stat"><span>Readiness</span><strong id="readinessCount">1</strong><small>已记录天数</small></div>
+<div class="stat"><span>周期位置</span><strong>W1–W2</strong><small>9 月 21 日开始</small></div>
+</section>
+
+<section class="card" aria-labelledby="calendarTitle">
+<div class="section-head"><div><h2 id="calendarTitle">月历</h2><p>训练日可进入对应详情；休息日仅显示状态，不创建详情链接。</p></div><div class="legend" aria-label="日历图例"><span><i class="training"></i>训练</span><span><i class="ready"></i>仅 Readiness</span><span><i class="rest"></i>休息</span></div></div>
+<div class="calendar" id="calendar" aria-label="2026 年 9 月日历"></div>
+</section>
+
+<section class="card" aria-labelledby="detailsTitle">
+<div class="section-head"><div><h2 id="detailsTitle">训练详情</h2><p>内容与 2026-09.md 保持一致。</p></div></div>
+<div id="details"><article class="detail" id="detail-2026-09-21"><h3>2026-09-21 · Readiness</h3><div class="detail-meta"><span class="pill">第 1 周 · 基础重建（进入） · 3 日版 D1</span><span class="pill">睡眠 4/5</span><span class="pill">疲劳 1/5</span><span class="pill">酸痛 1/5</span><span class="pill">疼痛 0/10 · 无</span><span class="pill">训练意愿 5/5</span><span class="pill">Readiness 96/100 · 绿色</span></div></article></div>
+</section>
+
+<footer class="footer">数据源：train2.0/records/2026-09.md</footer>
+</main>
+<script>
+const MONTH={year:2026,month:8,days:30,startOffset:1};
+const CYCLE_START='2026-09-21';
+const trainingDays={
+ '2026-09-21':{status:'readiness',label:'Ready 96',readiness:{sleep:4,fatigue:1,soreness:1,pain:0,painNote:'无',motivation:5,score:96,level:'绿色'}}
+};
+const REST_DAYS=[];
+
+function dateKey(day){return `${MONTH.year}-09-${String(day).padStart(2,'0')}`}
+function cyclePosition(day){
+ const date=new Date(MONTH.year,MONTH.month,day);
+ const start=new Date(2026,8,21);
+ const offset=Math.floor((date-start)/86400000);
+ if(offset<0)return '';
+ return `W${Math.floor(offset/7)+1}D${offset%7+1}`;
+}
+function dayContent(day){
+ const key=dateKey(day);
+ const record=trainingDays[key];
+ const isRest=REST_DAYS.includes(key);
+ const position=cyclePosition(day);
+ const cell=document.createElement('div');
+ cell.className='day';
+ if(key===CYCLE_START)cell.classList.add('cycle-start');
+ if(isRest)cell.classList.add('rest');
+ else if(record?.status==='training')cell.classList.add('training');
+ else if(record?.status==='readiness')cell.classList.add('readiness');
+
+ const content=document.createElement(record&&!isRest?'a':'div');
+ content.className=record&&!isRest?'day-link':'';
+ if(record&&!isRest)content.href=`#detail-${key}`;
+ const number=document.createElement('span');
+ number.className='day-number';
+ number.textContent=day;
+ content.append(number);
+ if(position){const phase=document.createElement('span');phase.className='phase';phase.textContent=position;content.append(phase)}
+ if(record||isRest){const status=document.createElement('span');status.className='day-status';status.textContent=isRest?'休息':record.label;content.append(status)}
+ else if(position){const label=document.createElement('span');label.className='day-label';label.textContent=key===CYCLE_START?'正式周期开始':'等待记录';content.append(label)}
+ cell.append(content);
+ return cell;
+}
+function renderCalendar(){
+ const weekdays=['周一','周二','周三','周四','周五','周六','周日'];
+ calendar.replaceChildren(...weekdays.map(label=>{const item=document.createElement('div');item.className='weekday';item.textContent=label;return item}));
+ for(let index=0;index<MONTH.startOffset;index++){const blank=document.createElement('div');blank.className='day outside';blank.setAttribute('aria-hidden','true');calendar.append(blank)}
+ for(let day=1;day<=MONTH.days;day++)calendar.append(dayContent(day));
+}
+function renderSummary(){
+ const records=Object.entries(trainingDays);
+ const trainingRecords=records.filter(([date,record])=>!REST_DAYS.includes(date)&&record.status==='training');
+ trainingCount.textContent=trainingRecords.length;
+ readinessCount.textContent=records.filter(([,record])=>record.readiness).length;
+ sessionLoad.textContent=trainingRecords.reduce((total,[,record])=>total+(record.sessionLoad||0),0);
+}
+renderCalendar();
+renderSummary();
+</script>
+</body>
+</html>
