@@ -2,59 +2,79 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 项目性质
+## 项目性质与运行方式
 
-这是一个**个人篮球训练记录与管理系统**（非软件项目），以 Markdown 文档为数据源、HTML 静态页面为展示层。没有构建工具、测试套件或包管理器——HTML 文件直接在浏览器打开即可预览。
+这是一个个人篮球训练记录与管理仓库，不是需要编译的软件项目。Markdown 是人工维护的数据源，HTML 是无依赖的静态展示页；仓库没有包管理器、构建脚本、lint 配置或自动化测试套件。
 
-## 文档架构（双系统并存）
+直接在浏览器中预览：
 
-### 1.0 系统（记录体系，根目录）
+```bash
+explorer.exe "$(cygpath -w "$PWD/train1.0/dashboard.html")"
+explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
+```
 
-数据流：`records/YYYY-MM.md`（记录源）→ 同步派生 `records/YYYY-MM.html`、`training-log.md`、`dashboard.html`。
+因此不存在 build、lint、test 或“运行单个测试”的命令。修改后应在浏览器中分别检查相关 HTML 页面，并用 `git diff --check` 检查文本格式问题。
 
-| 文件 | 角色 |
-|------|------|
-| `training-plans.md` | 训练计划框架 + 完整动作库（方案A：3练/周，方案B：4练/周；动作分板块，标注难度⭐与进退阶） |
-| `training-prehab.md` | 膝部防伤体系（Level 1 每日激活 / Level 2 训前准备 / Level 3 力量巩固）——每次训练前 Level 2 必做 |
-| `training-log.md` | 主索引：训练概览、核心板块、**弱点追踪**、进步追踪、阶段总结 |
-| `records/YYYY-MM.md` | 月度记录：训练日历（按周表格）+ 每日训练详情（四阶段：准备/激活/训练/核心） |
-| `records/YYYY-MM.html` | 月度记录的 HTML 版，JS `trainingDays` 对象驱动日历渲染 |
-| `dashboard.html` | 总览仪表盘：统计卡片、当月日历（链接到 `records/YYYY-MM.html#detail-...`）、弱点/进步追踪镜像 |
+## 双系统架构
 
-**同步规则**：以上 5 个文件中任何训练数据必须完全一致（数字、评分、备注、改进方向、总结）。改记录时按 `.claude/skills/record-training/skill.md` 的流程同步更新全部文件。
+### `train1.0/`：训练记录系统
 
-### 2.0 系统（周期化训练体系，`train2.0/`）
+这是当前日常记录入口。数据流为：
 
-独立的周期化系统，当前处于搭建阶段（新文件，部分未提交）。与 1.0 并存，1.0 仍是日常记录入口。
+`train1.0/records/YYYY-MM.md`（月度记录源）→ 同步更新月度 HTML、主索引和仪表盘。
 
 | 文件 | 角色 |
 |------|------|
-| `篮球运动训练理念.md` | 能力模型：从"练肌肉"转向"练篮球运动能力"的选材逻辑 |
-| `训练周期安排建议.md` | 系统层级：能力评估 → 12周大周期 → 4周中周期 → 周微周期 → 每日训练 → 数据记录 |
-| `12周计划安排.md` | 落地方案：A版 3日 / B版 4-5日；每 4 周一个中周期（进入→增量→高刺激→Deload+测试） |
-| `篮球运动员版动作库 2.0.md` | 扩展动作库（增加减速、落地、单腿、腘绳肌、内收肌等模块） |
-| `dashboard.html` | 交互式仪表盘（**localStorage 持久化**，键前缀 `athlete_`）：Readiness 自评、今日训练、负荷监控（Session Load = 时长 × RPE）、学习打卡——数据仅存浏览器，不写入文件 |
+| `train1.0/training-plans.md` | 周计划方案与动作库，提供推荐动作、组次和负荷依据 |
+| `train1.0/training-prehab.md` | 膝部防伤体系；每次训练前 Level 2 必做 |
+| `train1.0/records/YYYY-MM.md` | 月度日历和每日训练详情，是单次训练记录的主要数据源 |
+| `train1.0/records/YYYY-MM.html` | 月度记录的静态页面；JS `trainingDays` 驱动日历，详情区块用日期 ID 定位 |
+| `train1.0/training-log.md` | 跨月份汇总：训练概览、弱点追踪、进步追踪和阶段总结 |
+| `train1.0/dashboard.html` | 1.0 总览；镜像当月统计、最近训练、弱点和进步数据，并链接月度 HTML |
 
-## 核心技能：record-training
+一次训练记录必须同步修改以下 4 个文件，且数字、评分、备注、改进方向和总结完全一致：
 
-`.claude/skills/record-training/skill.md` 是训练记录的完整 SOP（含初始化模板）。触发词：`记录训练`、`训练记录`、`今天练了` 等。关键纪律：
+1. `train1.0/records/YYYY-MM.md`
+2. `train1.0/records/YYYY-MM.html`
+3. `train1.0/training-log.md`
+4. `train1.0/dashboard.html`
 
-1. **禁止编造数据**——用户没说的次数/负重/评分/身体感受一律不写；缺失信息最多一次问 2-3 个引导问题，用户说"记不清"就跳过。
-2. **只改这 4 个文件**：`records/YYYY-MM.md`、`records/YYYY-MM.html`、`training-log.md`、`dashboard.html`。
-3. **HTML 编辑技巧**：emoji/中文在 Edit 工具中易编码匹配失败，优先用纯 ASCII 锚点（如 `<section class="section" id="detail-`）；新增训练详情 section 时插入到 `<footer class="footer">` 之前。
-4. **休息日渲染规则**（HTML 日历）：休息日也进 `trainingDays` 以显示备注（如"血小板偏低"），但用 `REST_DAYS` 数组 + `.calendar-day.rest` 灰色样式渲染，不可点击、不用 `trained` 高亮——训练日才是视觉焦点。
-5. **日历链接**：检查 `buildCalendar()` 内 `link.href` 是否硬编码单一日期，若是则改为动态拼接 `#detail-YYYY-MM-' + pad(d)`（每文件只需修一次）。
-6. **下次训练推荐**必须三方数据源齐全：`training-plans.md`（周计划模板）、`records/` 最近 3 周详情、`training-log.md` 弱点追踪。推荐的动作/重量必须来自计划文档，新动作须标注"新动作，从轻重量开始试"。
+### `train2.0/`：周期化训练系统
+
+这是独立的 12 周周期化体系，与 1.0 并存，不是 1.0 记录文件的派生层：
+
+- `篮球运动训练理念.md` 定义能力模型与动作选择原则。
+- `训练周期安排建议.md` 定义大周期、中周期、周微周期和每日训练之间的层级。
+- `12周计划安排.md` 提供 A 版 3 日与 B 版 4–5 日计划，每 4 周按进入、增量、高刺激、Deload+测试推进。
+- `篮球运动员版动作库 2.0.md` 是面向篮球专项能力的扩展动作库。
+- `dashboard.html` 是交互式单页应用；Readiness、今日训练、Session Load 和学习打卡写入浏览器 `localStorage`，键统一以 `athlete_` 开头，不会回写 Markdown。
+
+除非用户明确要求迁移或同步，不要把 1.0 的文件数据自动写入 2.0，也不要把 2.0 浏览器数据视为仓库数据。
+
+## 训练记录工作流
+
+`.claude/skills/record-training/skill.md` 是完整 SOP。该技能文档中的 `records/`、`training-log.md`、`training-plans.md` 和 `dashboard.html` 均应解释为相对于 `train1.0/` 的路径。
+
+关键约束：
+
+1. 只记录用户明确提供的数据。不得补写次数、负重、评分、疼痛、身体感受或动作表现；缺失信息一次最多询问 2–3 项，用户记不清时跳过。
+2. 先确认日期，再更新月度 Markdown、月度 HTML、主索引和 1.0 仪表盘；保留所有历史记录。
+3. 休息日可以进入 HTML 的 `trainingDays` 以显示备注，但必须同时加入 `REST_DAYS`，使用 `.calendar-day.rest`，不可点击且不能使用训练日高亮。
+4. 月度页详情 ID 使用 `detail-YYYY-MM-DD`；日历链接必须动态按日期拼接，不能硬编码到某一天。
+5. HTML 中新增训练详情应插入 `<footer class="footer">` 前；编辑中文或 emoji 内容时优先用纯 ASCII 结构作为定位锚点。
+6. 下次训练推荐必须同时读取 `train1.0/training-plans.md`、最近 3 周月度记录和 `train1.0/training-log.md` 的弱点追踪。动作与重量必须有计划或历史数据依据；未练过的动作标注“新动作，从轻重量开始试”。
 
 ## 训练领域约定
 
-- 训练日结构固定：热身（5-10min 含 Level 2 防伤）→ 爆发/速度 → 主项力量 → 辅助 → 核心 → 拉伸
-- 排序原则：爆发力/速度敏捷永远最优先（神经兴奋度）；同一肌群大重量训练间隔 ≥48h
-- 板块图标：🏋️ 力量、⚡ 爆发力、🏃 速度敏捷、🔄 体能、🏀 篮球技巧、🧘 休息/停训
-- 评分均为 1-10；HTML 中评分圈配色：7-10 green、5-6 yellow、1-4 red
-- 进度条配色（dashboard）：力量→accent、核心→purple、篮球技巧→purple、爆发力→yellow、体能→green
-- 渐进方式（每次只选一种）：加重 → 加次 → 加组 → 控速；同一动作保持 6-8 次训练再进阶
+- 训练日顺序：热身（5–10 分钟，含 Level 2 防伤）→ 爆发/速度 → 主项力量 → 辅助 → 核心 → 拉伸。
+- 爆发力和速度敏捷始终优先；同一肌群的大重量训练间隔至少 48 小时。
+- 板块图标：🏋️ 力量、⚡ 爆发力、🏃 速度敏捷、🔄 体能、🏀 篮球技巧、🧘 休息/停训。
+- 评分范围为 1–10；HTML 评分圈配色为 7–10 green、5–6 yellow、1–4 red。
+- 1.0 仪表盘进度条配色：力量 accent、核心 purple、篮球技巧 purple、爆发力 yellow、体能 green。
+- 单次渐进只选择加重、加次、加组或控速中的一种；同一动作保持 6–8 次训练后再进阶。
 
-## Git 工作流
+## 验证与 Git
 
-提交信息用中文 + conventional 前缀（如 `feat(records):`、`feat(training):`）。仓库根路径含中文（`D:\个人文档`），文件路径请用完整绝对 Windows 路径。
+修改训练记录后至少核对：月度 Markdown 与 HTML 的详情一致；两个日历链接到正确日期；`training-log.md` 与 1.0 仪表盘中的统计、弱点和进步一致；休息日与训练日视觉状态正确。2.0 仪表盘改动还需验证刷新后的 `localStorage` 持久化及清空数据功能。
+
+提交信息使用中文说明和 conventional 前缀，例如 `feat(records):`、`feat(training):`。仓库路径包含中文，文件工具始终使用完整绝对 Windows 路径，如 `D:\个人文件\train-log\train1.0\dashboard.html`。
