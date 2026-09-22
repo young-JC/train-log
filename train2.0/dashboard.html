@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>篮球运动员训练系统 2.0</title>
+<title>超人不会飞专属训练系统 2.0</title>
 <style>
 :root{
  --bg:#080d13;--panel:#101720;--panel2:#151e29;--line:#223043;--text:#e9eef5;--muted:#8292a5;--muted2:#5c6b7e;
@@ -20,12 +20,52 @@ a{color:inherit;text-decoration:none}.container{max-width:1380px;margin:auto;pad
 .meso{margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.meso-card{padding:12px;border-radius:11px;border:1px solid var(--line);background:#0c131c}.meso-card h4{margin:0 0 4px;font-size:13px}.meso-card p{margin:0;font-size:11px;color:var(--muted)}
 .readiness{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.score-inputs{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.score{width:100%;appearance:none;height:6px;background:#1b2634;border-radius:4px;outline:none}.score::-webkit-slider-thumb{appearance:none;width:16px;height:16px;border-radius:50%;background:var(--orange);cursor:pointer}.readiness-result{padding:17px;border-radius:12px;background:#0c131c;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between}.ready-score{font-size:38px;font-weight:900}.ready-note{font-size:12px;color:var(--muted);line-height:1.7}
 .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px}table{width:100%;border-collapse:collapse;font-size:12px;min-width:720px}th{background:#0d151f;color:var(--muted2);font-size:10px;text-transform:uppercase;letter-spacing:.8px;text-align:left;padding:10px;white-space:nowrap}td{padding:10px;border-top:1px solid rgba(34,48,67,.7);color:#aebaca;vertical-align:top}td strong{color:#fff}
-.today{display:grid;grid-template-columns:1.15fr .85fr;gap:15px}.session-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.session-head h3{margin:0;font-size:18px}.slot{padding:12px 0;border-bottom:1px solid rgba(34,48,67,.65)}.slot:last-child{border-bottom:0}.slot-top{display:flex;justify-content:space-between;gap:8px}.slot-name{font-size:12px;font-weight:700}.slot-meta{font-size:10px;color:var(--muted)}.exercise-line{display:grid;grid-template-columns:1.5fr .6fr .55fr .75fr auto;gap:8px;align-items:center;margin-top:8px}.exercise-line div{font-size:12px;color:#bfccda}.check{width:18px;height:18px;accent-color:var(--green)}.hint{font-size:11px;color:var(--muted);line-height:1.7}.complete-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+.today{display:grid;grid-template-columns:1.15fr .85fr;gap:15px}.session-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.session-head h3{margin:0;font-size:18px}.slot{padding:10px 0;border-bottom:1px solid rgba(34,48,67,.65)}.slot:last-child{border-bottom:0}.slot-top{display:flex;justify-content:space-between;gap:8px}.slot-name{font-size:12px;font-weight:700}.slot-meta{font-size:10px;color:var(--muted)}.exercise-line{display:grid;grid-template-columns:1.5fr .6fr .55fr .75fr auto;gap:8px;align-items:center;margin-top:8px}.exercise-line div{font-size:12px;color:#bfccda}.check{width:18px;height:18px;accent-color:var(--green)}.hint{font-size:11px;color:var(--muted);line-height:1.7}.complete-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+.rec-meta{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;padding:10px;background:#0c131c;border-radius:9px;border:1px solid var(--line)}
+.rec-meta .pill{font-size:10px}
+.rec-slot{display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid rgba(34,48,67,.65);align-items:center}
+.rec-slot:last-child{border-bottom:0}
+.rec-slot-num{width:22px;height:22px;border-radius:50%;background:rgba(255,112,67,.15);color:var(--orange);font-size:10px;font-weight:800;display:grid;place-items:center}
+.rec-slot-body{display:flex;flex-direction:column;gap:2px}
+.rec-slot-name{font-size:12px;font-weight:700;color:var(--text)}
+.rec-slot-detail{font-size:11px;color:var(--muted)}
+.rec-slot-dose{font-size:11px;color:var(--blue);font-weight:700;text-align:right;white-space:nowrap}
+.rec-slot-dose small{display:block;font-size:9px;color:var(--muted2);font-weight:400}
 .assessment-status{display:inline-flex;padding:3px 8px;border-radius:999px;border:1px solid rgba(19,200,154,.3);background:rgba(19,200,154,.08);color:var(--green);font-size:10px;font-weight:800}.assessment-source{color:var(--blue);text-decoration:underline;text-decoration-color:rgba(73,167,255,.35);text-underline-offset:3px}.assessment-source:hover{color:#cbe7ff}
 .weak-status{display:inline-flex;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,196,77,.3);background:rgba(255,196,77,.08);color:var(--yellow);font-size:10px;font-weight:800}
-.filters{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px}.filter-group{display:grid;gap:5px}.filter-group label{font-size:10px;color:var(--muted);letter-spacing:.5px}.filter-secondary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px}.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.action{padding:13px;background:#0c131c;border:1px solid var(--line);border-radius:11px;cursor:pointer;transition:var(--tr)}.action:hover,.action:focus-visible{border-color:rgba(255,112,67,.55);transform:translateY(-1px);outline:none}.action h4{margin:0 0 5px;font-size:13px}.action p{margin:3px 0;color:var(--muted);font-size:11px}.action .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.tag{font-size:9px;padding:3px 7px;border-radius:999px;background:rgba(255,255,255,.05);color:var(--muted)}.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(3,7,12,.78);backdrop-filter:blur(8px)}.modal[hidden]{display:none}.modal-panel{width:min(620px,100%);max-height:min(760px,90vh);overflow:auto;background:var(--panel);border:1px solid #334760;border-radius:var(--r);box-shadow:0 24px 70px rgba(0,0,0,.5)}.modal-head{position:sticky;top:0;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:18px 20px;background:rgba(16,23,32,.96);border-bottom:1px solid var(--line)}.modal-head h3{margin:2px 0 0;font-size:20px}.modal-close{width:34px;height:34px;padding:0;border-radius:50%;font-size:20px}.modal-body{padding:20px}.modal-description{margin:0;color:#c5d0dc;font-size:14px;line-height:1.85}.modal-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}.modal-meta div{padding:10px;border:1px solid var(--line);border-radius:9px;background:#0c131c}.modal-meta span{display:block;color:var(--muted2);font-size:10px}.modal-meta strong{display:block;margin-top:3px;font-size:12px}.no-scroll{overflow:hidden}
+.filters{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px}.filter-group{display:grid;gap:5px}.filter-group label{font-size:10px;color:var(--muted);letter-spacing:.5px}.filter-secondary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px}.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.action{padding:13px;background:#0c131c;border:1px solid var(--line);border-radius:11px;cursor:pointer;transition:var(--tr)}.action:hover,.action:focus-visible{border-color:rgba(255,112,67,.55);transform:translateY(-1px);outline:none}.action h4{margin:0 0 5px;font-size:13px}.action p{margin:3px 0;color:var(--muted);font-size:11px}.action .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.tag{font-size:9px;padding:3px 7px;border-radius:999px;background:rgba(255,255,255,.05);color:var(--muted)}.action-name-en{display:block;margin-top:3px;font-size:10px;font-weight:400;color:var(--muted2)}
+.lib-toolbar{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:9px;margin-bottom:16px}
+@media(max-width:760px){.lib-toolbar{grid-template-columns:1fr 1fr}}
+.lib-group{margin-bottom:4px}
+.lib-group-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:#0c131c;border:1px solid var(--line);border-radius:10px;color:var(--text);font:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:var(--tr);text-align:left}
+.lib-group-toggle:hover{background:var(--panel2);border-color:#334760}
+.lib-group-toggle .lib-group-count{font-size:11px;font-weight:400;color:var(--muted2)}
+.lib-group-toggle .lib-group-arrow{font-size:10px;color:var(--muted);transition:transform .2s ease;flex-shrink:0}
+.lib-group.open .lib-group-toggle .lib-group-arrow{transform:rotate(90deg)}
+.lib-group-body{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.lib-group.open .lib-group-body{max-height:2500px}
+.lib-group-body .table-wrap{margin:8px 0 14px}
+.lib-group-body .table-wrap table{min-width:640px}
+.lib-table{font-size:12px}
+.lib-table td{vertical-align:middle}
+tr.lib-row{cursor:pointer;transition:background var(--tr)}
+tr.lib-row:hover td{background:rgba(255,112,67,.05);color:var(--text)}
+tr.lib-row:focus-visible{outline:2px solid var(--orange);outline-offset:-2px}
+.lib-name{color:#fff;font-weight:700}
+.lib-name .action-name-en{font-size:10px}
+.lvl-pill{display:inline-flex;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:800;border:1px solid var(--line);color:var(--muted)}
+.lvl-pill.l1{border-color:rgba(19,200,154,.4);color:var(--green)}
+.lvl-pill.l2{border-color:rgba(73,167,255,.4);color:var(--blue)}
+.lvl-pill.l3{border-color:rgba(255,196,77,.4);color:var(--yellow)}
+.lvl-pill.l4{border-color:rgba(255,97,117,.4);color:var(--red)}
+.impact-pill{display:inline-flex;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:800}
+.impact-pill.low{background:rgba(19,200,154,.1);color:var(--green)}
+.impact-pill.mid{background:rgba(255,196,77,.1);color:var(--yellow)}
+.impact-pill.high{background:rgba(255,97,117,.1);color:var(--red)}
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(3,7,12,.78);backdrop-filter:blur(8px)}.modal[hidden]{display:none}.modal-panel{width:min(620px,100%);max-height:min(760px,90vh);overflow:auto;background:var(--panel);border:1px solid #334760;border-radius:var(--r);box-shadow:0 24px 70px rgba(0,0,0,.5)}.modal-head{position:sticky;top:0;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:18px 20px;background:rgba(16,23,32,.96);border-bottom:1px solid var(--line)}.modal-head h3{margin:2px 0 0;font-size:20px}.modal-close{width:34px;height:34px;padding:0;border-radius:50%;font-size:20px}.modal-body{padding:20px}.modal-description{margin:0;color:#c5d0dc;font-size:14px;line-height:1.85}.modal-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}.modal-meta div{padding:10px;border:1px solid var(--line);border-radius:9px;background:#0c131c}.modal-meta span{display:block;color:var(--muted2);font-size:10px}.modal-meta strong{display:block;margin-top:3px;font-size:12px}.no-scroll{overflow:hidden}
 .prehab-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.prehab-card{padding:13px;background:#0c131c;border:1px solid var(--line);border-radius:11px}.prehab-card h4{margin:0 0 5px;font-size:13px}.prehab-card p{margin:0;font-size:11px;color:var(--muted)}
 .log-form{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.log-form .wide{grid-column:span 2}.pain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.status-box{padding:14px;border-radius:11px;border:1px solid var(--line);background:#0c131c}.status-box h4{margin:0 0 3px;font-size:13px}.status-box p{margin:0;color:var(--muted);font-size:11px}.status-box.green{border-color:rgba(19,200,154,.25);background:rgba(19,200,154,.06)}.status-box.yellow{border-color:rgba(255,196,77,.25);background:rgba(255,196,77,.06)}.status-box.red{border-color:rgba(255,97,117,.25);background:rgba(255,97,117,.06)}
+#load .grid2>*{min-width:0}#load .table-wrap table{min-width:520px}
 .skill-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.skill{padding:12px;border:1px solid var(--line);border-radius:10px;background:#0c131c}.skill h4{margin:0 0 5px;font-size:12px}.skill p{margin:0;font-size:10px;color:var(--muted)}
 .monthly-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;min-width:0}.monthly-weekday{padding:3px;text-align:center;color:var(--muted2);font-size:10px;font-weight:800}.monthly-day{position:relative;min-width:0;min-height:78px;overflow:hidden;padding:9px;border:1px solid var(--line);border-radius:10px;background:#0c131c}.monthly-day.outside{border-color:transparent;background:transparent}.monthly-day.cycle-start{border-color:var(--orange);box-shadow:inset 0 0 0 1px rgba(255,112,67,.15)}.monthly-day.training{border-color:rgba(19,200,154,.5);background:rgba(19,200,154,.06)}.monthly-day.readiness{border-color:rgba(73,167,255,.5);background:rgba(73,167,255,.06)}.monthly-day.rest{border-color:rgba(167,134,255,.45);background:rgba(167,134,255,.06)}.monthly-day a{display:block;height:100%}.monthly-day-number{font-size:13px;font-weight:800}.monthly-position{position:absolute;top:8px;right:7px;color:var(--orange);font-size:8px;font-weight:800}.monthly-status{display:block;margin-top:20px;color:var(--muted);font-size:9px}.monthly-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .footer{padding:30px 0;text-align:center;color:var(--muted2);font-size:11px;border-top:1px solid var(--line);margin-top:40px}.hidden{display:none!important}.muted{color:var(--muted)}.orange{color:var(--orange)}.green{color:var(--green)}.blue{color:var(--blue)}.yellow{color:var(--yellow)}.red{color:var(--red)}.purple{color:var(--purple)}
@@ -35,12 +75,12 @@ a{color:inherit;text-decoration:none}.container{max-width:1380px;margin:auto;pad
 </head>
 <body>
 <nav class="nav" id="nav">
- <a href="#dashboard">🏀 总览</a><a href="#monthCalendar">📅 月历</a><a href="#cycle">🗓 12周周期</a><a href="#readiness">⚡ Ready</a><a href="#today">📋 今日训练</a><a href="#assessment">📊 能力评估</a><a href="#weakness">🎯 弱项</a><a href="#load">📈 负荷</a><a href="#actionLib">📚 动作库</a><a href="#prehab">🛡️ 防伤</a><a href="#review">🔁 周期复盘</a>
+ <a href="#dashboard">🏀 总览</a><a href="#monthCalendar">📅 月历</a><a href="#cycle">🗓 12周周期</a><a href="#readiness">⚡ Ready</a><a href="#today">📋 训练推荐</a><a href="#assessment">📊 能力评估</a><a href="#weakness">🎯 弱项</a><a href="#load">📈 负荷</a><a href="#actionLib">📚 动作库</a><a href="#prehab">🛡️ 防伤</a><a href="#review">🔁 周期复盘</a>
 </nav>
 <div class="container">
 <header class="header" id="dashboard">
  <div class="head">
-  <div class="brand"><div class="brand-icon">⚡</div><div><h1>篮球运动员训练系统 2.0</h1><p>Athlete Performance Operating System</p></div></div>
+  <div class="brand"><div class="brand-icon">⚡</div><div><h1>超人不会飞专属训练系统 2.0</h1><p>Athlete Performance Operating System</p></div></div>
   <div class="cycle-controls">
    <label class="pill">周期开始 <input class="control" id="cycleStart" type="date" value="2026-09-21"></label>
    <label class="pill">训练模式 <select class="control" id="mode"><option value="3">3日版</option><option value="4">4日版</option><option value="5">4+1日版</option></select></label>
@@ -76,20 +116,39 @@ a{color:inherit;text-decoration:none}.container{max-width:1380px;margin:auto;pad
  <div class="readiness">
   <div class="card"><div class="score-inputs">
    <div class="field"><label>睡眠 1-5 · 当前 <b id="sleepVal">3</b></label><input id="sleep" class="score" type="range" min="1" max="5" value="3" oninput="syncSlider('sleep')"></div>
-   <div class="field"><label>疲劳 1-5 · 当前 <b id="fatigueVal">1</b></label><input id="fatigue" class="score" type="range" min="1" max="5" value="1" oninput="syncSlider('fatigue')"></div>
-   <div class="field"><label>酸痛 1-5 · 当前 <b id="sorenessVal">1</b></label><input id="soreness" class="score" type="range" min="1" max="5" value="1" oninput="syncSlider('soreness')"></div>
-   <div class="field"><label>疼痛 0-10 · 当前 <b id="painVal">0</b></label><input id="pain" class="score" type="range" min="0" max="10" value="0" oninput="syncSlider('pain')"></div>
-   <div class="field"><label>训练意愿 1-5 · 当前 <b id="motivationVal">5</b></label><input id="motivation" class="score" type="range" min="1" max="5" value="5" oninput="syncSlider('motivation')"></div>
+   <div class="field"><label>疲劳 1-5 · 当前 <b id="fatigueVal">2</b></label><input id="fatigue" class="score" type="range" min="1" max="5" value="2" oninput="syncSlider('fatigue')"></div>
+   <div class="field"><label>酸痛 1-5 · 当前 <b id="sorenessVal">2</b></label><input id="soreness" class="score" type="range" min="1" max="5" value="2" oninput="syncSlider('soreness')"></div>
+   <div class="field"><label>疼痛 0-10 · 当前 <b id="painVal">2</b></label><input id="pain" class="score" type="range" min="0" max="10" value="2" oninput="syncSlider('pain')"></div>
+   <div class="field"><label>训练意愿 1-5 · 当前 <b id="motivationVal">3</b></label><input id="motivation" class="score" type="range" min="1" max="5" value="3" oninput="syncSlider('motivation')"></div>
   </div></div>
   <div class="readiness-result"><div><div class="eyebrow">READINESS SCORE</div><div class="ready-score" id="readyScore">92</div></div><div class="ready-note" id="readyNote">绿色区：按计划训练。训练后再记录 Session RPE 与第二天反应。</div></div>
  </div>
 </section>
 
 <section class="section" id="today">
- <div class="section-head"><div><h2>📋 今日训练</h2><p>动作不是计划本身；先确定能力目标，再从动作库填入训练槽位。</p></div><span class="pill orange" id="todayPill">DAY 1</span></div>
+ <div class="section-head"><div><h2>📋 训练推荐</h2><p>下次训练推荐基于周期、Readiness 和恢复状态生成；训练后请使用 /record-training-2 记录实际完成内容。</p></div><span class="pill orange" id="todayPill">DAY 1</span></div>
  <div class="today">
-  <div class="card"><div class="session-head"><div><div class="eyebrow" id="todayModule">Lower A</div><h3 id="todayTitle">下肢爆发 + 力量</h3><div class="muted" style="font-size:11px" id="todayPurpose">垂直爆发、膝主导力量、单腿稳定、后链。</div></div><span class="pill" id="todayRpe">目标 RPE 6-7</span></div><div id="sessionSlots" style="margin-top:12px"></div></div>
-  <div class="card"><div class="card-header">🧠 为什么今天这样练？</div><div id="todayReason" class="hint"></div><div class="card-header" style="margin-top:16px">🎯 今日技能</div><div id="todaySkills" class="skill-grid"></div></div>
+  <div class="card">
+   <div class="session-head">
+    <div>
+     <div class="eyebrow" id="todayModule">Lower A</div>
+     <h3 id="todayTitle">下肢爆发 + 力量</h3>
+     <div class="muted" style="font-size:11px" id="todayPurpose">垂直爆发、膝主导力量、单腿稳定、后链。</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+     <span class="pill" id="todayRpe">目标 RPE 6-7</span>
+     <span class="pill green" id="todayDuration">预计 50 分钟</span>
+    </div>
+   </div>
+   <div class="rec-meta" id="recMeta"></div>
+   <div id="sessionSlots"></div>
+  </div>
+  <div class="card">
+   <div class="card-header">🧠 推荐依据</div>
+   <div id="todayReason" class="hint"></div>
+   <div class="card-header" style="margin-top:16px">🎯 训练重点</div>
+   <div id="todaySkills" class="skill-grid"></div>
+  </div>
  </div>
 </section>
 
@@ -104,36 +163,48 @@ a{color:inherit;text-decoration:none}.container{max-width:1380px;margin:auto;pad
 </section>
 
 <section class="section" id="load">
- <div class="section-head"><div><h2>📈 训练负荷 & 疼痛管理</h2><p>Session Load = 训练时长 × Session RPE；主要用于观察个人趋势，不作为单独诊断标准。</p></div><button class="btn green small" onclick="saveSessionLog()">保存训练日志</button></div>
+ <div class="section-head"><div><h2>📈 训练负荷 & 疼痛管理</h2><p>正式训练记录只读展示；数据来源为月度记录的已完成训练。</p></div><span class="pill" id="loadLatestBadge">最新：2026-09-21</span></div>
  <div class="grid2">
-  <div class="card"><div class="log-form">
-   <div class="field"><label>训练时长（分钟）</label><input id="duration" class="input" type="number" min="0" value="100"></div>
-   <div class="field"><label>Session RPE（1-10）</label><input id="sessionRpe" class="input" type="number" min="1" max="10" value="7"></div>
-   <div class="field"><label>训练前疼痛</label><input id="painBefore" class="input" type="number" min="0" max="10" value="0"></div>
-   <div class="field"><label>训练后疼痛</label><input id="painAfter" class="input" type="number" min="0" max="10" value="0"></div>
-   <div class="field"><label>第二天疼痛</label><input id="painNext" class="input" type="number" min="0" max="10" value="0"></div>
-   <div class="field"><label>动作质量 1-5</label><input id="quality" class="input" type="number" min="1" max="5" value="4"></div>
-   <div class="field wide"><label>今日备注</label><input id="sessionNote" class="input" placeholder="例如：最后两组速度下降；左腿稳定性较差"></div>
-  </div><div style="margin-top:14px" class="grid3"><div class="status-box"><h4>本次负荷</h4><p id="sessionLoad">525</p></div><div class="status-box"><h4>本周累计</h4><p id="weeklyLoad">0</p></div><div class="status-box" id="painStatusBox"><h4>疼痛状态</h4><p id="painStatus">绿色</p></div></div></div>
+  <div class="card">
+    <div class="eyebrow" style="margin-bottom:10px">最新训练 · <span id="latestTrainingDate">—</span></div>
+    <div class="grid3" style="margin-bottom:14px">
+     <div class="status-box" id="latestLoadBox"><h4>Session Load</h4><p id="latestSessionLoad">—</p></div>
+     <div class="status-box" id="latestPainBox"><h4>疼痛（前/中/后）</h4><p id="latestPainDetail">—</p></div>
+     <div class="status-box" id="latestReadyBox"><h4>Readiness</h4><p id="latestReadyScore">—</p></div>
+    </div>
+    <div style="border-top:1px solid var(--line);padding-top:14px">
+     <div class="eyebrow" style="margin-bottom:10px" id="loadWeekLabel">本周统计</div>
+     <div class="grid3" style="margin-bottom:4px">
+      <div class="status-box"><h4>训练天数</h4><p id="loadTrainingDays">0</p></div>
+      <div class="status-box"><h4>本周累计负荷</h4><p id="weeklyLoadDisplay">0 AU</p></div>
+      <div class="status-box" id="weeklyPainBox"><h4>疼痛趋势</h4><p id="weeklyPainTrend">—</p></div>
+     </div>
+    </div>
+    <div style="border-top:1px solid var(--line);padding-top:14px">
+     <div class="eyebrow" style="margin-bottom:8px">近期训练记录</div>
+     <div class="table-wrap">
+      <table>
+       <thead><tr><th>日期</th><th>周</th><th>负荷</th><th>Ready</th><th>疼痛备注</th></tr></thead>
+       <tbody id="loadHistoryBody"></tbody>
+      </table>
+     </div>
+    </div>
+   </div>
   <div class="card"><div class="card-header">🚦 自动调整规则</div><div class="grid3"><div class="status-box green"><h4>🟢 Green</h4><p>疼痛稳定、恢复正常、动作质量≥4。按计划。</p></div><div class="status-box yellow"><h4>🟡 Yellow</h4><p>疲劳/疼痛升高。总量可降20–30%，减少高冲击Plyo/COD。</p></div><div class="status-box red"><h4>🔴 Red</h4><p>尖锐痛、肿胀、不稳、卡顿或持续加重。停止高冲击并做专业评估。</p></div></div><div style="margin-top:14px" class="table-wrap"><table><thead><tr><th>情况</th><th>自动策略</th></tr></thead><tbody><tr><td>Ready ≥ 75 且疼痛 ≤ 2</td><td>100%计划；保持动作质量</td></tr><tr><td>Ready 60–74 或疼痛 3–4</td><td>训练量 -20%；Plyo/COD减少</td></tr><tr><td>Ready &lt; 60 或疼痛 ≥ 5</td><td>恢复/Prehab；取消高冲击训练</td></tr></tbody></table></div></div>
  </div>
 </section>
 
 <section class="section" id="actionLib">
- <div class="section-head"><div><h2>📚 动作库 2.0</h2><p>动作库不是“全部都做”，而是按阶段、能力短板、难度、冲击和器材筛选。</p></div><span class="pill purple" id="actionCount">0 个动作</span></div>
+ <div class="section-head"><div><h2>📚 动作库 2.0</h2><p>按模块分组展示，点击动作行查看详细说明；可用搜索和筛选快速定位。等级 L1 基础 · L2 运动员基础 · L3 运动表现 · L4 篮球专项。</p></div><span class="pill purple" id="actionCount">0 个动作</span></div>
  <div class="card">
-  <div class="filters">
-   <div class="filter-group"><label for="fModule">1 · 模块</label><select id="fModule" class="select"><option value="">全部模块</option></select></div>
-   <div class="filter-group"><label for="fCategory">2 · 类别</label><select id="fCategory" class="select" disabled><option value="">请先选择模块</option></select></div>
-   <div class="filter-group"><label for="fAction">3 · 动作</label><select id="fAction" class="select" disabled><option value="">请先选择类别</option></select></div>
-  </div>
-  <div class="filter-secondary">
+  <div class="lib-toolbar">
+   <input id="fSearch" class="input" aria-label="搜索动作" placeholder="搜索动作名称（中文 / 英文）…">
    <select id="fLevel" class="select" aria-label="等级"><option value="">全部等级</option><option>L1</option><option>L2</option><option>L3</option><option>L4</option></select>
    <select id="fImpact" class="select" aria-label="冲击"><option value="">全部冲击</option><option>低</option><option>中</option><option>高</option></select>
    <select id="fEquipment" class="select" aria-label="器材"><option value="">全部器材</option></select>
-   <input id="fSearch" class="input" aria-label="搜索动作" placeholder="搜索动作/能力/目标肌群">
   </div>
-  <div class="action-grid" id="actionGrid"></div>
+  <div id="actionLibGroups"></div>
+  <div class="muted" id="actionLibEmpty" style="display:none;text-align:center;padding:20px 0">没有匹配的动作。</div>
  </div>
 </section>
 
@@ -163,147 +234,549 @@ a{color:inherit;text-decoration:none}.container{max-width:1380px;margin:auto;pad
 </div>
 <script>
 const FORMAL_MONTH={year:2026,month:'09',days:30,startOffset:1};
+const FORMAL_TODAY_READINESS={date:'2026-09-23',sleep:4,fatigue:1,soreness:1,pain:1,motivation:5,score:94,level:'绿色',painNote:'左膝轻微疼痛 1/10（预估）；疼痛趋势下降但仍存在'};
 const FORMAL_RECORDS={
- '2026-09-21':{status:'training',label:'训练 · Ready 92 · 700 AU',sessionLoad:700,readiness:{sleep:3,fatigue:1,soreness:1,pain:0,painNote:'训练前无疼痛；训练中膝盖左2/10、右3/10；训练后无疼痛',motivation:5,score:92,level:'绿色'}}
+ '2026-09-21':{status:'training',label:'训练 · Ready 92 · 700 AU',sessionLoad:700,readiness:{sleep:3,fatigue:1,soreness:1,pain:0,painNote:'训练前无疼痛；训练中膝盖左2/10、右3/10；训练后无疼痛',motivation:5,score:92,level:'绿色'}},
+ '2026-09-22':{status:'readiness',label:'取消 · 加班',sessionLoad:0,readiness:{sleep:3,fatigue:2,soreness:2,pain:2,painNote:'左膝极轻微疼痛，静止和走路无感觉，热身后不出现；次日活动时轻微 2/10',motivation:3,score:72,level:'黄色'}},
+ '2026-09-23':{status:'readiness',label:'Ready 94 · 绿色',sessionLoad:0,readiness:{sleep:4,fatigue:1,soreness:1,pain:1,painNote:'左膝轻微疼痛 1/10（预估）；疼痛趋势下降但仍存在',motivation:5,score:94,level:'绿色'}}
 };
 const FORMAL_REST_DAYS=[];
-const ACTIONS = [
+const ACTIONS=[
 // A Mobility
-['A1','踝关节 Mobility','膝盖靠墙踝背屈','低','L1','踝背屈','无','篮球落地/变向基础'],['A1','踝关节 Mobility','动态踝背屈','低','L1','踝背屈','无','动态热身'],['A1','踝关节 Mobility','深蹲位踝背屈','低','L2','踝背屈/深蹲','无','深蹲与落地'],['A2','髋 Mobility','90/90 Hip Switch','低','L1','髋旋转','无','髋活动'],['A2','髋 Mobility','90/90前倾','低','L1','髋外旋','无','髋活动'],['A2','髋 Mobility','Cossack Squat','中','L2','髋/内收肌','无','侧向能力'],['A2','髋 Mobility','Hip Airplane','中','L3','髋稳定/旋转控制','无','单腿控制'],['A3','胸椎/肩 Mobility','World’s Greatest Stretch','低','L1','髋/胸椎','无','全身热身'],['A3','胸椎/肩 Mobility','Open Book','低','L1','胸椎旋转','无','胸椎活动'],['A3','胸椎/肩 Mobility','Wall Slide','低','L1','肩胛控制','无','上肢日'],
+{id:'A1',module:'踝关节 Mobility',name:'膝盖靠墙踝背屈',en:'Knee-to-Wall Ankle Dorsiflexion',impact:'低',level:'L1',ability:'踝背屈',equipment:'无',use:'篮球落地/变向基础'},
+{id:'A1',module:'踝关节 Mobility',name:'动态踝背屈',en:'Dynamic Ankle Dorsiflexion',impact:'低',level:'L1',ability:'踝背屈',equipment:'无',use:'动态热身'},
+{id:'A1',module:'踝关节 Mobility',name:'深蹲位踝背屈',en:'Ankle Dorsiflexion in Squat',impact:'低',level:'L2',ability:'踝背屈/深蹲',equipment:'无',use:'深蹲与落地'},
+{id:'A1',module:'踝关节 Mobility',name:'小腿动态拉伸',en:'Dynamic Calf Stretch',impact:'低',level:'L1',ability:'小腿活动',equipment:'无',use:'踝活动'},
+{id:'A1',module:'踝关节 Mobility',name:'比目鱼肌动态活动',en:'Soleus Dynamic Mobility',impact:'低',level:'L2',ability:'比目鱼肌活动',equipment:'无',use:'踝活动'},
+{id:'A2',module:'髋 Mobility',name:'90/90髋部转换',en:'90/90 Hip Switch',impact:'低',level:'L1',ability:'髋旋转',equipment:'无',use:'髋活动'},
+{id:'A2',module:'髋 Mobility',name:'90/90髋部前倾',en:'90/90 Forward Fold',impact:'低',level:'L1',ability:'髋外旋',equipment:'无',use:'髋活动'},
+{id:'A2',module:'髋 Mobility',name:'哥萨克深蹲',en:'Cossack Squat',impact:'中',level:'L2',ability:'髋/内收肌',equipment:'无',use:'侧向能力'},
+{id:'A2',module:'髋 Mobility',name:'髋飞机',en:'Hip Airplane',impact:'中',level:'L3',ability:'髋稳定/旋转控制',equipment:'无',use:'单腿控制'},
+{id:'A2',module:'髋 Mobility',name:'内收肌后坐拉伸',en:'Adductor Rock Back',impact:'低',level:'L1',ability:'内收肌活动',equipment:'无',use:'髋活动'},
+{id:'A3',module:'胸椎/肩 Mobility',name:'世界最伟大拉伸',en:'World’s Greatest Stretch',impact:'低',level:'L1',ability:'髋/胸椎',equipment:'无',use:'全身热身'},
+{id:'A3',module:'胸椎/肩 Mobility',name:'开书式胸椎旋转',en:'Open Book',impact:'低',level:'L1',ability:'胸椎旋转',equipment:'无',use:'胸椎活动'},
+{id:'A3',module:'胸椎/肩 Mobility',name:'墙滑',en:'Wall Slide',impact:'低',level:'L1',ability:'肩胛控制',equipment:'无',use:'上肢日'},
+{id:'A3',module:'胸椎/肩 Mobility',name:'胸椎旋转',en:'T-Spine Rotation',impact:'低',level:'L1',ability:'胸椎活动',equipment:'无',use:'全身热身'},
+{id:'A3',module:'胸椎/肩 Mobility',name:'弹力带肩部绕环',en:'Band Shoulder Dislocate',impact:'低',level:'L1',ability:'肩部活动',equipment:'弹力带',use:'肩部热身'},
+{id:'A3',module:'胸椎/肩 Mobility',name:'肩胛关节控制环绕',en:'Scapular CARs',impact:'低',level:'L2',ability:'肩胛控制',equipment:'无',use:'肩部活动'},
 // B Prehab
-['B1','Prehab · 膝','弹力带侧走','低','L1','臀中肌/膝稳定','弹力带','训练前固定'],['B1','Prehab · 膝','站姿膝控','低','L1','膝本体感觉','无','训练前固定'],['B1','Prehab · 膝','Step-down','中','L2','减速/膝控制','台阶','单腿制动'],['B1','Prehab · 膝','Spanish Squat','中','L2','股四/膝耐受','弹力带','力量辅助'],['B2','Prehab · 髋','侧卧蚌式','低','L1','臀中肌','自重','每日激活'],['B2','Prehab · 髋','侧卧髋外展','低','L1','臀中肌','无','每日激活'],['B3','Prehab · 腘绳肌','单腿RDL','中','L2','腘绳肌/髋稳定','哑铃','单腿力量'],['B3','Prehab · 腘绳肌','滑动腿弯举','中','L2','腘绳肌','滑盘','后链'],['B3','Prehab · 腘绳肌','Nordic辅助','高','L3','腘绳肌离心','固定点','高级后链'],['B4','Prehab · 内收肌','Copenhagen短杠杆','中','L2','内收肌/核心','凳子','侧向能力'],['B4','Prehab · 内收肌','Copenhagen长杠杆','高','L3','内收肌','凳子','高级侧向能力'],['B5','Prehab · 踝足','单腿提踵','低','L2','小腿/踝稳定','哑铃','落地耐受'],['B5','Prehab · 踝足','屈膝提踵','低','L2','比目鱼肌','哑铃','踝力量'],['B5','Prehab · 踝足','单腿平衡','低','L1','本体感觉','无','训练后'],
+{id:'B1',module:'Prehab · 膝',name:'弹力带侧走',en:'Band Lateral Walk',impact:'低',level:'L1',ability:'臀中肌/膝稳定',equipment:'弹力带',use:'训练前固定'},
+{id:'B1',module:'Prehab · 膝',name:'站姿膝控',en:'Standing Knee Control',impact:'低',level:'L1',ability:'膝本体感觉',equipment:'无',use:'训练前固定'},
+{id:'B1',module:'Prehab · 膝',name:'台阶下蹲',en:'Step Down',impact:'中',level:'L2',ability:'减速/膝控制',equipment:'台阶',use:'单腿制动'},
+{id:'B1',module:'Prehab · 膝',name:'西班牙深蹲',en:'Spanish Squat',impact:'中',level:'L2',ability:'股四/膝耐受',equipment:'弹力带',use:'力量辅助'},
+{id:'B1',module:'Prehab · 膝',name:'单腿坐姿起立',en:'Single-Leg Sit-to-Stand',impact:'中',level:'L2',ability:'膝控制/单腿力量',equipment:'椅子',use:'单腿控制'},
+{id:'B2',module:'Prehab · 髋',name:'蚌式',en:'Clamshell',impact:'低',level:'L1',ability:'臀中肌',equipment:'自重',use:'每日激活'},
+{id:'B2',module:'Prehab · 髋',name:'侧卧髋外展',en:'Side-Lying Hip Abduction',impact:'低',level:'L1',ability:'臀中肌',equipment:'无',use:'每日激活'},
+{id:'B2',module:'Prehab · 髋',name:'弹力带髋外展',en:'Band Hip Abduction',impact:'低',level:'L1',ability:'臀中肌',equipment:'弹力带',use:'每日激活'},
+{id:'B3',module:'Prehab · 腘绳肌',name:'单腿罗马尼亚硬拉',en:'Single-Leg RDL',impact:'中',level:'L2',ability:'腘绳肌/髋稳定',equipment:'哑铃',use:'单腿力量'},
+{id:'B3',module:'Prehab · 腘绳肌',name:'滑动腿弯举',en:'Slider Leg Curl',impact:'中',level:'L2',ability:'腘绳肌',equipment:'滑盘',use:'后链'},
+{id:'B3',module:'Prehab · 腘绳肌',name:'瑞士球腿弯举',en:'Swiss Ball Leg Curl',impact:'中',level:'L2',ability:'腘绳肌',equipment:'瑞士球',use:'后链'},
+{id:'B3',module:'Prehab · 腘绳肌',name:'辅助北欧腘绳肌弯举',en:'Assisted Nordic Hamstring Curl',impact:'高',level:'L3',ability:'腘绳肌离心',equipment:'固定点',use:'高级后链'},
+{id:'B4',module:'Prehab · 内收肌',name:'短杠杆哥本哈根侧桥',en:'Short-Lever Copenhagen',impact:'中',level:'L2',ability:'内收肌/核心',equipment:'凳子',use:'侧向能力'},
+{id:'B4',module:'Prehab · 内收肌',name:'长杠杆哥本哈根侧桥',en:'Long-Lever Copenhagen',impact:'高',level:'L3',ability:'内收肌',equipment:'凳子',use:'高级侧向能力'},
+{id:'B4',module:'Prehab · 内收肌',name:'侧向弓步',en:'Lateral Lunge',impact:'中',level:'L2',ability:'内收肌/单腿力量',equipment:'无',use:'侧向能力'},
+{id:'B5',module:'Prehab · 踝足',name:'双腿提踵',en:'Double-Leg Calf Raise',impact:'低',level:'L1',ability:'小腿/踝稳定',equipment:'无',use:'踝力量'},
+{id:'B5',module:'Prehab · 踝足',name:'单腿提踵',en:'Single-Leg Calf Raise',impact:'低',level:'L2',ability:'小腿/踝稳定',equipment:'哑铃',use:'落地耐受'},
+{id:'B5',module:'Prehab · 踝足',name:'屈膝提踵',en:'Bent-Knee Calf Raise',impact:'低',level:'L2',ability:'比目鱼肌',equipment:'哑铃',use:'踝力量'},
+{id:'B5',module:'Prehab · 踝足',name:'单腿平衡',en:'Single-Leg Balance',impact:'低',level:'L1',ability:'本体感觉',equipment:'无',use:'训练后'},
 // C Landing
-['C1','Landing','Snap Down','低','L1','落地姿势','无','落地入门'],['C1','Landing','单脚Snap Down','中','L2','单腿落地','无','单腿控制'],['C1','Landing','Squat Landing','中','L1','双脚落地','无','基础'],['C1','Landing','Drop Landing','中','L2','冲击吸收','低箱','篮球落地'],['C1','Landing','Drop Jump','高','L3','反应力量/落地','低箱','高级'],['C2','Landing','Lateral Jump Stick','中','L2','侧向落地','无','横向稳定'],
+{id:'C1',module:'Landing',name:'快速下落定住',en:'Snap Down',impact:'低',level:'L1',ability:'落地姿势',equipment:'无',use:'落地入门'},
+{id:'C1',module:'Landing',name:'深蹲式落地',en:'Squat Landing',impact:'中',level:'L1',ability:'双脚落地',equipment:'无',use:'基础'},
+{id:'C1',module:'Landing',name:'下落落地',en:'Drop Landing',impact:'中',level:'L2',ability:'冲击吸收',equipment:'低箱',use:'篮球落地'},
+{id:'C1',module:'Landing',name:'跳箱后落地',en:'Box Jump Landing',impact:'中',level:'L2',ability:'落地控制',equipment:'跳箱',use:'落地吸收'},
+{id:'C1',module:'Landing',name:'落箱反应跳',en:'Drop Jump',impact:'高',level:'L3',ability:'反应力量/落地',equipment:'低箱',use:'高级'},
+{id:'C2',module:'Landing',name:'单脚快速下落定住',en:'Single-Leg Snap Down',impact:'中',level:'L2',ability:'单腿落地',equipment:'无',use:'单腿控制'},
+{id:'C2',module:'Landing',name:'单脚落地',en:'Single-Leg Landing',impact:'中',level:'L2',ability:'单腿落地',equipment:'无',use:'单腿控制'},
+{id:'C2',module:'Landing',name:'单脚跳→落地',en:'Single-Leg Hop to Landing',impact:'中',level:'L2',ability:'单腿落地',equipment:'无',use:'单腿控制'},
+{id:'C2',module:'Landing',name:'横向跳→单脚落地',en:'Lateral Jump Stick',impact:'中',level:'L2',ability:'侧向落地',equipment:'无',use:'横向稳定'},
+{id:'C3',module:'Landing',name:'跳跃→定住→再次跳跃',en:'Jump-Stick-Jump',impact:'高',level:'L3',ability:'落地/反应力量',equipment:'无',use:'复杂落地'},
 // D Decel
-['D1','Deceleration','5m加速急停','中','L1','制动','标志桶','减速入门'],['D1','Deceleration','10m加速急停','中','L2','制动','标志桶','篮球制动'],['D1','Deceleration','单腿前跳→停','中','L2','单腿制动','无','单腿能力'],['D1','Deceleration','单腿侧跳→停','高','L3','侧向制动','无','高级'],['D2','Deceleration','Sprint→Stop→Backpedal','高','L3','复杂减速','标志桶','防守专项'],['D2','Deceleration','Sprint→45° Cut','高','L3','减速/变向','标志桶','COD'],['D2','Deceleration','Sprint→90° Cut','高','L4','减速/变向','标志桶','高级COD'],
+{id:'D1',module:'Deceleration',name:'5米加速急停',en:'5m Acceleration Stop',impact:'中',level:'L1',ability:'制动',equipment:'标志桶',use:'减速入门'},
+{id:'D1',module:'Deceleration',name:'10米加速急停',en:'10m Acceleration Stop',impact:'中',level:'L2',ability:'制动',equipment:'标志桶',use:'篮球制动'},
+{id:'D1',module:'Deceleration',name:'前进→急停',en:'Forward Run to Stop',impact:'中',level:'L1',ability:'制动',equipment:'标志桶',use:'减速入门'},
+{id:'D1',module:'Deceleration',name:'后退→急停',en:'Backpedal to Stop',impact:'中',level:'L2',ability:'制动',equipment:'标志桶',use:'减速入门'},
+{id:'D2',module:'Deceleration',name:'单腿跳→停',en:'Single-Leg Hop to Stop',impact:'中',level:'L2',ability:'单腿制动',equipment:'无',use:'单腿能力'},
+{id:'D2',module:'Deceleration',name:'单腿向前跳→停',en:'Single-Leg Broad Jump to Stop',impact:'中',level:'L2',ability:'单腿制动',equipment:'无',use:'单腿能力'},
+{id:'D2',module:'Deceleration',name:'单腿侧向跳→停',en:'Single-Leg Lateral Jump to Stop',impact:'高',level:'L3',ability:'侧向制动',equipment:'无',use:'高级'},
+{id:'D3',module:'Deceleration',name:'冲刺→急停',en:'Sprint to Stop',impact:'高',level:'L3',ability:'制动',equipment:'标志桶',use:'高级减速'},
+{id:'D3',module:'Deceleration',name:'冲刺→后退跑',en:'Sprint to Backpedal',impact:'高',level:'L3',ability:'制动/回跑',equipment:'标志桶',use:'篮球专项'},
+{id:'D3',module:'Deceleration',name:'冲刺→急停→后退跑',en:'Sprint-Stop-Backpedal',impact:'高',level:'L3',ability:'复杂减速',equipment:'标志桶',use:'防守专项'},
+{id:'D3',module:'Deceleration',name:'冲刺→急停→变向',en:'Sprint-Stop-Cut',impact:'高',level:'L3',ability:'减速/变向',equipment:'标志桶',use:'COD'},
+{id:'D3',module:'Deceleration',name:'冲刺→45°变向',en:'Sprint to 45° Cut',impact:'高',level:'L3',ability:'减速/变向',equipment:'标志桶',use:'COD'},
+{id:'D3',module:'Deceleration',name:'冲刺→90°变向',en:'Sprint to 90° Cut',impact:'高',level:'L4',ability:'减速/变向',equipment:'标志桶',use:'高级COD'},
+{id:'D3',module:'Deceleration',name:'冲刺→180°转身',en:'Sprint to 180° Turn',impact:'高',level:'L3',ability:'减速/转身',equipment:'标志桶',use:'高级COD'},
 // E Plyo
-['E1','Plyometric · 踝弹性','Pogo Jump','低','L1','踝弹性','无','跳跃基础'],['E1','Plyometric · 踝弹性','前后Pogo','低','L2','踝弹性','无','前后弹性'],['E1','Plyometric · 踝弹性','左右Pogo','中','L2','横向弹性','无','横向能力'],['E1','Plyometric · 踝弹性','单腿Pogo','中','L2','单腿弹性','无','单腿'],['E2','Plyometric · 垂直','Countermovement Jump','中','L1','垂直爆发','无','测试/爆发'],['E2','Plyometric · 垂直','Squat Jump','中','L1','垂直爆发','无','爆发基础'],['E2','Plyometric · 垂直','Tuck Jump','高','L2','垂直爆发','无','高级'],['E2','Plyometric · 垂直','Box Jump','中','L2','髋爆发','跳箱','高质量跳跃'],['E2','Plyometric · 垂直','Depth Jump','高','L3','反应爆发','跳箱','高级'],['E3','Plyometric · 水平','Broad Jump','中','L2','水平爆发','无','启动'],['E3','Plyometric · 水平','单腿前跳','中','L2','单腿水平爆发','无','单腿'],['E3','Plyometric · 水平','Bounds','高','L3','水平爆发','无','高级'],['E4','Plyometric · 横向','Skater Jump','中','L2','横向爆发','无','侧向'],['E4','Plyometric · 横向','Lateral Bound','高','L3','横向爆发','无','高级侧向'],['E5','Plyometric · 药球','药球胸前推','低','L2','水平功率','药球','上肢/力量传递'],['E5','Plyometric · 药球','药球旋转投','低','L2','旋转功率','药球','篮球传力'],['E5','Plyometric · 药球','药球下砸','低','L2','全身功率','药球','核心'],
+{id:'E1',module:'Plyometric · 踝弹性',name:'踝弹跳',en:'Pogo Jump',impact:'低',level:'L1',ability:'踝弹性',equipment:'无',use:'跳跃基础'},
+{id:'E1',module:'Plyometric · 踝弹性',name:'前后踝弹跳',en:'Forward/Backward Pogo Jump',impact:'低',level:'L2',ability:'踝弹性',equipment:'无',use:'前后弹性'},
+{id:'E1',module:'Plyometric · 踝弹性',name:'左右踝弹跳',en:'Lateral Pogo Jump',impact:'中',level:'L2',ability:'横向弹性',equipment:'无',use:'横向能力'},
+{id:'E1',module:'Plyometric · 踝弹性',name:'单腿踝弹跳',en:'Single-Leg Pogo Jump',impact:'中',level:'L2',ability:'单腿弹性',equipment:'无',use:'单腿'},
+{id:'E2',module:'Plyometric · 垂直',name:'反向动作纵跳',en:'Countermovement Jump (CMJ)',impact:'中',level:'L1',ability:'垂直爆发',equipment:'无',use:'测试/爆发'},
+{id:'E2',module:'Plyometric · 垂直',name:'深蹲跳',en:'Squat Jump',impact:'中',level:'L1',ability:'垂直爆发',equipment:'无',use:'爆发基础'},
+{id:'E2',module:'Plyometric · 垂直',name:'抱膝跳',en:'Tuck Jump',impact:'高',level:'L2',ability:'垂直爆发',equipment:'无',use:'高级'},
+{id:'E2',module:'Plyometric · 垂直',name:'跳箱',en:'Box Jump',impact:'中',level:'L2',ability:'髋爆发',equipment:'跳箱',use:'高质量跳跃'},
+{id:'E2',module:'Plyometric · 垂直',name:'深度跳',en:'Depth Jump',impact:'高',level:'L3',ability:'反应爆发',equipment:'跳箱',use:'高级'},
+{id:'E3',module:'Plyometric · 水平',name:'立定跳远',en:'Broad Jump',impact:'中',level:'L2',ability:'水平爆发',equipment:'无',use:'启动'},
+{id:'E3',module:'Plyometric · 水平',name:'单腿向前跳',en:'Single-Leg Broad Jump',impact:'中',level:'L2',ability:'单腿水平爆发',equipment:'无',use:'单腿'},
+{id:'E3',module:'Plyometric · 水平',name:'跨步跳',en:'Bounds',impact:'高',level:'L3',ability:'水平爆发',equipment:'无',use:'高级'},
+{id:'E3',module:'Plyometric · 水平',name:'连续跨步跳',en:'Continuous Bounds',impact:'高',level:'L3',ability:'水平爆发',equipment:'无',use:'连续跨步跳'},
+{id:'E4',module:'Plyometric · 横向',name:'滑冰者跳',en:'Skater Jump',impact:'中',level:'L2',ability:'横向爆发',equipment:'无',use:'侧向'},
+{id:'E4',module:'Plyometric · 横向',name:'侧向跨跳',en:'Lateral Bound',impact:'高',level:'L3',ability:'横向爆发',equipment:'无',use:'高级侧向'},
+{id:'E4',module:'Plyometric · 横向',name:'单腿侧向跳',en:'Single-Leg Lateral Jump',impact:'高',level:'L3',ability:'横向爆发',equipment:'无',use:'单腿侧向能力'},
+{id:'E4',module:'Plyometric · 横向',name:'连续侧向跳',en:'Continuous Lateral Jumps',impact:'高',level:'L3',ability:'横向爆发',equipment:'无',use:'连续侧向能力'},
+{id:'E5',module:'Plyometric · 药球',name:'药球胸前传球',en:'Medicine Ball Chest Pass',impact:'低',level:'L2',ability:'水平功率',equipment:'药球',use:'上肢/力量传递'},
+{id:'E5',module:'Plyometric · 药球',name:'药球旋转投掷',en:'Medicine Ball Rotational Throw',impact:'低',level:'L2',ability:'旋转功率',equipment:'药球',use:'篮球传力'},
+{id:'E5',module:'Plyometric · 药球',name:'药球过顶砸地',en:'Overhead Slam',impact:'低',level:'L2',ability:'全身功率',equipment:'药球',use:'核心'},
 // F Strength
-['F1','Strength · 双腿','高脚杯深蹲','中','L1','下肢力量','哑铃/壶铃','基础'],['F1','Strength · 双腿','六角杠深蹲','中','L2','力量','六角杠','主项'],['F1','Strength · 双腿','后蹲','中','L3','最大力量','杠铃','高级力量'],['F1','Strength · 髋主导','六角杠硬拉','中','L2','髋力量','六角杠','主项'],['F1','Strength · 髋主导','罗马尼亚硬拉','中','L2','后链','杠铃/哑铃','后链'],['F1','Strength · 髋主导','臀推','中','L2','臀力量','杠铃/哑铃','髋主导'],['F2','Strength · 单腿','保加利亚分腿蹲','中','L2','单腿力量','哑铃','核心动作'],['F2','Strength · 单腿','反向弓步','中','L1','单腿力量','哑铃','退阶/基础'],['F2','Strength · 单腿','Step-up','中','L2','单腿蹬伸','箱','单腿力量'],['F2','Strength · 单腿','前脚抬高分腿蹲','中','L2','单腿力量','哑铃','ROM'],['F2','Strength · 单腿','辅助Pistol Squat','高','L3','单腿力量','箱/扶手','高级'],
+{id:'F1',module:'Strength · 双腿',name:'高脚杯深蹲',en:'Goblet Squat',impact:'中',level:'L1',ability:'下肢力量',equipment:'哑铃/壶铃',use:'基础'},
+{id:'F1',module:'Strength · 双腿',name:'前蹲',en:'Front Squat',impact:'中',level:'L2',ability:'下肢力量',equipment:'杠铃',use:'力量基础'},
+{id:'F1',module:'Strength · 双腿',name:'后蹲',en:'Back Squat',impact:'中',level:'L3',ability:'最大力量',equipment:'杠铃',use:'高级力量'},
+{id:'F1',module:'Strength · 双腿',name:'六角杠深蹲',en:'Trap Bar Squat',impact:'中',level:'L2',ability:'力量',equipment:'六角杠',use:'主项'},
+{id:'F1',module:'Strength · 髋主导',name:'六角杠硬拉',en:'Trap Bar Deadlift',impact:'中',level:'L2',ability:'髋力量',equipment:'六角杠',use:'主项'},
+{id:'F1',module:'Strength · 髋主导',name:'罗马尼亚硬拉',en:'Romanian Deadlift (RDL)',impact:'中',level:'L2',ability:'后链',equipment:'杠铃/哑铃',use:'后链'},
+{id:'F1',module:'Strength · 髋主导',name:'杠铃臀推',en:'Barbell Hip Thrust',impact:'中',level:'L2',ability:'臀力量',equipment:'杠铃/哑铃',use:'髋主导'},
+{id:'F1',module:'Strength · 髋主导',name:'壶铃摆动',en:'Kettlebell Swing',impact:'中',level:'L2',ability:'髋爆发',equipment:'壶铃',use:'髋主导'},
+{id:'F1',module:'Strength · 髋主导',name:'早安式',en:'Good Morning',impact:'中',level:'L2',ability:'后链',equipment:'杠铃',use:'后链'},
+{id:'F2',module:'Strength · 单腿',name:'保加利亚分腿蹲',en:'Bulgarian Split Squat',impact:'中',level:'L2',ability:'单腿力量',equipment:'哑铃',use:'核心动作'},
+{id:'F2',module:'Strength · 单腿',name:'反向弓步',en:'Reverse Lunge',impact:'中',level:'L1',ability:'单腿力量',equipment:'哑铃',use:'退阶/基础'},
+{id:'F2',module:'Strength · 单腿',name:'前向弓步',en:'Forward Lunge',impact:'中',level:'L1',ability:'单腿力量',equipment:'哑铃',use:'基础单腿'},
+{id:'F2',module:'Strength · 单腿',name:'分腿蹲',en:'Split Squat',impact:'中',level:'L1',ability:'单腿力量',equipment:'自重/哑铃',use:'基础单腿'},
+{id:'F2',module:'Strength · 单腿',name:'台阶上步',en:'Step Up',impact:'中',level:'L2',ability:'单腿蹬伸',equipment:'箱',use:'单腿力量'},
+{id:'F2',module:'Strength · 单腿',name:'前脚抬高分腿蹲',en:'Front-Foot-Elevated Split Squat',impact:'中',level:'L2',ability:'单腿力量',equipment:'哑铃',use:'ROM'},
+{id:'F2',module:'Strength · 单腿',name:'反向弓步接提膝',en:'Reverse Lunge + Knee Drive',impact:'中',level:'L2',ability:'单腿力量/平衡',equipment:'哑铃',use:'单腿控制'},
+{id:'F2',module:'Strength · 单腿',name:'辅助手枪深蹲',en:'Assisted Pistol Squat',impact:'高',level:'L3',ability:'单腿力量',equipment:'箱/扶手',use:'高级'},
+{id:'F2',module:'Strength · 单腿',name:'手枪深蹲',en:'Pistol Squat',impact:'高',level:'L3',ability:'单腿力量',equipment:'无',use:'高级单腿'},
+{id:'F2',module:'Strength · 单腿',name:'单腿箱式深蹲',en:'Single-Leg Squat to Box',impact:'高',level:'L3',ability:'单腿力量',equipment:'箱/扶手',use:'高级单腿'},
+{id:'F2',module:'Strength · 单腿',name:'后脚抬高分腿蹲跳',en:'Rear-Foot-Elevated Split Squat Jump',impact:'高',level:'L3',ability:'单腿爆发',equipment:'凳子/跳箱',use:'单腿爆发'},
 // G Upper
-['G1','Upper · Push','俯卧撑','低','L1','推力','自重','基础'],['G1','Upper · Push','哑铃卧推','中','L2','推力','哑铃','主项'],['G1','Upper · Push','哑铃上斜卧推','中','L2','推力','哑铃','上肢'],['G1','Upper · Push','Landmine Press','中','L2','推力/核心','杠铃','运动员推'],['G2','Upper · Pull','引体向上','中','L2','拉力','单杠','篮球对抗'],['G2','Upper · Pull','哑铃划船','中','L2','拉力','哑铃','上背'],['G2','Upper · Pull','单臂划船','中','L2','拉力/抗旋','哑铃','单侧'],['G2','Upper · Pull','澳式引体','低','L1','拉力','低杠','退阶'],['G3','Upper · Shoulder','Face Pull','低','L1','肩胛稳定','弹力带/绳','肩部健康'],['G3','Upper · Shoulder','墙滑','低','L1','肩胛控制','墙','肩部健康'],['G3','Upper · Shoulder','外旋','低','L1','肩袖','弹力带','肩部健康'],
+{id:'G1',module:'Upper · Push',name:'俯卧撑',en:'Push-Up',impact:'低',level:'L1',ability:'推力',equipment:'自重',use:'基础'},
+{id:'G1',module:'Upper · Push',name:'哑铃卧推',en:'Dumbbell Bench Press',impact:'中',level:'L2',ability:'推力',equipment:'哑铃',use:'主项'},
+{id:'G1',module:'Upper · Push',name:'上斜哑铃卧推',en:'Incline Dumbbell Press',impact:'中',level:'L2',ability:'推力',equipment:'哑铃',use:'上肢'},
+{id:'G1',module:'Upper · Push',name:'杠铃卧推',en:'Barbell Bench Press',impact:'中',level:'L2',ability:'推力',equipment:'杠铃',use:'主项'},
+{id:'G1',module:'Upper · Push',name:'地雷管推举',en:'Landmine Press',impact:'中',level:'L2',ability:'推力/核心',equipment:'杠铃',use:'运动员推'},
+{id:'G1',module:'Upper · Push',name:'哑铃肩推',en:'Dumbbell Shoulder Press',impact:'中',level:'L2',ability:'推力/肩部力量',equipment:'哑铃',use:'上肢'},
+{id:'G2',module:'Upper · Pull',name:'引体向上',en:'Pull-Up',impact:'中',level:'L2',ability:'拉力',equipment:'单杠',use:'篮球对抗'},
+{id:'G2',module:'Upper · Pull',name:'反握引体向上',en:'Chin-Up',impact:'中',level:'L2',ability:'拉力',equipment:'单杠',use:'篮球对抗'},
+{id:'G2',module:'Upper · Pull',name:'高位下拉',en:'Lat Pulldown',impact:'中',level:'L1',ability:'拉力',equipment:'绳索',use:'上背'},
+{id:'G2',module:'Upper · Pull',name:'哑铃划船',en:'Dumbbell Row',impact:'中',level:'L2',ability:'拉力',equipment:'哑铃',use:'上背'},
+{id:'G2',module:'Upper · Pull',name:'单臂划船',en:'Single-Arm Row',impact:'中',level:'L2',ability:'拉力/抗旋',equipment:'哑铃',use:'单侧'},
+{id:'G2',module:'Upper · Pull',name:'坐姿绳索划船',en:'Cable Row',impact:'中',level:'L2',ability:'拉力',equipment:'绳索',use:'上背'},
+{id:'G2',module:'Upper · Pull',name:'澳式引体',en:'Inverted Row',impact:'低',level:'L1',ability:'拉力',equipment:'低杠',use:'退阶'},
+{id:'G3',module:'Upper · Shoulder',name:'面拉',en:'Face Pull',impact:'低',level:'L1',ability:'肩胛稳定',equipment:'弹力带/绳',use:'肩部健康'},
+{id:'G3',module:'Upper · Shoulder',name:'弹力带肩外旋',en:'Band External Rotation',impact:'低',level:'L1',ability:'肩袖',equipment:'弹力带',use:'肩部健康'},
+{id:'G3',module:'Upper · Shoulder',name:'绳索肩外旋',en:'Cable External Rotation',impact:'低',level:'L2',ability:'肩袖',equipment:'绳索',use:'肩部健康'},
+{id:'G3',module:'Upper · Shoulder',name:'Y字抬臂',en:'Y Raise',impact:'低',level:'L1',ability:'肩胛控制',equipment:'无',use:'肩部健康'},
+{id:'G3',module:'Upper · Shoulder',name:'肩胛俯卧撑',en:'Scapular Push-Up',impact:'低',level:'L1',ability:'肩胛控制',equipment:'自重',use:'肩部健康'},
 // H Core
-['H1','Core · 抗伸展','Dead Bug','低','L1','抗伸展','无','基础'],['H1','Core · 抗伸展','Hollow Body','中','L2','抗伸展','无','核心'],['H1','Core · 抗伸展','Ab Wheel','高','L3','抗伸展','滚轮','高级'],['H2','Core · 抗旋转','Pallof Press','低','L1','抗旋转','弹力带/绳','篮球专项'],['H2','Core · 抗旋转','Half-kneeling Pallof','低','L2','抗旋转','弹力带/绳','稳定'],['H3','Core · 抗侧屈','Side Plank','低','L1','抗侧屈','无','基础'],['H3','Core · 抗侧屈','Suitcase Carry','中','L2','抗侧屈/握力','哑铃','篮球对抗'],['H3','Core · 抗侧屈','Farmer Carry','中','L2','核心/握力','哑铃','对抗'],['H4','Core · 动态','悬挂举腿','中','L2','核心/髋屈','单杠','动态'],['H4','Core · 动态','Cable Chop','中','L2','旋转','绳索','篮球传力'],['H4','Core · 动态','Cable Lift','中','L2','旋转','绳索','篮球传力'],
+{id:'H1',module:'Core · 抗伸展',name:'死虫式',en:'Dead Bug',impact:'低',level:'L1',ability:'抗伸展',equipment:'无',use:'基础'},
+{id:'H1',module:'Core · 抗伸展',name:'空心身体保持',en:'Hollow Body Hold',impact:'中',level:'L2',ability:'抗伸展',equipment:'无',use:'核心'},
+{id:'H1',module:'Core · 抗伸展',name:'腹轮滚动',en:'Ab Wheel Rollout',impact:'高',level:'L3',ability:'抗伸展',equipment:'滚轮',use:'高级'},
+{id:'H1',module:'Core · 抗伸展',name:'平板支撑',en:'Plank',impact:'低',level:'L1',ability:'抗伸展',equipment:'无',use:'核心基础'},
+{id:'H2',module:'Core · 抗旋转',name:'帕洛夫抗旋推',en:'Pallof Press',impact:'低',level:'L1',ability:'抗旋转',equipment:'弹力带/绳',use:'篮球专项'},
+{id:'H2',module:'Core · 抗旋转',name:'半跪姿帕洛夫抗旋推',en:'Half-Kneeling Pallof Press',impact:'低',level:'L2',ability:'抗旋转',equipment:'弹力带/绳',use:'稳定'},
+{id:'H2',module:'Core · 抗旋转',name:'绳索抗旋转',en:'Cable Anti-Rotation',impact:'低',level:'L2',ability:'抗旋转',equipment:'绳索',use:'篮球专项'},
+{id:'H3',module:'Core · 抗侧屈',name:'侧桥',en:'Side Plank',impact:'低',level:'L1',ability:'抗侧屈',equipment:'无',use:'基础'},
+{id:'H3',module:'Core · 抗侧屈',name:'单侧负重行走',en:'Suitcase Carry',impact:'中',level:'L2',ability:'抗侧屈/握力',equipment:'哑铃',use:'篮球对抗'},
+{id:'H3',module:'Core · 抗侧屈',name:'农夫走',en:'Farmer Carry',impact:'中',level:'L2',ability:'核心/握力',equipment:'哑铃',use:'对抗'},
+{id:'H4',module:'Core · 动态',name:'悬垂举腿',en:'Hanging Leg Raise',impact:'中',level:'L2',ability:'核心/髋屈',equipment:'单杠',use:'动态'},
+{id:'H4',module:'Core · 动态',name:'悬垂提膝',en:'Hanging Knee Raise',impact:'中',level:'L2',ability:'核心/髋屈',equipment:'单杠',use:'动态核心'},
+{id:'H4',module:'Core · 动态',name:'反向卷腹',en:'Reverse Crunch',impact:'低',level:'L1',ability:'核心/髋屈',equipment:'无',use:'基础核心'},
+{id:'H4',module:'Core · 动态',name:'绳索砍劈',en:'Cable Chop',impact:'中',level:'L2',ability:'旋转',equipment:'绳索',use:'篮球传力'},
+{id:'H4',module:'Core · 动态',name:'绳索上提',en:'Cable Lift',impact:'中',level:'L2',ability:'旋转',equipment:'绳索',use:'篮球传力'},
+{id:'H5',module:'Core · 篮球专项',name:'药球铲式旋转抛投',en:'Medicine Ball Scoop Toss',impact:'低',level:'L2',ability:'旋转功率',equipment:'药球',use:'篮球传力'},
 // I Speed
-['I1','Speed · Acceleration','5m Sprint','低','L1','加速','标志桶','起步'],['I1','Speed · Acceleration','10m Sprint','中','L2','加速','标志桶','核心测试'],['I1','Speed · Acceleration','15m Sprint','中','L2','加速','标志桶','推进'],['I1','Speed · Acceleration','Falling Start','中','L2','加速','无','起步'],['I2','Speed · Max Velocity','Flying 10m','高','L3','最大速度','标志桶','高级'],['I2','Speed · Max Velocity','A-Skip','低','L1','跑步力学','无','热身'],['I2','Speed · Max Velocity','B-Skip','低','L2','跑步力学','无','技术'],['I3','Speed · Resisted','阻力冲刺','中','L2','加速力量','雪橇/弹力带','运动员'],['I3','Speed · Resisted','雪橇推','中','L2','水平力量','雪橇','加速'],
+{id:'I1',module:'Speed · Acceleration',name:'5米冲刺',en:'5m Sprint',impact:'低',level:'L1',ability:'加速',equipment:'标志桶',use:'起步'},
+{id:'I1',module:'Speed · Acceleration',name:'10米冲刺',en:'10m Sprint',impact:'中',level:'L2',ability:'加速',equipment:'标志桶',use:'核心测试'},
+{id:'I1',module:'Speed · Acceleration',name:'15米冲刺',en:'15m Sprint',impact:'中',level:'L2',ability:'加速',equipment:'标志桶',use:'推进'},
+{id:'I1',module:'Speed · Acceleration',name:'前倾起跑',en:'Falling Start',impact:'中',level:'L2',ability:'加速',equipment:'无',use:'起步'},
+{id:'I1',module:'Speed · Acceleration',name:'前后站姿起跑',en:'Split-Stance Start',impact:'低',level:'L1',ability:'加速',equipment:'无',use:'起步'},
+{id:'I1',module:'Speed · Acceleration',name:'侧向起跑',en:'Lateral Start',impact:'低',level:'L2',ability:'加速/横向移动',equipment:'无',use:'起步'},
+{id:'I2',module:'Speed · Max Velocity',name:'飞行10米',en:'Flying 10m',impact:'高',level:'L3',ability:'最大速度',equipment:'标志桶',use:'高级'},
+{id:'I2',module:'Speed · Max Velocity',name:'飞行20米',en:'Flying 20m',impact:'高',level:'L3',ability:'最大速度',equipment:'标志桶',use:'高速跑'},
+{id:'I2',module:'Speed · Max Velocity',name:'冲刺跑技术',en:'Sprint Mechanics',impact:'低',level:'L1',ability:'跑步力学',equipment:'无',use:'技术'},
+{id:'I2',module:'Speed · Max Velocity',name:'A式小步跳',en:'A-Skip',impact:'低',level:'L1',ability:'跑步力学',equipment:'无',use:'热身'},
+{id:'I2',module:'Speed · Max Velocity',name:'B式小步跳',en:'B-Skip',impact:'低',level:'L2',ability:'跑步力学',equipment:'无',use:'技术'},
+{id:'I3',module:'Speed · Resisted',name:'阻力冲刺',en:'Resisted Sprint',impact:'中',level:'L2',ability:'加速力量',equipment:'雪橇/弹力带',use:'运动员'},
+{id:'I3',module:'Speed · Resisted',name:'雪橇推',en:'Sled Push',impact:'中',level:'L2',ability:'水平力量',equipment:'雪橇',use:'加速'},
+{id:'I3',module:'Speed · Resisted',name:'雪橇拖',en:'Sled Drag',impact:'中',level:'L2',ability:'加速力量',equipment:'雪橇',use:'水平力量'},
+{id:'I3',module:'Speed · Resisted',name:'上坡冲刺',en:'Hill Sprint',impact:'高',level:'L2',ability:'加速力量',equipment:'坡道',use:'加速'},
 // J Agility
-['J1','Agility · 预设COD','5-10-5','高','L2','变向','标志桶','测试'],['J1','Agility · 预设COD','T-Drill','高','L2','综合变向','标志桶','测试'],['J1','Agility · 预设COD','3 Cone/L Drill','高','L3','变向','标志桶','高级'],['J2','Agility · 横向','防守滑步','低','L1','横向移动','无','防守'],['J2','Agility · 横向','Crossover Run','中','L2','横向移动','无','追防'],['J3','Agility · 反应','视觉反应冲刺','高','L3','反应/决策','伙伴','运动专项'],['J3','Agility · 反应','口令反应冲刺','中','L2','反应','伙伴','基础反应'],['J4','Agility · 篮球专项','Closeout','高','L3','减速/防守','球场','防守'],['J4','Agility · 篮球专项','Closeout→Slide→Sprint','高','L4','反应/变向','球场','专项'],
+{id:'J1',module:'Agility · 预设COD',name:'5-10-5折返跑',en:'5-10-5 Shuttle',impact:'高',level:'L2',ability:'变向',equipment:'标志桶',use:'测试'},
+{id:'J1',module:'Agility · 预设COD',name:'T字折返测试',en:'T-Test',impact:'高',level:'L2',ability:'综合变向',equipment:'标志桶',use:'测试'},
+{id:'J1',module:'Agility · 预设COD',name:'三锥体/L形变向',en:'3 Cone/L Drill',impact:'高',level:'L3',ability:'变向',equipment:'标志桶',use:'高级'},
+{id:'J1',module:'Agility · 预设COD',name:'方框变向跑',en:'Box Drill',impact:'高',level:'L2',ability:'变向',equipment:'标志桶',use:'预设变向'},
+{id:'J2',module:'Agility · 横向',name:'防守滑步',en:'Defensive Slide',impact:'低',level:'L1',ability:'横向移动',equipment:'无',use:'防守'},
+{id:'J2',module:'Agility · 横向',name:'侧向滑步',en:'Lateral Shuffle',impact:'低',level:'L1',ability:'横向移动',equipment:'无',use:'基础横移'},
+{id:'J2',module:'Agility · 横向',name:'交叉步跑',en:'Crossover Run',impact:'中',level:'L2',ability:'横向移动',equipment:'无',use:'追防'},
+{id:'J2',module:'Agility · 横向',name:'卡里奥卡交叉步',en:'Carioca',impact:'中',level:'L2',ability:'横向移动',equipment:'无',use:'横向协调'},
+{id:'J3',module:'Agility · 反应',name:'视觉反应冲刺',en:'Visual Reaction Sprint',impact:'高',level:'L3',ability:'反应/决策',equipment:'伙伴',use:'运动专项'},
+{id:'J3',module:'Agility · 反应',name:'口令反应冲刺',en:'Auditory Reaction Sprint',impact:'中',level:'L2',ability:'反应',equipment:'伙伴',use:'基础反应'},
+{id:'J3',module:'Agility · 反应',name:'手势反应',en:'Hand-Signal Reaction',impact:'中',level:'L2',ability:'反应/决策',equipment:'伙伴',use:'反应训练'},
+{id:'J3',module:'Agility · 反应',name:'球反应',en:'Ball Reaction',impact:'高',level:'L3',ability:'反应/决策',equipment:'篮球/伙伴',use:'运动专项'},
+{id:'J4',module:'Agility · 篮球专项',name:'防守接近',en:'Closeout',impact:'高',level:'L3',ability:'减速/防守',equipment:'球场',use:'防守'},
+{id:'J4',module:'Agility · 篮球专项',name:'防守接近→滑步→冲刺',en:'Closeout-Slide-Sprint',impact:'高',level:'L4',ability:'反应/变向',equipment:'球场',use:'专项'},
+{id:'J4',module:'Agility · 篮球专项',name:'防守接近→滑步',en:'Closeout to Slide',impact:'高',level:'L3',ability:'减速/防守',equipment:'球场',use:'防守专项'},
+{id:'J4',module:'Agility · 篮球专项',name:'滑步→冲刺',en:'Slide to Sprint',impact:'中',level:'L2',ability:'横向移动/加速',equipment:'球场',use:'防守专项'},
+{id:'J4',module:'Agility · 篮球专项',name:'后退跑→转身→冲刺',en:'Backpedal-Turn-Sprint',impact:'高',level:'L3',ability:'回跑/转身',equipment:'球场',use:'防守专项'},
 // K Basketball
-['K1','Basketball · 运球','Pound Dribble','低','L1','控球','篮球','基础'],['K1','Basketball · 运球','Crossover','低','L1','变向控球','篮球','基础'],['K1','Basketball · 运球','Between Legs','中','L2','变向控球','篮球','进阶'],['K1','Basketball · 运球','Behind Back','中','L2','变向控球','篮球','进阶'],['K1','Basketball · 运球','Hesitation','中','L2','节奏变化','篮球','突破'],['K1','Basketball · 运球','Retreat Dribble','中','L2','后撤/空间','篮球','比赛专项'],['K2','Basketball · Shooting','Form Shooting','低','L1','投篮动作','篮球','基础'],['K2','Basketball · Shooting','Catch & Shoot','中','L2','接球投篮','篮球','专项'],['K2','Basketball · Shooting','Pull-up','中','L2','运球后投篮','篮球','专项'],['K2','Basketball · Shooting','Side-step','高','L3','空间创造','篮球','高级'],['K3','Basketball · Finishing','左右手上篮','低','L1','终结','篮球','基础'],['K3','Basketball · Finishing','高手/低手上篮','中','L2','终结手感','篮球','专项'],['K3','Basketball · Finishing','Euro Step','中','L2','终结/步法','篮球','专项'],['K3','Basketball · Finishing','Floater','中','L2','禁区终结','篮球','专项'],['K3','Basketball · Finishing','Contact Finish','高','L3','对抗终结','篮球/伙伴','高级'],['K4','Basketball · Footwork','Jump Stop','低','L1','脚步','篮球','基础'],['K4','Basketball · Footwork','Pivot','低','L1','脚步','篮球','基础'],['K4','Basketball · Footwork','Jab Step','中','L2','脚步/突破','篮球','专项'],['K4','Basketball · Footwork','Step Back','高','L3','脚步/投篮','篮球','高级'],['K5','Basketball · Defense','滑步→交叉步','中','L2','防守脚步','篮球','专项'],['K5','Basketball · Defense','Closeout→追防','高','L3','防守反应','篮球/伙伴','专项'],
+{id:'K1',module:'Basketball · 运球',name:'原地大力运球',en:'Pound Dribble',impact:'低',level:'L1',ability:'控球',equipment:'篮球',use:'基础'},
+{id:'K1',module:'Basketball · 运球',name:'交叉运球',en:'Crossover',impact:'低',level:'L1',ability:'变向控球',equipment:'篮球',use:'基础'},
+{id:'K1',module:'Basketball · 运球',name:'胯下运球',en:'Between-the-Legs',impact:'中',level:'L2',ability:'变向控球',equipment:'篮球',use:'进阶'},
+{id:'K1',module:'Basketball · 运球',name:'背后运球',en:'Behind-the-Back',impact:'中',level:'L2',ability:'变向控球',equipment:'篮球',use:'进阶'},
+{id:'K1',module:'Basketball · 运球',name:'犹豫步运球',en:'Hesitation Dribble',impact:'中',level:'L2',ability:'节奏变化',equipment:'篮球',use:'突破'},
+{id:'K1',module:'Basketball · 运球',name:'后撤运球',en:'Retreat Dribble',impact:'中',level:'L2',ability:'后撤/空间',equipment:'篮球',use:'比赛专项'},
+{id:'K1',module:'Basketball · 运球',name:'高速运球',en:'Speed Dribble',impact:'中',level:'L2',ability:'控球/推进',equipment:'篮球',use:'移动运球'},
+{id:'K1',module:'Basketball · 运球',name:'体前内外运球',en:'In-and-Out',impact:'低',level:'L1',ability:'变向控球',equipment:'篮球',use:'基础变向'},
+{id:'K1',module:'Basketball · 运球',name:'胯下接交叉',en:'Between-the-Legs to Crossover',impact:'中',level:'L2',ability:'组合控球',equipment:'篮球',use:'组合运球'},
+{id:'K1',module:'Basketball · 运球',name:'背后接交叉',en:'Behind-the-Back to Crossover',impact:'中',level:'L2',ability:'组合控球',equipment:'篮球',use:'组合运球'},
+{id:'K1',module:'Basketball · 运球',name:'节奏变化',en:'Change of Pace',impact:'中',level:'L2',ability:'节奏变化',equipment:'篮球',use:'突破'},
+{id:'K1',module:'Basketball · 运球',name:'方向变化',en:'Change of Direction',impact:'中',level:'L2',ability:'方向变化',equipment:'篮球',use:'突破'},
+{id:'K1',module:'Basketball · 运球',name:'逃脱式运球',en:'Escape Dribble',impact:'中',level:'L2',ability:'逃脱控球',equipment:'篮球',use:'比赛专项'},
+{id:'K1',module:'Basketball · 运球',name:'组合运球',en:'Combo Dribble',impact:'中',level:'L3',ability:'组合控球',equipment:'篮球',use:'高级控球'},
+{id:'K2',module:'Basketball · Shooting',name:'基础投篮姿势',en:'Form Shooting',impact:'低',level:'L1',ability:'投篮动作',equipment:'篮球',use:'基础'},
+{id:'K2',module:'Basketball · Shooting',name:'接球即投',en:'Catch-and-Shoot',impact:'中',level:'L2',ability:'接球投篮',equipment:'篮球',use:'专项'},
+{id:'K2',module:'Basketball · Shooting',name:'急停跳投',en:'Pull-Up',impact:'中',level:'L2',ability:'运球后投篮',equipment:'篮球',use:'专项'},
+{id:'K2',module:'Basketball · Shooting',name:'横移跳投',en:'Side Step',impact:'高',level:'L3',ability:'空间创造',equipment:'篮球',use:'高级'},
+{id:'K2',module:'Basketball · Shooting',name:'1-2步投篮脚步',en:'1-2 Step',impact:'低',level:'L1',ability:'投篮脚步',equipment:'篮球',use:'投篮基础'},
+{id:'K2',module:'Basketball · Shooting',name:'双脚跳步投篮',en:'Hop',impact:'中',level:'L2',ability:'投篮脚步',equipment:'篮球',use:'投篮脚步'},
+{id:'K2',module:'Basketball · Shooting',name:'重新落位投篮',en:'Relocation',impact:'中',level:'L2',ability:'无球移动/投篮',equipment:'篮球',use:'专项投篮'},
+{id:'K2',module:'Basketball · Shooting',name:'底角投篮',en:'Corner Shooting',impact:'低',level:'L1',ability:'定点投篮',equipment:'篮球',use:'专项投篮'},
+{id:'K2',module:'Basketball · Shooting',name:'侧翼投篮',en:'Wing Shooting',impact:'低',level:'L1',ability:'定点投篮',equipment:'篮球',use:'专项投篮'},
+{id:'K2',module:'Basketball · Shooting',name:'弧顶投篮',en:'Top-of-the-Key Shooting',impact:'低',level:'L1',ability:'定点投篮',equipment:'篮球',use:'专项投篮'},
+{id:'K2',module:'Basketball · Shooting',name:'绕掩护投篮',en:'Off-Screen Shooting',impact:'高',level:'L3',ability:'移动投篮',equipment:'篮球/掩护',use:'专项投篮'},
+{id:'K2',module:'Basketball · Shooting',name:'手递手配合',en:'Hand-off',impact:'高',level:'L3',ability:'配合/投篮',equipment:'篮球/伙伴',use:'专项配合'},
+{id:'K2',module:'Basketball · Shooting',name:'转换进攻三分',en:'Transition 3',impact:'高',level:'L3',ability:'转换投篮',equipment:'篮球',use:'专项投篮'},
+{id:'K3',module:'Basketball · Finishing',name:'左右手上篮',en:'Left/Right Hand Layup',impact:'低',level:'L1',ability:'终结',equipment:'篮球',use:'基础'},
+{id:'K3',module:'Basketball · Finishing',name:'高手/低手上篮',en:'High/Low Release Layup',impact:'中',level:'L2',ability:'终结手感',equipment:'篮球',use:'专项'},
+{id:'K3',module:'Basketball · Finishing',name:'欧洲步',en:'Euro Step',impact:'中',level:'L2',ability:'终结/步法',equipment:'篮球',use:'专项'},
+{id:'K3',module:'Basketball · Finishing',name:'抛投',en:'Floater',impact:'中',level:'L2',ability:'禁区终结',equipment:'篮球',use:'专项'},
+{id:'K3',module:'Basketball · Finishing',name:'对抗终结',en:'Contact Finish',impact:'高',level:'L3',ability:'对抗终结',equipment:'篮球/伙伴',use:'高级'},
+{id:'K3',module:'Basketball · Finishing',name:'正手上篮',en:'Overhand Finish',impact:'低',level:'L1',ability:'终结',equipment:'篮球',use:'基础终结'},
+{id:'K3',module:'Basketball · Finishing',name:'反手上篮',en:'Reverse Finish',impact:'中',level:'L2',ability:'终结',equipment:'篮球',use:'专项终结'},
+{id:'K3',module:'Basketball · Finishing',name:'跨步跳',en:'Pro Hop',impact:'中',level:'L2',ability:'终结/步法',equipment:'篮球',use:'专项终结'},
+{id:'K3',module:'Basketball · Finishing',name:'转身终结',en:'Spin Move',impact:'中',level:'L2',ability:'终结/步法',equipment:'篮球',use:'专项终结'},
+{id:'K4',module:'Basketball · Footwork',name:'跳步急停',en:'Jump Stop',impact:'低',level:'L1',ability:'脚步',equipment:'篮球',use:'基础'},
+{id:'K4',module:'Basketball · Footwork',name:'中枢脚转身',en:'Pivot',impact:'低',level:'L1',ability:'脚步',equipment:'篮球',use:'基础'},
+{id:'K4',module:'Basketball · Footwork',name:'刺探步',en:'Jab Step',impact:'中',level:'L2',ability:'脚步/突破',equipment:'篮球',use:'专项'},
+{id:'K4',module:'Basketball · Footwork',name:'后撤步跳投',en:'Step Back',impact:'高',level:'L3',ability:'脚步/投篮',equipment:'篮球',use:'高级'},
+{id:'K4',module:'Basketball · Footwork',name:'跨步急停',en:'Stride Stop',impact:'中',level:'L2',ability:'脚步/急停',equipment:'篮球',use:'脚步'},
+{id:'K4',module:'Basketball · Footwork',name:'前转身',en:'Front Pivot',impact:'低',level:'L1',ability:'脚步',equipment:'篮球',use:'脚步基础'},
+{id:'K4',module:'Basketball · Footwork',name:'后转身',en:'Reverse Pivot',impact:'低',level:'L1',ability:'脚步',equipment:'篮球',use:'脚步基础'},
+{id:'K4',module:'Basketball · Footwork',name:'撕裂步',en:'Rip Through',impact:'中',level:'L2',ability:'脚步/突破',equipment:'篮球',use:'专项脚步'},
+{id:'K4',module:'Basketball · Footwork',name:'下沉转身步',en:'Drop Step',impact:'中',level:'L2',ability:'脚步/终结',equipment:'篮球',use:'专项脚步'},
+{id:'K4',module:'Basketball · Footwork',name:'跨步穿越终结',en:'Step Through',impact:'中',level:'L2',ability:'脚步/终结',equipment:'篮球',use:'专项脚步'},
+{id:'K5',module:'Basketball · Defense',name:'滑步→交叉步',en:'Slide to Crossover Step',impact:'中',level:'L2',ability:'防守脚步',equipment:'篮球',use:'专项'},
+{id:'K5',module:'Basketball · Defense',name:'防守接近→追防',en:'Closeout to Recover',impact:'高',level:'L3',ability:'防守反应',equipment:'篮球/伙伴',use:'专项'},
 // L Conditioning
-['L1','Conditioning · Aerobic','Zone 2快走/骑车','低','L1','有氧基础','自行车/跑步','恢复'],['L1','Conditioning · Repeat Sprint','10m反复冲刺','高','L2','重复冲刺','标志桶','体能'],['L1','Conditioning · Repeat Sprint','30s冲刺/30s慢走','高','L2','无氧耐力','场地','体能'],['L1','Conditioning · Basketball','全场折返','高','L3','篮球专项体能','球场','比赛模拟'],['L1','Conditioning · Basketball','滑步→冲刺→投篮循环','高','L3','篮球专项体能','球场/篮球','比赛模拟'],['L1','Conditioning · Game','3v3半场','高','L4','比赛体能/决策','篮球场','专项'],['L1','Conditioning · Game','5v5全场','高','L4','比赛体能/决策','篮球场','专项'],
+{id:'L1',module:'Conditioning · Aerobic',name:'二区有氧快走/骑车',en:'Zone 2 Walk/Bike',impact:'低',level:'L1',ability:'有氧基础',equipment:'自行车/跑步',use:'恢复'},
+{id:'L1',module:'Conditioning · Aerobic',name:'慢跑',en:'Easy Jog',impact:'低',level:'L1',ability:'有氧基础',equipment:'跑步',use:'恢复/有氧'},
+{id:'L1',module:'Conditioning · Aerobic',name:'划船机',en:'Rowing Machine',impact:'低',level:'L1',ability:'有氧基础',equipment:'划船机',use:'恢复/有氧'},
+{id:'L1',module:'Conditioning · Repeat Sprint',name:'10米反复冲刺',en:'10m Repeat Sprint',impact:'高',level:'L2',ability:'重复冲刺',equipment:'标志桶',use:'体能'},
+{id:'L1',module:'Conditioning · Repeat Sprint',name:'30秒冲刺/30秒慢走',en:'30s Sprint/30s Walk',impact:'高',level:'L2',ability:'无氧耐力',equipment:'场地',use:'体能'},
+{id:'L1',module:'Conditioning · Basketball',name:'全场折返',en:'Full-Court Shuttle',impact:'高',level:'L3',ability:'篮球专项体能',equipment:'球场',use:'比赛模拟'},
+{id:'L1',module:'Conditioning · Basketball',name:'滑步→冲刺→投篮循环',en:'Slide-Sprint-Shoot Circuit',impact:'高',level:'L3',ability:'篮球专项体能',equipment:'球场/篮球',use:'比赛模拟'},
+{id:'L1',module:'Conditioning · Game',name:'3v3半场',en:'3v3 Half-Court',impact:'高',level:'L4',ability:'比赛体能/决策',equipment:'篮球场',use:'专项'},
+{id:'L1',module:'Conditioning · Game',name:'5v5全场',en:'5v5 Full-Court',impact:'高',level:'L4',ability:'比赛体能/决策',equipment:'篮球场',use:'专项'},
 // M Recovery
-['M1','Recovery','轻松步行','低','L1','恢复','无','恢复日'],['M1','Recovery','低强度自行车','低','L1','恢复/有氧','自行车','恢复日'],['M2','Recovery','90/90呼吸','低','L1','恢复/呼吸','无','训练后'],['M2','Recovery','小腿/髋动态拉伸','低','L1','活动度','无','训练后'],
-['A1','踝关节 Mobility','小腿动态拉伸','低','L1','小腿活动','无','踝活动'],['A1','踝关节 Mobility','Soleus动态活动','低','L2','比目鱼肌活动','无','踝活动'],['A2','髋 Mobility','内收肌后坐拉伸','低','L1','内收肌活动','无','髋活动'],['A3','胸椎/肩 Mobility','胸椎旋转','低','L1','胸椎活动','无','全身热身'],['A3','胸椎/肩 Mobility','弹力带肩部绕环','低','L1','肩部活动','弹力带','肩部热身'],['A3','胸椎/肩 Mobility','肩胛关节控制环绕','低','L2','肩胛控制','无','肩部活动'],
-['B1','Prehab · 膝','单腿坐姿起立','中','L2','膝控制/单腿力量','椅子','单腿控制'],['B2','Prehab · 髋','弹力带髋外展','低','L1','臀中肌','弹力带','每日激活'],['B3','Prehab · 腘绳肌','瑞士球腿弯举','中','L2','腘绳肌','瑞士球','后链'],['B4','Prehab · 内收肌','侧向弓步','中','L2','内收肌/单腿力量','无','侧向能力'],['B5','Prehab · 踝足','双腿提踵','低','L1','小腿/踝稳定','无','踝力量'],
-['C1','Landing','跳箱后落地','中','L2','落地控制','跳箱','落地吸收'],['C2','Landing','单脚落地','中','L2','单腿落地','无','单腿控制'],['C2','Landing','单脚跳→落地','中','L2','单腿落地','无','单腿控制'],['C3','Landing','跳跃→定住→再次跳跃','高','L3','落地/反应力量','无','复杂落地'],
-['D1','Deceleration','前进→急停','中','L1','制动','标志桶','减速入门'],['D1','Deceleration','后退→急停','中','L2','制动','标志桶','减速入门'],['D2','Deceleration','单腿跳→停','中','L2','单腿制动','无','单腿能力'],['D3','Deceleration','Sprint→Stop','高','L3','制动','标志桶','高级减速'],['D3','Deceleration','Sprint→Backpedal','高','L3','制动/回跑','标志桶','篮球专项'],['D3','Deceleration','Sprint→Stop→Cut','高','L3','减速/变向','标志桶','COD'],['D3','Deceleration','Sprint→180° Turn','高','L3','减速/转身','标志桶','高级COD'],
-['E3','Plyometric · 水平','Continuous Bounds','高','L3','水平爆发','无','连续跨步跳'],['E4','Plyometric · 横向','Single-Leg Lateral Jump','高','L3','横向爆发','无','单腿侧向能力'],['E4','Plyometric · 横向','Continuous Lateral Jumps','高','L3','横向爆发','无','连续侧向能力'],
-['F1','Strength · 双腿','前蹲','中','L2','下肢力量','杠铃','力量基础'],['F1','Strength · 髋主导','壶铃摆动','中','L2','髋爆发','壶铃','髋主导'],['F1','Strength · 髋主导','早安式','中','L2','后链','杠铃','后链'],['F2','Strength · 单腿','前向弓步','中','L1','单腿力量','哑铃','基础单腿'],['F2','Strength · 单腿','分腿蹲','中','L1','单腿力量','自重/哑铃','基础单腿'],['F2','Strength · 单腿','反向弓步接提膝','中','L2','单腿力量/平衡','哑铃','单腿控制'],['F2','Strength · 单腿','单腿箱式深蹲','高','L3','单腿力量','箱/扶手','高级单腿'],['F2','Strength · 单腿','手枪深蹲','高','L3','单腿力量','无','高级单腿'],['F2','Strength · 单腿','后脚抬高分腿蹲跳','高','L3','单腿爆发','凳子/跳箱','单腿爆发'],
-['G1','Upper · Push','杠铃卧推','中','L2','推力','杠铃','主项'],['G1','Upper · Push','哑铃肩推','中','L2','推力/肩部力量','哑铃','上肢'],['G2','Upper · Pull','反握引体向上','中','L2','拉力','单杠','篮球对抗'],['G2','Upper · Pull','高位下拉','中','L1','拉力','绳索','上背'],['G2','Upper · Pull','坐姿绳索划船','中','L2','拉力','绳索','上背'],['G3','Upper · Shoulder','绳索肩外旋','低','L2','肩袖','绳索','肩部健康'],['G3','Upper · Shoulder','Y字抬臂','低','L1','肩胛控制','无','肩部健康'],['G3','Upper · Shoulder','肩胛俯卧撑','低','L1','肩胛控制','自重','肩部健康'],
-['H1','Core · 抗伸展','平板支撑','低','L1','抗伸展','无','核心基础'],['H2','Core · 抗旋转','绳索抗旋转','低','L2','抗旋转','绳索','篮球专项'],['H4','Core · 动态','悬垂提膝','中','L2','核心/髋屈','单杠','动态核心'],['H4','Core · 动态','反向卷腹','低','L1','核心/髋屈','无','基础核心'],['H5','Core · 篮球专项','药球铲式旋转抛投','低','L2','旋转功率','药球','篮球传力'],
-['I1','Speed · Acceleration','前后站姿起跑','低','L1','加速','无','起步'],['I1','Speed · Acceleration','侧向起跑','低','L2','加速/横向移动','无','起步'],['I3','Speed · Resisted','雪橇拖','中','L2','加速力量','雪橇','水平力量'],['I3','Speed · Resisted','上坡冲刺','高','L2','加速力量','坡道','加速'],['I2','Speed · Max Velocity','Flying 20m','高','L3','最大速度','标志桶','高速跑'],['I2','Speed · Max Velocity','冲刺跑技术','低','L1','跑步力学','无','技术'],
-['J1','Agility · 预设COD','Box Drill','高','L2','变向','标志桶','预设变向'],['J2','Agility · 横向','侧向滑步','低','L1','横向移动','无','基础横移'],['J2','Agility · 横向','Carioca','中','L2','横向移动','无','横向协调'],['J3','Agility · 反应','手势反应','中','L2','反应/决策','伙伴','反应训练'],['J3','Agility · 反应','球反应','高','L3','反应/决策','篮球/伙伴','运动专项'],['J4','Agility · 篮球专项','Closeout→Slide','高','L3','减速/防守','球场','防守专项'],['J4','Agility · 篮球专项','Slide→Sprint','中','L2','横向移动/加速','球场','防守专项'],['J4','Agility · 篮球专项','Backpedal→Turn→Sprint','高','L3','回跑/转身','球场','防守专项'],
-['K1','Basketball · 运球','Speed Dribble','中','L2','控球/推进','篮球','移动运球'],['K1','Basketball · 运球','In-and-Out','低','L1','变向控球','篮球','基础变向'],['K1','Basketball · 运球','Between-the-Legs → Crossover','中','L2','组合控球','篮球','组合运球'],['K1','Basketball · 运球','Behind-the-Back → Crossover','中','L2','组合控球','篮球','组合运球'],['K1','Basketball · 运球','Change of Pace','中','L2','节奏变化','篮球','突破'],['K1','Basketball · 运球','Change of Direction','中','L2','方向变化','篮球','突破'],['K1','Basketball · 运球','Escape Dribble','中','L2','逃脱控球','篮球','比赛专项'],['K1','Basketball · 运球','Combo Dribble','中','L3','组合控球','篮球','高级控球'],['K2','Basketball · Shooting','1-2 Step','低','L1','投篮脚步','篮球','投篮基础'],['K2','Basketball · Shooting','Hop','中','L2','投篮脚步','篮球','投篮脚步'],['K2','Basketball · Shooting','Relocation','中','L2','无球移动/投篮','篮球','专项投篮'],['K2','Basketball · Shooting','Corner Shooting','低','L1','定点投篮','篮球','专项投篮'],['K2','Basketball · Shooting','Wing Shooting','低','L1','定点投篮','篮球','专项投篮'],['K2','Basketball · Shooting','Top-of-the-Key Shooting','低','L1','定点投篮','篮球','专项投篮'],['K2','Basketball · Shooting','Off-Screen Shooting','高','L3','移动投篮','篮球/掩护','专项投篮'],['K2','Basketball · Shooting','Hand-off','高','L3','配合/投篮','篮球/伙伴','专项配合'],['K2','Basketball · Shooting','Transition 3','高','L3','转换投篮','篮球','专项投篮'],['K3','Basketball · Finishing','正手上篮','低','L1','终结','篮球','基础终结'],['K3','Basketball · Finishing','反手上篮','中','L2','终结','篮球','专项终结'],['K3','Basketball · Finishing','Pro Hop','中','L2','终结/步法','篮球','专项终结'],['K3','Basketball · Finishing','Spin Move','中','L2','终结/步法','篮球','专项终结'],['K4','Basketball · Footwork','Stride Stop','中','L2','脚步/急停','篮球','脚步'],['K4','Basketball · Footwork','Front Pivot','低','L1','脚步','篮球','脚步基础'],['K4','Basketball · Footwork','Reverse Pivot','低','L1','脚步','篮球','脚步基础'],['K4','Basketball · Footwork','Rip Through','中','L2','脚步/突破','篮球','专项脚步'],['K4','Basketball · Footwork','Drop Step','中','L2','脚步/终结','篮球','专项脚步'],['K4','Basketball · Footwork','Step Through','中','L2','脚步/终结','篮球','专项脚步'],
-['L1','Conditioning · Aerobic','慢跑','低','L1','有氧基础','跑步','恢复/有氧'],['L1','Conditioning · Aerobic','划船机','低','L1','有氧基础','划船机','恢复/有氧'],['M1','Recovery','低强度慢跑','低','L1','恢复/有氧','跑步','恢复日'],['M2','Recovery','内收肌后坐拉伸','低','L1','内收肌活动','无','训练后'],['M2','Recovery','小腿拉伸','低','L1','小腿活动','无','训练后'],['M2','Recovery','髋屈肌拉伸','低','L1','髋活动','无','训练后'],['M2','Recovery','胸椎旋转','低','L1','胸椎活动','无','训练后'],['M2','Recovery','鳄鱼式呼吸','低','L1','呼吸/恢复','无','恢复日'],['M2','Recovery','方框呼吸','低','L1','呼吸/恢复','无','恢复日']
-].map(x=>({id:x[0],module:x[1],name:x[2],impact:x[3],level:x[4],ability:x[5],equipment:x[6],use:x[7]}));
-
+{id:'M1',module:'Recovery',name:'轻松步行',en:'Easy Walk',impact:'低',level:'L1',ability:'恢复',equipment:'无',use:'恢复日'},
+{id:'M1',module:'Recovery',name:'低强度自行车',en:'Easy Bike',impact:'低',level:'L1',ability:'恢复/有氧',equipment:'自行车',use:'恢复日'},
+{id:'M1',module:'Recovery',name:'低强度慢跑',en:'Easy Jog',impact:'低',level:'L1',ability:'恢复/有氧',equipment:'跑步',use:'恢复日'},
+{id:'M2',module:'Recovery',name:'90/90呼吸',en:'90/90 Breathing',impact:'低',level:'L1',ability:'恢复/呼吸',equipment:'无',use:'训练后'},
+{id:'M2',module:'Recovery',name:'小腿/髋动态拉伸',en:'Calf/Hip Dynamic Stretch',impact:'低',level:'L1',ability:'活动度',equipment:'无',use:'训练后'},
+{id:'M2',module:'Recovery',name:'内收肌后坐拉伸',en:'Adductor Rock Back',impact:'低',level:'L1',ability:'内收肌活动',equipment:'无',use:'训练后'},
+{id:'M2',module:'Recovery',name:'小腿拉伸',en:'Calf Stretch',impact:'低',level:'L1',ability:'小腿活动',equipment:'无',use:'训练后'},
+{id:'M2',module:'Recovery',name:'髋屈肌拉伸',en:'Hip Flexor Stretch',impact:'低',level:'L1',ability:'髋活动',equipment:'无',use:'训练后'},
+{id:'M2',module:'Recovery',name:'胸椎旋转',en:'T-Spine Rotation',impact:'低',level:'L1',ability:'胸椎活动',equipment:'无',use:'训练后'},
+{id:'M2',module:'Recovery',name:'鳄鱼式呼吸',en:'Crocodile Breathing',impact:'低',level:'L1',ability:'呼吸/恢复',equipment:'无',use:'恢复日'},
+{id:'M2',module:'Recovery',name:'方框呼吸',en:'Box Breathing',impact:'低',level:'L1',ability:'呼吸/恢复',equipment:'无',use:'恢复日'},
+// N Kinetic Chain 全身力量传递
+{id:'N1',module:'Kinetic Chain · 分腿姿上肢爆发',name:'弓步单臂哑铃推举',en:'Split-Stance Single-Arm DB Press',impact:'中',level:'L2',ability:'抗旋转/力量传递',equipment:'哑铃',use:'对抗/护球/终结'},
+{id:'N1',module:'Kinetic Chain · 分腿姿上肢爆发',name:'分腿姿快速蹬伸单臂推举',en:'Split-Stance Explosive Single-Arm Push Press',impact:'高',level:'L3',ability:'全身爆发/力量传递',equipment:'哑铃',use:'地面→髋→核心→肩'},
+{id:'N1',module:'Kinetic Chain · 分腿姿上肢爆发',name:'分腿姿地雷管推举',en:'Split-Stance Landmine Press',impact:'中',level:'L2',ability:'力量传递/肩胛稳定',equipment:'杠铃',use:'运动员推'},
+{id:'N1',module:'Kinetic Chain · 分腿姿上肢爆发',name:'半跪姿单臂地雷管推举',en:'Half-Kneeling Landmine Press',impact:'低',level:'L2',ability:'髋稳定/抗旋转/肩推',equipment:'杠铃',use:'核心+上肢'},
+{id:'N2',module:'Kinetic Chain · 负重爆发',name:'壶铃摆动',en:'Kettlebell Swing',impact:'中',level:'L2',ability:'髋爆发/后链',equipment:'壶铃',use:'Hip Hinge 力量链'},
+{id:'N2',module:'Kinetic Chain · 负重爆发',name:'哑铃高拉',en:'Dumbbell High Pull',impact:'中',level:'L2',ability:'快速伸髋/力量传递',equipment:'哑铃',use:'Power 入门'},
+{id:'N2',module:'Kinetic Chain · 负重爆发',name:'悬垂哑铃高翻',en:'Hang Dumbbell Clean',impact:'高',level:'L3',ability:'RFD/全身协调',equipment:'哑铃',use:'负重爆发入门'},
+{id:'N2',module:'Kinetic Chain · 负重爆发',name:'哑铃高翻',en:'Dumbbell Clean',impact:'高',level:'L3',ability:'负重爆发/RFD',equipment:'哑铃',use:'跳跃之外的爆发体系'},
+{id:'N2',module:'Kinetic Chain · 负重爆发',name:'单臂哑铃抓举',en:'Single-Arm Dumbbell Snatch',impact:'高',level:'L3',ability:'全身爆发/力量传递',equipment:'哑铃',use:'髋爆发链顶端'},
+{id:'N2',module:'Kinetic Chain · 负重爆发',name:'壶铃高翻',en:'Kettlebell Clean',impact:'高',level:'L3',ability:'髋爆发',equipment:'壶铃',use:'髋爆发'},
+{id:'N2',module:'Kinetic Chain · 负重爆发',name:'壶铃高翻推举',en:'Kettlebell Clean & Press',impact:'高',level:'L3',ability:'全身力量链',equipment:'壶铃',use:'髋爆发+上肢推'},
+{id:'N2',module:'Kinetic Chain · 负重爆发',name:'壶铃单臂摆动',en:'Single-Arm KB Swing',impact:'中',level:'L2',ability:'髋爆发/抗旋转',equipment:'壶铃',use:'髋爆发+抗旋转'},
+{id:'N2',module:'Kinetic Chain · 负重爆发',name:'哑铃火箭推',en:'Dumbbell Thruster',impact:'中',level:'L2',ability:'三关节伸展/全身力量',equipment:'哑铃',use:'Power 或 Conditioning'},
+{id:'N3',module:'Kinetic Chain · 抗旋转复合',name:'俯卧撑位交替哑铃划船',en:'Renegade Row',impact:'中',level:'L2',ability:'划船/抗旋转/肩胛稳定',equipment:'哑铃',use:'Upper Day / Core Slot'},
+{id:'N3',module:'Kinetic Chain · 抗旋转复合',name:'V字坐姿单臂哑铃推举',en:'V-Sit Single-Arm DB Press',impact:'中',level:'L2',ability:'核心稳定/推举',equipment:'哑铃',use:'辅助核心挑战'},
+{id:'N4',module:'Kinetic Chain · 药球爆发',name:'药球旋转砸墙',en:'Rotational Medicine Ball Throw',impact:'低',level:'L2',ability:'旋转爆发',equipment:'药球',use:'篮球旋转爆发'},
+{id:'N4',module:'Kinetic Chain · 药球爆发',name:'药球侧向抛',en:'Medicine Ball Scoop Toss',impact:'低',level:'L2',ability:'髋→躯干传力',equipment:'药球',use:'旋转传力'},
+{id:'N4',module:'Kinetic Chain · 药球爆发',name:'药球跨步旋转抛',en:'Step-Behind Rotational Throw',impact:'中',level:'L3',ability:'动态力量传递',equipment:'药球',use:'跨步→蹬地→旋转→释放'},
+{id:'N4',module:'Kinetic Chain · 药球爆发',name:'单腿旋转抛',en:'Single-Leg Rotational Throw',impact:'中',level:'L3',ability:'单腿稳定/旋转爆发',equipment:'药球',use:'高级旋转'},
+{id:'N5',module:'Kinetic Chain · 负重行走',name:'农夫行走',en:'Farmer Carry',impact:'中',level:'L1',ability:'全身稳定/握力',equipment:'哑铃/壶铃',use:'基础 Carry'},
+{id:'N5',module:'Kinetic Chain · 负重行走',name:'单侧负重行走',en:'Suitcase Carry',impact:'中',level:'L2',ability:'抗侧屈/髋稳定',equipment:'哑铃/壶铃',use:'篮球对抗'},
+{id:'N5',module:'Kinetic Chain · 负重行走',name:'前架单侧行走',en:'Single-Arm Front Rack Carry',impact:'中',level:'L2',ability:'核心+上肢稳定',equipment:'哑铃/壶铃',use:'进阶 Carry'},
+{id:'N5',module:'Kinetic Chain · 负重行走',name:'单臂过顶行走',en:'Overhead Carry',impact:'中',level:'L3',ability:'肩胛稳定/核心',equipment:'哑铃/壶铃',use:'高级 Carry'},
+{id:'N6',module:'Kinetic Chain · 旋转力量',name:'地雷管旋转',en:'Landmine Rotation',impact:'中',level:'L2',ability:'旋转力量/抗旋转',equipment:'杠铃',use:'旋转模式'},
+{id:'N6',module:'Kinetic Chain · 旋转力量',name:'绳索砍劈',en:'Cable Chop',impact:'低',level:'L2',ability:'旋转模式',equipment:'绳索',use:'旋转传力'},
+{id:'N6',module:'Kinetic Chain · 旋转力量',name:'绳索上提',en:'Cable Lift',impact:'低',level:'L2',ability:'反向旋转模式',equipment:'绳索',use:'反向旋转'}
+];
+function actionDisplayName(a){return a.en?a.name+'（'+a.en+'）':a.name}
+function moduleDisplayName(m){const i=m.indexOf(' · ');return i>0?m.slice(i+3)+'（'+m.slice(0,i)+'）':m}
+function actionDescription(action){return action.desc||'动作库文档暂未提供详细说明。'}
 const ACTION_DESCRIPTIONS={
  '膝盖靠墙踝背屈':'面向墙站立，脚尖距墙约5–10厘米；脚跟始终贴地，让膝盖向第二脚趾方向前移并轻触墙面，再回到起始位。左右腿分别测试/训练，避免足弓塌陷和膝盖内扣。',
  '动态踝背屈':'站立或半跪位，以脚跟不离地为前提，让膝盖反复向前越过脚尖，再回到中立位；动作连续但不弹震。',
  '深蹲位踝背屈':'进入舒适深蹲位，在脚跟贴地的情况下主动将膝盖向前移动，感受踝背屈；保持足弓和膝盖方向稳定。',
- '90/90 Hip Switch':'坐姿双腿弯曲约90°，双膝向一侧倒下，再通过髋关节旋转转换到另一侧；保持躯干尽量稳定。',
- '90/90前倾':'进入90/90坐姿，保持背部较长，从髋部向前倾，回到直立；不要通过弯腰塌背强行增加幅度。',
- 'Cossack Squat':'双脚宽站，一侧屈膝下沉，另一侧腿伸直、脚尖朝上或保持自然；躯干保持控制，再推回中间换侧。',
- 'Hip Airplane':'单腿站立，另一腿向后伸；保持骨盆稳定，通过髋关节旋转让骨盆向外打开再回正，必要时扶墙完成。',
- 'World’s Greatest Stretch':'弓步位，前脚落地；同侧手臂向上旋转打开胸椎，再将肘部向前脚内侧靠近；左右交替。',
- 'Wall Slide':'背部靠墙或面向墙站立，肘和手臂保持受控接触墙面，沿墙向上滑，再缓慢回落；避免耸肩和腰椎过度伸展。',
+ '小腿动态拉伸':'一脚前、一脚后站立，在后脚跟保持接触地面的情况下反复屈伸踝关节；可缓慢前移身体增加活动幅度。',
+ '比目鱼肌动态活动':'屈膝约30°姿势下，反复让膝盖前移越过脚尖再回位；在屈膝状态下重点活动比目鱼肌，脚跟始终贴地。',
+ '90/90髋部转换':'坐姿双腿弯曲约90°，双膝向一侧倒下，再通过髋关节旋转转换到另一侧；保持躯干尽量稳定。',
+ '90/90髋部前倾':'进入90/90坐姿，保持背部较长，从髋部向前倾，回到直立；不要通过弯腰塌背强行增加幅度。',
+ '哥萨克深蹲':'双脚宽站，一侧屈膝下沉，另一侧腿伸直、脚尖朝上或保持自然；躯干保持控制，再推回中间换侧。',
+ '髋飞机':'单腿站立，另一腿向后伸；保持骨盆稳定，通过髋关节旋转让骨盆向外打开再回正，必要时扶墙完成。',
+ '内收肌后坐拉伸':'四点跪姿，一腿向侧方伸直，脚掌贴地；臀部向后坐至内侧大腿产生拉伸，再返回。',
+ '世界最伟大拉伸':'弓步位，前脚落地；同侧手臂向上旋转打开胸椎，再将肘部向前脚内侧靠近；左右交替。',
+ '开书式胸椎旋转':'侧卧、髋膝屈曲叠放，双手前伸合十；上侧手臂像打开书本一样向后旋转打开胸椎，眼睛跟随手的方向，再缓慢合回。',
  '墙滑':'背部靠墙或面向墙站立，肘和手臂保持受控接触墙面，沿墙向上滑，再缓慢回落；避免耸肩和腰椎过度伸展。',
+ '胸椎旋转':'四点跪姿，一手放于头后；保持骨盆稳定，通过胸椎旋转将肘部指向对侧地面，再向上打开至天花板方向，左右交替。避免用腰椎旋转代偿，动作范围以胸椎活动为准。',
+ '弹力带肩部绕环':'站立，双手宽握弹力带置于体前；保持手臂基本伸直，将弹力带从体前经头顶绕到体后，再原路返回。握距以肩部无痛、动作可控为准，避免耸肩和腰部过伸。',
+ '肩胛关节控制环绕':'站立或俯身，单手缓慢做最大幅度但受控的肩胛环绕；顺序为上提、前伸、下压、后缩，全程避免耸肩借力。',
  '弹力带侧走':'弹力带置于膝上或脚踝，髋膝轻屈；向侧方迈步，保持骨盆水平和膝盖对准脚尖，连续侧向移动。',
  '站姿膝控':'单腿站立，缓慢屈髋屈膝，观察膝盖始终朝向第二脚趾；必要时降低动作幅度。',
- 'Step-down':'站在低台阶上，单腿支撑；另一脚缓慢向下探地，再由支撑腿推回起始位。全过程控制骨盆和膝盖。',
- 'Spanish Squat':'用固定带/弹力带支撑膝后侧，身体向后坐并屈膝下蹲；保持躯干相对直立，再站起。以舒适范围和稳定性为先。',
- '侧卧蚌式':'侧卧、髋膝弯曲，双脚并拢；保持骨盆不向后翻，用上侧髋外旋打开膝盖，再缓慢闭合。',
+ '台阶下蹲':'站在低台阶上，单腿支撑；另一脚缓慢向下探地，再由支撑腿推回起始位。全过程控制骨盆和膝盖。',
+ '西班牙深蹲':'用固定带/弹力带支撑膝后侧，身体向后坐并屈膝下蹲；保持躯干相对直立，再站起。以舒适范围和稳定性为先。',
+ '单腿坐姿起立':'坐在椅子前缘，一腿抬起悬空；用支撑腿发力站起，再缓慢控制坐下。全程保持膝盖对准脚尖，不借助手撑。',
+ '蚌式':'侧卧、髋膝弯曲，双脚并拢；保持骨盆不向后翻，用上侧髋外旋打开膝盖，再缓慢闭合。',
  '侧卧髋外展':'侧卧，下侧腿可弯曲稳定，上侧腿伸直；保持脚尖朝前，用髋部抬高上侧腿，再控制下降。',
+ '弹力带髋外展':'弹力带置于膝上或脚踝，站立或半蹲；将腿向侧方打开，骨盆保持稳定后回到起始位。',
+ '单腿罗马尼亚硬拉':'单腿站立手持哑铃，向后推髋同时躯干前倾，哑铃沿支撑腿下降；保持骨盆水平和脊柱中立，再伸髋回正。',
  '滑动腿弯举':'仰卧，脚跟踩滑垫/毛巾；抬起臀部后屈伸膝，将脚跟拉向臀部，再控制伸直。',
- 'Nordic辅助':'跪姿固定脚踝，身体从膝关节向前倾；用手或弹力带辅助控制下降，再回到起始位。重点是慢速离心。',
- 'Copenhagen短杠杆':'侧桥姿势，将上侧膝盖放在凳面，支撑身体并保持骨盆抬高；另一腿悬空或自然放置。',
- 'Copenhagen长杠杆':'侧桥姿势，将上侧小腿/脚踝放在凳面，保持身体成一直线；用内收肌和侧核心稳定骨盆。',
+ '瑞士球腿弯举':'仰卧，双脚放在瑞士球上；抬髋后屈膝把球拉近，再缓慢伸膝。',
+ '辅助北欧腘绳肌弯举':'跪姿固定脚踝，身体从膝关节向前倾；用手或弹力带辅助控制下降，再回到起始位。重点是慢速离心。',
+ '短杠杆哥本哈根侧桥':'侧桥姿势，将上侧膝盖放在凳面，支撑身体并保持骨盆抬高；另一腿悬空或自然放置。',
+ '长杠杆哥本哈根侧桥':'侧桥姿势，将上侧小腿/脚踝放在凳面，保持身体成一直线；用内收肌和侧核心稳定骨盆。',
+ '侧向弓步':'向侧方迈出一大步，该侧屈髋屈膝下蹲，另一腿保持伸直；膝盖对准脚尖，再用支撑腿推回站立位。',
+ '双腿提踵':'站立扶稳，脚掌前部着地；抬高脚跟至最大舒适范围，再缓慢下降。',
  '单腿提踵':'单腿站立扶稳，脚跟下降后主动踮起，保持脚踝轨迹稳定，不向内外塌。',
  '屈膝提踵':'膝盖保持轻度弯曲进行提踵，重点训练屈膝状态下的小腿/比目鱼肌。',
  '单腿平衡':'单脚站立，保持骨盆和足弓稳定；可逐渐加入闭眼、触地或轻微动态干扰。',
- 'Pogo Jump':'膝盖保持轻微弯曲，以脚踝快速弹性完成连续小幅跳跃；落地安静、触地时间短，不追求高度。',
- 'Snap Down':'站立后快速摆臂下落到运动准备位，髋膝踝同步屈曲并稳定定住；重点练习快速吸收力量。',
- 'Squat Landing':'从小跳落地，双脚同时着地，髋膝踝屈曲吸收冲击，膝盖对准脚尖，稳定后再站起。',
- 'Drop Landing':'从低台阶走下或小幅跳下，双脚落地并主动屈髋屈膝吸收冲击；先练稳定，再逐渐提高高度。',
- 'Drop Jump':'从低箱下落，落地后尽快完成垂直起跳；强调落地位置、刚性和快速反应，不以高度替代动作质量。',
- 'Countermovement Jump':'站立快速下蹲并立即向上起跳，利用下蹲反向动作产生弹性；双脚稳定落地。',
- 'Squat Jump':'先停在固定深蹲位，再不借助明显反向下蹲直接向上跳；强调起跳力量和落地控制。',
- 'Tuck Jump':'垂直起跳时主动抬膝接近胸部，落地后立即准备下一次；保持躯干控制，避免为了抬膝而塌腰。',
- 'Box Jump':'从站立位摆臂起跳，双脚落在箱面并屈髋屈膝吸收冲击，再站直；箱高以动作稳定为准，不追求极限高度。',
- 'Depth Jump':'从箱上走下落地，利用落地后的快速伸展反应立即起跳；必须先具备良好落地控制。',
- 'Broad Jump':'双脚屈髋屈膝预蹲，摆臂并向前跳远；双脚落地并主动吸收冲击。',
- 'Bounds':'以单腿交替向前跨跳，强调水平推进和髋部力量；每一步保持稳定落地与节奏。',
- 'Skater Jump':'从一侧单腿向另一侧跳，落在对侧腿上并稳定；保持髋膝踝对齐，控制横向摆动。',
- 'Lateral Bound':'单腿向侧方强力蹬地，跳到另一侧并单腿落地定住；逐渐增加距离。',
+ '快速下落定住':'站立后快速摆臂下落到运动准备位，髋膝踝同步屈曲并稳定定住；重点练习快速吸收力量。',
+ '深蹲式落地':'从小跳落地，双脚同时着地，髋膝踝屈曲吸收冲击，膝盖对准脚尖，稳定后再站起。',
+ '下落落地':'从低台阶走下或小幅跳下，双脚落地并主动屈髋屈膝吸收冲击；先练稳定，再逐渐提高高度。',
+ '跳箱后落地':'跳上低箱后立即从箱上走下或跳下，双脚落地并主动屈髋屈膝吸收冲击，稳定定住2秒；重点在落地质量而非跳箱高度。',
+ '落箱反应跳':'从低箱下落，落地后尽快完成垂直起跳；强调落地位置、刚性和快速反应，不以高度替代动作质量。',
+ '单脚快速下落定住':'单腿站立，快速摆臂下落到单腿运动准备位并稳定定住；保持膝盖对准脚尖、骨盆水平，吸收力量后不晃动。',
+ '单脚落地':'从小跳或低台阶以单脚落地，髋膝踝同步屈曲吸收冲击，保持膝盖对准脚尖，稳定定住2秒以上。',
+ '单脚跳→落地':'单脚起跳向前或向上，同侧单脚落地并稳定定住；落地后髋膝踝屈曲缓冲，骨盆保持水平，不向内扣。',
+ '横向跳→单脚落地':'从一侧单腿向侧方跳，落在对侧单腿上并稳定定住；落地时髋膝踝对齐，控制身体不再晃动，定住2秒以上。',
+ '跳跃→定住→再次跳跃':'完成一次跳跃后稳定落地定住，确认姿势可控后立即再次起跳；落地即蓄力，训练落地到起跳的转换质量。',
+ '5米加速急停':'从静止起跑加速5米，到达标志后通过多步小碎步降低重心急停定住；保持膝盖对准脚尖、躯干稳定不前倾过度。',
+ '10米加速急停':'起跑加速10米后，在标志桶前提前降低重心，通过多步减速把水平速度吸收后完全定住；急停后保持可立即再启动的姿势。',
+ '前进→急停':'中低速向前跑动，听口令或在标志处急停定住；通过小碎步降低重心，双脚稳定后不出现多余调整步。',
+ '后退→急停':'后退跑中听口令急停，降低重心、身体略前倾定住；保持视野朝前，定住后能立即向任意方向再启动。',
+ '单腿跳→停':'单腿向前跳，同侧单腿落地后立即制动定住；通过屈髋屈膝吸收水平冲量，膝盖对准脚尖，骨盆稳定不晃。',
+ '单腿向前跳→停':'单腿向前跳远（Single-Leg Broad Jump），同侧单腿落地后立即制动定住；通过屈髋屈膝吸收水平冲量，膝盖对准脚尖，骨盆稳定不晃。',
+ '单腿侧向跳→停':'单腿向侧方跳，对侧单腿落地后立即制动定住；落地侧髋膝踝对齐，躯干不侧倒，定住2秒以上。',
+ '冲刺→急停':'全速或接近全速冲刺后，在标志处通过多步降低重心完成急停；先降速再定住，避免单步硬刹，观察膝盖轨迹和躯干控制。',
+ '冲刺→后退跑':'向前冲刺到标志处，降低重心后立即转换为控制的后退跑；转换过程中保持躯干稳定、脚步轻快。',
+ '冲刺→急停→后退跑':'冲刺后先完成急停定住，确认稳定后立即转换为后退跑；急停质量优先，再追求转换速度。',
+ '冲刺→急停→变向':'冲刺到标志处降低重心急停，支撑脚稳定后向规定方向变向并重新加速；全程观察膝盖轨迹、躯干控制和变向后第一步。',
+ '冲刺→45°变向':'冲刺接近标志桶后提前降重心，支撑脚外置蹬地完成约45°变向并重新加速；变向前先减速，变向后第一步有力。',
+ '冲刺→90°变向':'冲刺接近标志桶后充分降低重心，外侧支撑脚强力蹬地完成90°变向；这是大角度变向，对减速能力和膝踝控制要求最高。',
+ '冲刺→180°转身':'冲刺到标志处降低重心，通过小碎步完成180°转身，再向来时方向加速；转身过程中保持低重心和脚步快速调整。',
+ '踝弹跳':'膝盖保持轻微弯曲，以脚踝快速弹性完成连续小幅跳跃；落地安静、触地时间短，不追求高度。',
+ '前后踝弹跳':'以脚踝弹性完成连续小幅前后跳跃；膝盖微屈保持稳定，落地安静、触地时间短。',
+ '左右踝弹跳':'以脚踝弹性完成连续小幅左右跳跃；保持躯干朝前、膝盖对准脚尖，横向移动时落地安静。',
+ '单腿踝弹跳':'单腿以脚踝弹性完成连续小幅跳跃；保持骨盆水平和膝盖对准脚尖，触地时间短，左右分别完成。',
+ '反向动作纵跳':'站立快速下蹲并立即向上起跳，利用下蹲反向动作产生弹性；双脚稳定落地。',
+ '深蹲跳':'先停在固定深蹲位，再不借助明显反向下蹲直接向上跳；强调起跳力量和落地控制。',
+ '抱膝跳':'垂直起跳时主动抬膝接近胸部，落地后立即准备下一次；保持躯干控制，避免为了抬膝而塌腰。',
+ '跳箱':'从站立位摆臂起跳，双脚落在箱面并屈髋屈膝吸收冲击，再站直；箱高以动作稳定为准，不追求极限高度。',
+ '深度跳':'从箱上走下落地，利用落地后的快速伸展反应立即起跳；必须先具备良好落地控制。',
+ '立定跳远':'双脚屈髋屈膝预蹲，摆臂并向前跳远；双脚落地并主动吸收冲击。',
+ '单腿向前跳':'单腿屈髋屈膝预蹲，摆臂向前跳远，同侧单腿落地并主动吸收冲击；先保证落地稳定，再追求距离。',
+ '跨步跳':'以单腿交替向前跨跳，强调水平推进和髋部力量；每一步保持稳定落地与节奏。',
+ '连续跨步跳':'以单腿交替连续向前跨跳，每步尽量远且保持节奏；触地时间短，髋部主动发力推进，落地始终稳定。',
+ '滑冰者跳':'从一侧单腿向另一侧跳，落在对侧腿上并稳定；保持髋膝踝对齐，控制横向摆动。',
+ '侧向跨跳':'单腿向侧方强力蹬地，跳到另一侧并单腿落地定住；逐渐增加距离。',
+ '单腿侧向跳':'单腿向侧方跳，同侧或对侧单腿落地；保持髋膝踝对齐和躯干稳定，可逐步增加跳跃距离。',
+ '连续侧向跳':'单腿或双腿连续向侧方跳跃，保持节奏和触地时间；躯干朝前，膝盖对准脚尖，不因追求距离而牺牲落地质量。',
+ '药球胸前传球':'双脚前后或平行站立，双手持球置于胸前；核心收紧，下肢稳定，双臂快速向前推出，同时转肩送胯将力量从下肢传递到上肢；球出手后手臂自然跟随，迅速准备下一次。重点体会全身力量传递，而非单纯手臂发力。',
+ '药球旋转投掷':'侧身站立，髋部先旋转带动躯干和手臂，把药球向墙面或伙伴投出；重点是力量从下肢向上肢传递。',
+ '药球过顶砸地':'双手将药球举过头顶，利用躯干和髋部快速向下把球砸向地面，再安全拾回。',
  '高脚杯深蹲':'双手在胸前托住壶铃/哑铃，脚站略宽于髋；髋膝同步屈曲下蹲，保持胸廓和足底稳定后站起。',
+ '前蹲':'杠铃置于身体前侧肩部支撑位，肘部抬高；屈髋屈膝下蹲，保持躯干较直，再站起。',
+ '后蹲':'杠铃置于上背部，双脚稳定；髋膝同步屈曲下蹲至目标深度，再通过脚底发力站起。',
  '六角杠深蹲':'站入六角杠中央，握把站起；以髋膝同步屈曲下蹲，再稳定站起，保持负荷位于身体两侧。',
  '六角杠硬拉':'站在六角杠中央，髋部后移并屈膝抓握；脚底发力伸髋伸膝站起，保持脊柱中立。',
  '罗马尼亚硬拉':'双手持杠，从站立开始向后推髋，杠铃沿腿部下降；腘绳肌出现明显张力后，通过伸髋回到站立。',
+ '杠铃臀推':'上背部支撑在凳面，杠铃位于髋部；脚掌稳定，伸髋把骨盆抬至身体接近直线，再控制下降。',
+ '壶铃摆动':'双脚宽站，壶铃从胯下向后摆动，利用快速伸髋把壶铃向前摆至肩高以下；手臂只起引导作用，力量来自髋部爆发。',
+ '早安式':'杠铃置于上背部，膝盖微屈；向后推髋让躯干前倾，保持脊柱中立，再通过臀腿伸髋回正。',
+ '保加利亚分腿蹲':'后脚置于凳面，前脚稳定承重；垂直下沉至目标深度，再用前腿发力站起，保持躯干和骨盆稳定。',
+ '反向弓步':'向后撤步并下沉，前腿承担主要力量；膝盖对准脚尖，再用前腿推回站立位。',
+ '前向弓步':'向前迈步并下沉，前脚稳定承重，膝盖对准脚尖；推地回到站立。',
+ '分腿蹲':'前后分腿但双脚固定，垂直下沉并站起；前腿承担主要力量，保持骨盆稳定。',
+ '台阶上步':'一脚完整踩上台阶，用台阶上的腿伸髋伸膝把身体带上去；避免过度借助后脚蹬地。',
+ '前脚抬高分腿蹲':'前脚垫高的分腿蹲，增加前腿动作幅度；垂直下沉时保持骨盆稳定和膝盖对准脚尖，再由前腿发力站起。',
+ '反向弓步接提膝':'完成一次反向弓步后，后腿主动向前上方提膝至髋高；保持支撑腿稳定和躯干直立，训练单腿力量与平衡衔接。',
+ '辅助手枪深蹲':'单腿下蹲，同时另一腿前伸，手扶固定物辅助平衡；保持支撑脚稳定和膝盖轨迹，达到可控深度后站起。',
+ '手枪深蹲':'单腿下蹲，同时另一腿前伸；保持支撑脚稳定和膝盖轨迹，达到可控深度后站起。',
+ '单腿箱式深蹲':'单腿站立向后坐到箱/凳面，轻触后再单腿站起；控制膝盖和骨盆，不塌向一侧。',
+ '后脚抬高分腿蹲跳':'后脚置于凳面的分腿蹲姿势，前腿爆发蹬地起跳，落地回到分腿姿势并立即吸收冲击；先建立负重分腿蹲力量，再加入跳跃。',
  '俯卧撑':'双手略宽于肩，身体保持一直线；屈肘降低胸部，再主动推地回到起始位。',
  '哑铃卧推':'仰卧凳上，哑铃位于胸侧；控制下放，肘部适度外展，再向上推至接近伸直。',
- 'Landmine Press':'一端固定杠铃，双手或单手握另一端；从肩前方向上前方推，保持躯干稳定。',
+ '上斜哑铃卧推':'仰卧于上斜凳，哑铃位于胸部上方两侧；控制下放至胸侧，再向上推起，保持肩胛稳定。',
+ '杠铃卧推':'仰卧凳上，杠铃从架位起至胸上方；控制下放至胸部，再向上推至接近伸直，保持肩胛后缩和脚踩稳。',
+ '地雷管推举':'一端固定杠铃，双手或单手握另一端；从肩前方向上前方推，保持躯干稳定。',
+ '哑铃肩推':'坐姿或站姿，哑铃位于肩部两侧；向上推至接近伸直，再控制下放，避免腰椎过伸。',
+ '引体向上':'正手握杠略宽于肩，从悬垂位通过肩胛下沉和屈肘将身体上拉至下巴过杠，再控制下降。',
+ '反握引体向上':'掌心朝向自己握杠，通过肩胛下沉和屈肘将身体拉起，再控制下降。',
+ '高位下拉':'坐稳固定腿部，握住横杆向上胸方向下拉；保持胸廓稳定，不用身体后仰借力。',
+ '哑铃划船':'俯身单手支撑，另一手持哑铃向髋部方向拉；肩胛受控移动，不耸肩，保持躯干稳定。',
  '单臂划船':'一手一膝或双脚稳定支撑，另一手持哑铃向髋部方向拉；肩胛受控移动，不耸肩。',
- 'Face Pull':'绳索约脸部高度，双手向脸部拉并外旋，让手位于耳侧；保持肩胛控制。',
- 'Dead Bug':'仰卧，腰背保持受控贴地；对侧手脚缓慢伸展，再回到中间，左右交替。',
- 'Hollow Body':'仰卧抬起肩胛和腿，腹部收紧，使身体形成轻微弧形；根据能力调整腿高。',
- 'Pallof Press':'侧身站在绳索/弹力带固定点旁，双手从胸前推出并保持躯干不被拉向侧面，再收回。',
- 'Suitcase Carry':'单手持重物行走，另一侧不负重；保持躯干垂直、骨盆水平，不向负重侧倾斜。',
- 'Farmer Carry':'双手各持重物行走，保持胸廓和骨盆稳定，步幅自然。',
- '悬挂举腿':'悬垂后保持躯干稳定，主动屈髋将双腿抬高，再控制下降。',
- 'Cable Chop':'站立握绳索，从高位向对侧髋部斜向拉动；骨盆和胸廓协调旋转，保持核心控制。',
- 'Cable Lift':'从低位向对侧肩部斜向提拉绳索，保持脚底和骨盆稳定，让躯干产生受控旋转。',
- '5m Sprint':'采用适合自己的起跑姿势，前几步保持身体前倾并积极蹬地；目标是短距离快速加速。',
- 'Falling Start':'身体整体前倾至即将失去平衡，再用前腿跨出进入冲刺；避免只从腰部折叠。',
+ '坐姿绳索划船':'坐姿保持脊柱中立，向身体方向拉绳柄；肩胛向后收，再控制回程。',
+ '澳式引体':'身体保持一直线，胸口向固定杠/把手靠近，再控制下降；根据杠高调整难度。',
+ '面拉':'绳索约脸部高度，双手向脸部拉并外旋，让手位于耳侧；保持肩胛控制。',
+ '弹力带肩外旋':'肘部贴近身体约90°屈曲，前臂向外旋转弹力带，再缓慢回位；避免耸肩。',
+ '绳索肩外旋':'肘部贴近身体约90°屈曲，前臂向外旋转拉绳索，再缓慢回位；保持肘部位置固定，避免耸肩。',
+ 'Y字抬臂':'俯卧或站立轻负荷，将双臂沿Y字方向抬起；重点是肩胛上回旋和下斜方肌控制。',
+ '肩胛俯卧撑':'保持肘基本伸直，只让肩胛骨前伸和后缩，身体随肩胛移动；不要把它做成普通俯卧撑。',
+ '死虫式':'仰卧，腰背保持受控贴地；对侧手脚缓慢伸展，再回到中间，左右交替。',
+ '空心身体保持':'仰卧抬起肩胛和腿，腹部收紧，使身体形成轻微弧形；根据能力调整腿高。',
+ '腹轮滚动':'跪姿握腹轮，收紧腹部，髋肩同步向前伸展至可控范围，再利用核心拉回；不要让腰椎塌陷。',
+ '平板支撑':'前臂或双手支撑，身体从头到脚跟保持直线；主动收腹、夹臀，避免塌腰。',
+ '帕洛夫抗旋推':'侧身站在绳索/弹力带固定点旁，双手从胸前推出并保持躯干不被拉向侧面，再收回。',
+ '半跪姿帕洛夫抗旋推':'半跪姿侧身对固定点，双手将绳索/弹力带从胸前推出，保持躯干不被拉转；跪姿进一步挑战骨盆稳定。',
+ '绳索抗旋转':'侧身站在绳索固定点旁，双手持绳置于胸前；抵抗侧向拉力保持躯干稳定，可静态保持或缓慢推出收回。',
+ '侧桥':'侧卧以前臂和脚侧支撑，身体成一直线并抬起骨盆；保持骨盆不前倾、不后倒，左右分别完成。',
+ '单侧负重行走':'单手持重物行走，另一侧不负重；保持躯干垂直、骨盆水平，不向负重侧倾斜。',
+ '农夫走':'双手各持重物行走，保持胸廓和骨盆稳定，步幅自然。',
+ '悬垂举腿':'悬垂后保持躯干稳定，主动屈髋将双腿抬高，再控制下降。',
+ '悬垂提膝':'悬垂稳定后收紧核心，将膝盖向胸部方向抬起，再控制下放，避免大幅摆动。',
+ '反向卷腹':'仰卧屈膝，利用下腹发力将骨盆向后卷起、膝盖靠近胸部，再控制下放；避免借助摆动惯性。',
+ '绳索砍劈':'站立握绳索，从高位向对侧髋部斜向拉动；骨盆和胸廓协调旋转，保持核心控制。',
+ '绳索上提':'从低位向对侧肩部斜向提拉绳索，保持脚底和骨盆稳定，让躯干产生受控旋转。',
+ '药球铲式旋转抛投':'侧对目标站立，双手持球从髋侧低位开始，利用髋部旋转带动躯干，将球以铲式弧线向前上方抛出；重点是从下肢到上肢的力量传递。',
+ '5米冲刺':'采用适合自己的起跑姿势，前几步保持身体前倾并积极蹬地；目标是短距离快速加速。',
+ '10米冲刺':'站立式或三点式起跑，前10米保持积极蹬地和身体前倾，逐步抬升躯干；全程放松摆臂，追求最大加速度。',
+ '15米冲刺':'延续10米冲刺的加速模式，在15米内完成从强前倾到较直立姿势的过渡；保持步频和放松，避免过早挺直。',
+ '前倾起跑':'身体整体前倾至即将失去平衡，再用前腿跨出进入冲刺；避免只从腰部折叠。',
+ '前后站姿起跑':'前后分腿站立，前腿同侧手臂后摆；起跑时前腿强力蹬地、身体前倾进入加速，前几步保持低重心。',
+ '侧向起跑':'侧对跑动方向站立，起跑时转髋交叉步切入加速；前2–3步完成从侧向到正向的转换，保持身体前倾。',
+ '飞行10米':'先用逐渐加速区达到较高速度，再进入10米计时区；重点是最高速度阶段的放松和步频。',
+ '飞行20米':'加速区达到接近最高速度后进入20米计时区；保持直立放松的跑姿、步频和触地效率，避免僵硬发力。',
+ '冲刺跑技术':'在低速到中等速度下分解练习冲刺姿势：身体整体前倾、积极摆臂、前侧力学和脚掌触地；以质量优先，不追求速度。',
+ 'A式小步跳':'交替抬膝并用对侧脚快速弹跳，保持躯干直立和脚踝弹性；用于跑姿节奏练习。',
+ 'B式小步跳':'在A式动作基础上将抬起的小腿向前下方主动伸展，再快速回收；保持节奏和控制。',
  '阻力冲刺':'使用雪橇、弹力带等提供适度阻力，保持正常冲刺姿势；阻力不能大到破坏动作。',
  '雪橇推':'双手握雪橇把手，身体前倾，连续有力地向后蹬地推进；保持躯干稳定。',
- 'Flying 10m':'先用逐渐加速区达到较高速度，再进入10米计时区；重点是最高速度阶段的放松和步频。',
- 'A-Skip':'交替抬膝并用对侧脚快速弹跳，保持躯干直立和脚踝弹性；用于跑姿节奏练习。',
- 'B-Skip':'在A式动作基础上将抬起的小腿向前下方主动伸展，再快速回收；保持节奏和控制。',
- '5-10-5':'从中线起跑，先向一侧5码，再穿过中线跑10码到另一侧，最后返回起点；每次变向先降速再强力蹬地。',
- 'T-Drill':'向前冲刺到中点，横向滑到一侧，再横向到另一侧，返回中点后后退回起点；按规定路线完成。',
+ '雪橇拖':'身体背对拖动方向或正向拖行雪橇，保持身体前倾和积极蹬地；阻力适中，保持正常跑姿不被破坏。',
+ '上坡冲刺':'在缓坡上进行短距离冲刺；坡度自然迫使身体前倾和前侧力学，保持积极蹬地和摆臂。',
+ '5-10-5折返跑':'从中线起跑，先向一侧5码，再穿过中线跑10码到另一侧，最后返回起点；每次变向先降速再强力蹬地。',
+ 'T字折返测试':'向前冲刺到中点，横向滑到一侧，再横向到另一侧，返回中点后后退回起点；按规定路线完成。',
+ '三锥体/L形变向':'围绕三个标志桶完成L形路线的冲刺、急停、变向和回跑；每次换向前先降低重心，支撑脚稳定后再加速。',
+ '方框变向跑':'围绕四个标志桶组成的方框完成冲刺、滑步、后退跑等组合移动；保持低重心，变向前先减速。',
  '防守滑步':'低重心、胸口朝前，横向移动时保持双脚不交叉；脚步快速，膝盖对准脚尖。',
- 'Closeout':'从防守协防位置快速接近持球人，最后几步降低重心并碎步减速，保持可继续滑步的姿势。',
- 'Pound Dribble':'保持低重心，用手指和手掌主动向下压球，球反弹至腰部以下；左右手交替。',
- 'Between Legs':'在双腿形成通道时将球从一手穿过双腿换到另一手；保持低重心和视野抬起。',
- 'Behind Back':'利用手腕和前臂把球从身体一侧送到背后另一侧，保持身体移动方向稳定。',
- 'Hesitation':'高速运球中短暂降低身体和球速，制造节奏变化，再快速加速突破。',
- 'Retreat Dribble':'突破过程中快速向后退步拉开距离，同时控制球后撤，为重新进攻创造空间。',
- 'Catch & Shoot':'提前准备手型和脚步，接球同时完成脚步调整并快速出手；减少多余停顿。',
- 'Pull-up':'运球推进后通过减速和脚步急停垂直起跳，保持上身稳定完成投篮。',
- 'Side-step':'先向侧方移动制造空间，再快速建立稳定投篮脚步并起跳出手。',
- 'Euro Step':'持球突破后连续两步改变横向方向，第一步制造防守人偏移，第二步向另一侧终结。',
- 'Floater':'突破进入中距离区域后单手或双手柔和抛球，利用高弧线越过协防者。',
- 'Contact Finish':'在合理身体接触下保持核心和上肢稳定完成上篮/投篮；先从可控接触开始。',
- 'Jump Stop':'移动中双脚同时落地完成急停，屈髋屈膝吸收惯性并保持平衡。',
- 'Pivot':'建立一只中枢脚后保持其支点不移动，用另一脚带动身体转向；遵守篮球走步规则。',
- 'Jab Step':'一脚快速向防守者方向探出制造假动作，再迅速收回进入突破或投篮。',
- 'Step Back':'从进攻脚步中向后撤开空间，双脚稳定后起跳；控制身体后移幅度。',
- 'Zone 2快走/骑车':'保持可以持续较长时间的低到中等强度，呼吸加快但仍能进行简短交流；以个人心率/体感区间为准。',
- '90/90呼吸':'仰卧、髋膝约90°，缓慢吸气扩张下侧肋骨，长呼气并轻收腹；重复数个呼吸循环。'
+ '侧向滑步':'运动方向侧向移动，双脚连续快速调整；保持髋膝微屈和躯干稳定。',
+ '交叉步跑':'侧向移动时用交叉步越过身体前侧完成快速横向跑；躯干尽量朝前，用于追防或长距离横向覆盖。',
+ '卡里奥卡交叉步':'身体侧向移动，前后交替交叉脚步，同时保持躯干朝向前方；从慢速开始建立协调性。',
+ '视觉反应冲刺':'根据伙伴/教练的视觉信号（手势、指向）决定冲刺方向；先看清信号再启动，训练决策速度而非纯冲刺速度。',
+ '口令反应冲刺':'根据口令（方向、颜色、数字）决定冲刺方向或动作；听到信号后快速决策并启动，保持动作质量。',
+ '手势反应':'根据伙伴的手势信号完成左右变向、前后冲刺或急停；信号随机，重点是感知-决策-动作的衔接速度。',
+ '球反应':'根据篮球的弹跳、传球方向或伙伴持球信号做出冲刺、急停或变向；最接近比赛情境的反应训练。',
+ '防守接近':'从防守协防位置快速接近持球人，最后几步降低重心并碎步减速，保持可继续滑步的姿势。',
+ '防守接近→滑步→冲刺':'快速接近持球人完成Closeout，立即衔接防守滑步跟随，再转换为冲刺回位；三个环节的衔接都要保持低重心和平衡。',
+ '防守接近→滑步':'快速接近持球人完成Closeout后，立即衔接防守滑步；重点是从冲刺减速到滑步的平滑转换，保持防守姿势。',
+ '滑步→冲刺':'防守滑步中听到信号或看到方向后，立即转换为向前冲刺；转换瞬间降低重心、第一步有力。',
+ '后退跑→转身→冲刺':'后退跑中快速完成转身，随即向前冲刺；转身时降低重心、头部先转，保持身体平衡。',
+ '原地大力运球':'保持低重心，用手指和手掌主动向下压球，球反弹至腰部以下；左右手交替。',
+ '交叉运球':'体前将球从一手快速换到另一手，球的落点在身体前方中线；换手时降低重心，同时观察场上情况。',
+ '胯下运球':'在双腿形成通道时将球从一手穿过双腿换到另一手；保持低重心和视野抬起。',
+ '背后运球':'利用手腕和前臂把球从身体一侧送到背后另一侧，保持身体移动方向稳定。',
+ '犹豫步运球':'高速运球中短暂降低身体和球速，制造节奏变化，再快速加速突破。',
+ '后撤运球':'突破过程中快速向后退步拉开距离，同时控制球后撤，为重新进攻创造空间。',
+ '高速运球':'在前进中用较大幅度、较快节奏运球，球落点位于身体前侧并略向前。',
+ '体前内外运球':'同一只手控制球先向外假动作，再快速向内收回改变方向；保持身体和球同步。',
+ '胯下接交叉':'先完成一次胯下运球，球到另一手后立即衔接体前交叉运球；两个动作之间不减速，保持低重心。',
+ '背后接交叉':'先完成一次背后运球，接球手立即衔接体前交叉变向；组合连贯、节奏不停顿，保持推进速度。',
+ '节奏变化':'运球推进中主动改变速度和身体高度：减速-加速、停顿-启动；用节奏差异制造突破空间。',
+ '方向变化':'运球中快速改变进攻方向，结合体前、胯下或背后运球完成变向；变向前降低重心，变向后第一步加速。',
+ '逃脱式运球':'在被紧逼或包夹时，通过后撤、转身或背后运球摆脱防守压力，重新获得安全控球空间；以保护球为首要目标。',
+ '组合运球':'连续组合两种以上运球动作（如胯下+背后+交叉），保持节奏流畅和重心稳定；先慢速连贯，再逐渐提速。',
+ '基础投篮姿势':'近距离面对篮筐，从站姿、手型、出手弧线到跟随动作反复定型；距离由近到远，先保证动作一致性再增加距离。',
+ '接球即投':'提前准备手型和脚步，接球同时完成脚步调整并快速出手；减少多余停顿。',
+ '急停跳投':'运球推进后通过减速和脚步急停垂直起跳，保持上身稳定完成投篮。',
+ '横移跳投':'先向侧方移动制造空间，再快速建立稳定投篮脚步并起跳出手。',
+ '1-2步投篮脚步':'接球后先落一脚、再落另一脚形成1-2节奏，并在第二脚稳定后起跳投篮。',
+ '双脚跳步投篮':'接球或运球后双脚同时落地完成跳步，再快速起跳出手；注意身体平衡。',
+ '重新落位投篮':'传球或切入后迅速移动到新位置接球投篮；移动中提前准备手型，接球即用1-2步或跳步完成出手。',
+ '底角投篮':'在两侧底角定点接球投篮；保持脚步准备和出手一致性，是比赛中最常见的定点三分位置。',
+ '侧翼投篮':'在两侧45°侧翼位置接球或运球后投篮；模拟比赛常见出手点，保持稳定的脚步和出手节奏。',
+ '弧顶投篮':'在弧顶位置接球或运球后投篮；这是发起进攻的核心区域，需结合投篮假动作和阅读防守。',
+ '绕掩护投篮':'利用队友掩护摆脱防守后接球投篮；绕掩护时贴近队友、快速急停建立脚步，接球后快速出手。',
+ '手递手配合':'与队友完成手递手传球后立即切入或投篮；接球时保持移动速度，接球后顺势完成进攻动作。',
+ '转换进攻三分':'快攻推进中快速落位三分线外，接球或运球急停完成三分出手；模拟比赛转换节奏下的投篮稳定性。',
+ '左右手上篮':'从两侧分别用左、右手完成上篮；掌握正确的脚步节奏（右手上篮左脚起跳），弱侧手单独加练。',
+ '高手/低手上篮':'高手上篮在较高位置柔和释放球，低手上篮从较低位置快速出手；根据防守者位置选择出手高度。',
+ '欧洲步':'持球突破后连续两步改变横向方向，第一步制造防守人偏移，第二步向另一侧终结。',
+ '抛投':'突破进入中距离区域后单手或双手柔和抛球，利用高弧线越过协防者。',
+ '对抗终结':'在合理身体接触下保持核心和上肢稳定完成上篮/投篮；先从可控接触开始。',
+ '正手上篮':'面对篮筐方向的标准上篮，掌心朝向篮筐柔和出手打板；注意起跳腿与出手手的配合和打板角度。',
+ '反手上篮':'从篮筐一侧起跳，身体越过篮筐用反手在另一侧完成终结；出手时手腕内旋，打板点与正手上篮相反。',
+ '跨步跳':'突破中双脚同时落地急停（Pro Hop），利用急停节奏变化躲避防守，再选择上篮或分球；落地时保持平衡和护球。',
+ '转身终结':'背身或面框持球，以中枢脚为轴完成转身摆脱防守后上篮；转身过程中保持低重心和护球，起跳终结保持稳定。',
+ '跳步急停':'移动中双脚同时落地完成急停，屈髋屈膝吸收惯性并保持平衡。',
+ '中枢脚转身':'建立一只中枢脚后保持其支点不移动，用另一脚带动身体转向；遵守篮球走步规则。',
+ '刺探步':'一脚快速向防守者方向探出制造假动作，再迅速收回进入突破或投篮。',
+ '后撤步跳投':'从进攻脚步中向后撤开空间，双脚稳定后起跳；控制身体后移幅度。',
+ '跨步急停':'通过一脚先落地、另一脚随后落地完成急停，控制重心并准备下一动作。',
+ '前转身':'面向防守者方向转身，中枢脚保持不动，另一脚向前跨过完成面向篮筐的转身；常用于摆脱贴身防守。',
+ '后转身':'背向防守者方向转身，中枢脚保持不动，身体后转制造空间；常用于背身进攻中向底线或中路转身。',
+ '撕裂步':'接球后将球从防守者身侧低位快速扫过，同时迈步突破；保持球远离防守者。',
+ '下沉转身步':'背身或接近篮筐时，一脚向侧后方落地形成空间，再转髋完成突破或终结。',
+ '跨步穿越终结':'投篮假动作后，一脚从防守者身侧穿越迈步完成上篮；保持中枢脚稳定，穿越时护球并寻找出手空间。',
+ '滑步→交叉步':'防守滑步跟随进攻者，当被突破身位时用交叉步快速转换追赶；滑步保持低重心，交叉步衔接要快。',
+ '防守接近→追防':'完成Closeout后被突破，立即转身用交叉步追防，目标回到持球人身前；转换过程中保持对球的观察。',
+ '二区有氧快走/骑车':'保持可以持续较长时间的低到中等强度，呼吸加快但仍能进行简短交流；以个人心率/体感区间为准。',
+ '慢跑':'低强度匀速慢跑，保持可以说话的强度；用于有氧基础建设和主动恢复，不追求配速。',
+ '划船机':'低中强度稳定节奏划船，保持腿-躯干-手臂的发力顺序和完整动作幅度；用于有氧恢复。',
+ '10米反复冲刺':'短距离冲刺组间短休息（如10m×6、休、20m×4、休、10m×6）；每次冲刺都追求质量，心率未完全恢复即开始下一组。',
+ '30秒冲刺/30秒慢走':'30秒高强度冲刺后30秒慢走恢复，循环多组；训练无氧耐力和恢复能力，冲刺段保持动作不变形。',
+ '全场折返':'沿篮球场各条线（底线-罚球线-中线-对侧罚球线-对侧底线）连续折返跑；每次触线变向，模拟比赛持续强度。',
+ '滑步→冲刺→投篮循环':'防守滑步→向前冲刺→接球投篮→回跑，循环重复；把防守、冲刺和技术动作组合成接近比赛的体能训练。',
+ '3v3半场':'半场3对3对抗；在真实攻防决策中发展比赛体能，注意动作质量和战术执行。',
+ '5v5全场':'全场5对5对抗；最接近比赛的体能和决策训练，注意转换速度和持续强度。',
+ '轻松步行':'放松步速步行，可户外或跑步机；促进血液循环和主动恢复，不追求强度。',
+ '低强度自行车':'低阻力轻松骑行，保持舒适踏频；训练后或恢复日的主动恢复手段。',
+ '低强度慢跑':'低于Zone 2强度的放松慢跑，保持轻松可对话的节奏；用于恢复日促进恢复。',
+ '90/90呼吸':'仰卧、髋膝约90°，缓慢吸气扩张下侧肋骨，长呼气并轻收腹；重复数个呼吸循环。',
+ '小腿/髋动态拉伸':'动态方式交替活动小腿和髋部：如提踵下落、前后摆腿、髋部绕环；动作连续受控，不追求静态拉伸深度。',
+ '小腿拉伸':'前后弓步站立，后脚跟贴地、腿伸直，身体前倾至小腿后侧产生拉伸感；静态保持，也可微屈膝针对比目鱼肌。',
+ '髋屈肌拉伸':'半跪姿，后侧髋部向前下方轻推至髋前侧产生拉伸；保持骨盆后倾、不塌腰，可同侧手臂上举加强。',
+ '鳄鱼式呼吸':'俯卧额头支撑，缓慢吸气让腹部和下侧肋骨向地面扩张，再长呼气放松。',
+ '方框呼吸':'按固定节奏完成吸气、停顿、呼气、停顿，例如各4秒；以舒适和不憋气为原则。',
+ '弓步单臂哑铃推举':'前后分腿站立（推荐对侧负重：左腿在前→右手持哑铃），哑铃置于肩部高度；保持骨盆中立、核心抗旋转，单臂向上推起哑铃至手臂接近伸直，再控制下放。训练前腿稳定+臀部稳定+骨盆控制+抗旋转+肩部推力，对应篮球对抗状态下的传球、护球、终结。',
+ '分腿姿快速蹬伸单臂推举':'低位分腿姿稳定，哑铃置于肩部；前腿快速蹬地、髋膝快速伸展，力量经核心传递至肩部，单臂爆发推起哑铃；落地时重新稳定在分腿姿。重点是 Ground→Hip→Core→Upper 的力量链，三关节伸展驱动推举而非单纯手臂发力。训练意图为 Power（3–5次/组，强调速度）。膝部症状期不进入此动作，先完成分腿蹲和减速控制。',
+ '分腿姿地雷管推举':'前后分腿站立，双手或单手握地雷管杠铃一端；从肩前方向上前方推出，保持躯干稳定和骨盆中立。分腿姿增加抗旋转需求，是从基础地雷管推举到动态爆发力传递的过渡动作。',
+ '半跪姿单臂地雷管推举':'半跪姿（前脚踩地、后膝着地），对侧单手握地雷管；保持骨盆中立和髋部稳定，单臂向上前方推起。跪姿进一步挑战骨盆稳定和核心抗旋转，同时完成肩部推举。',
+ '壶铃摆动':'双脚宽站，壶铃从胯下向后摆动，利用快速伸髋把壶铃向前摆至肩高以下；手臂只起引导作用，力量来自髋部爆发。动作链定位：RDL（建立髋伸力量）→ 壶铃摆动（快速髋伸）→ 立定跳远（水平爆发）→ 冲刺（专项输出）。',
+ '哑铃高拉':'站姿双手持哑铃于体前或体侧；屈髋加载后快速伸髋伸膝，顺势耸肩提肘将哑铃拉至胸肩高度，再控制下放。不用考虑 Catch，专注于快速伸髋。肘部高于手腕；力量源自下肢而非手臂。进阶定位：壶铃摆动 → 哑铃高拉 → 悬垂哑铃高翻。',
+ '悬垂哑铃高翻':'哑铃置于膝上/大腿中段悬垂位；屈髋加载后快速伸髋伸膝耸肩，哑铃沿身体上升至肩部高度时快速转肘"接住"哑铃于肩部，再站直。技术门槛低于从地面启动的完整高翻，建议作为负重爆发入门。',
+ '哑铃高翻':'哑铃从地面启动，通过快速伸髋伸膝将哑铃沿身体拉上，在肩部高度转肘接住，同时屈髋屈膝吸收，再站直。属于 Loaded Explosive Movement，补齐自重跳跃（CMJ/Box Jump/Broad Jump）之外的负重爆发体系。',
+ '单臂哑铃抓举':'单手持哑铃于体前地面或悬垂位；快速伸髋伸膝耸肩，哑铃沿身体直线上升至头顶，手臂伸直锁定，同时微屈髋膝吸收；再控制下放。是高拉→高翻之后最自然的进阶，强调快速伸髋+全身力量传递。',
+ '壶铃高翻':'壶铃从地面或悬垂位启动，快速伸髋伸膝将壶铃沿身体拉上前架位（贴靠前臂），同时屈髋屈膝吸收；保持手腕中立不翻转。',
+ '壶铃高翻推举':'壶铃从地面或悬垂位高翻至前架位（贴靠前臂、肘部收紧），稳定后推举过顶；下放回前架位再回地面。一次完成髋爆发+上肢推的完整力量链。',
+ '壶铃单臂摆动':'与双手壶铃摆动相同模式，但单手持铃；身体会产生旋转力矩，需要核心抗旋转保持稳定。',
+ '哑铃火箭推':'哑铃置于肩部，下蹲至舒适深度；快速站起完成踝膝髋三关节伸展，顺势将哑铃推过头顶；下放回肩位后进入下一次。3–5次×3–4组偏 Power；12–15次×多组偏 Conditioning/Work Capacity。同一动作需明确标注训练意图。',
+ '俯卧撑位交替哑铃划船':'俯卧撑位，双手各握哑铃支撑地面，双脚略宽于肩；保持骨盆不旋转，单手将哑铃拉向髋部，再控制放下换侧。真正训练重点不是"背"，而是划船时身体想旋转、你的任务是不让它旋转：划船+抗旋转核心+肩胛稳定+髋稳定。建议放在 Upper Day / Core Slot，不作为主力背部增肌动作。',
+ 'V字坐姿单臂哑铃推举':'坐姿抬起双腿保持 V 字平衡，单手持哑铃于肩部；保持躯干稳定，单臂向上推起哑铃再控制下放。核心要求高，肩部推举易因稳定不足而变形。定位为辅助核心挑战动作，不替代 Landmine Press / Split-Stance Press / Pallof Press / Renegade Row。腰椎开始明显弓起时应降级（改为脚踩地或半躺姿）。',
+ '药球旋转砸墙':'侧身对墙站立，双手持球于远离墙侧髋部；髋部先旋转带动躯干和手臂，把药球全力抛向墙面。重点是力量从下肢向上肢传递，是篮球旋转爆发的基础。',
+ '药球侧向抛':'侧对目标，双手持球于远离目标侧髋部；通过髋部快速旋转驱动躯干，将球从低位"铲"向目标，力量路径为髋→躯干→上肢。',
+ '药球跨步旋转抛':'侧对墙站立，远离墙的一侧脚向后跨步（Step-Behind）；蹬地→髋旋转→躯干旋转→肩→手，将药球全力抛向墙面。完整呈现篮球运动力量链：跨步→蹬地→髋旋转→躯干旋转→上肢释放。',
+ '单腿旋转抛':'单腿站立或单腿支撑姿态下完成旋转抛球，同时考验单腿稳定与旋转爆发。属于高级旋转动作。',
+ '农夫行走':'双手各持重物行走，保持胸廓和骨盆稳定，步幅自然。是最基础的 Carry 动作，训练全身稳定+握力。',
+ '单侧负重行走':'单手持重物行走，另一侧不负重；保持躯干垂直、骨盆水平，不向负重侧倾斜。看起来简单，但身体一直想侧屈，你的核心必须抵抗侧屈。训练核心稳定+髋稳定+握力+全身力量传递。',
+ '前架单侧行走':'单手持壶铃/哑铃于前架位（贴靠前臂、肘部收紧），保持躯干直立行走；核心抗侧屈+抗旋转，肩胛保持稳定。是单侧负重行走的进阶。',
+ '单臂过顶行走':'单臂将哑铃/壶铃举过头顶锁定，肩胛主动稳定；保持躯干直立、肋骨不外翻行走。属于高级 Carry，对肩胛稳定要求最高。',
+ '地雷管旋转':'杠铃一端固定，双手握另一端于胸前；保持髋部朝向固定（或小幅旋转），通过躯干旋转将杠铃从一侧摆到另一侧，核心控制旋转速度。可先严格锁髋练纯躯干旋转，进阶允许髋部参与练全身旋转力量。'
 };
-
-const ACTION_DESCRIPTION_ALIASES={
- '药球旋转投':'药球旋转投掷',
- '药球下砸':'药球过顶砸地',
- '臀推':'杠铃臀推',
- 'Step-up':'台阶上步',
- '哑铃划船':'单臂划船',
- '澳式引体':'倒立划船',
- '外旋':'弹力带肩外旋',
- 'Ab Wheel':'腹轮滚动'
-};
-function actionDescription(name){return ACTION_DESCRIPTIONS[name]||ACTION_DESCRIPTIONS[ACTION_DESCRIPTION_ALIASES[name]]||'动作库文档暂未提供详细说明。'}
+ACTIONS.forEach(a=>{a.desc=ACTION_DESCRIPTIONS[actionDisplayName(a)]||ACTION_DESCRIPTIONS[a.name]||''});
 
 const WEEK_PHASES={1:{phase:1,name:'基础重建',desc:'技术、稳定、基础力量、低冲击爆发',type:'p1',focus:['Prehab','Landing','基础力量','单腿'],rpe:'6'},2:{phase:1,name:'基础重建',desc:'增加训练容量，同时保持动作质量',type:'p1',focus:['基础力量','单腿','低量Plyo'],rpe:'6-7'},3:{phase:1,name:'基础重建',desc:'第一阶段高刺激周',type:'p1',focus:['力量','爆发','基础COD'],rpe:'7-8'},4:{phase:1,name:'Deload + 测试',desc:'训练量下降30–40%，完成第一次复测',type:'p1',focus:['恢复','复测'],rpe:'5-6'},5:{phase:2,name:'力量→爆发',desc:'最大力量、单腿力量与力量转化',type:'p2',focus:['最大力量','单腿','Plyo'],rpe:'7'},6:{phase:2,name:'力量→爆发',desc:'提高力量和水平/横向爆发',type:'p2',focus:['Strength','Sprint','Plyo'],rpe:'7-8'},7:{phase:2,name:'力量→爆发',desc:'第二阶段最高刺激周',type:'p2',focus:['力量','Reactive','COD'],rpe:'8'},8:{phase:2,name:'Deload + 测试',desc:'降低训练量，复测力量、跳跃、速度、COD',type:'p2',focus:['恢复','复测'],rpe:'5-6'},9:{phase:3,name:'专项表现',desc:'加速、减速、变向进入主导位置',type:'p3',focus:['Acceleration','Decel','COD'],rpe:'7'},10:{phase:3,name:'专项表现',desc:'增加反应和篮球专项变向',type:'p3',focus:['Decel','Reactive','Closeout'],rpe:'7-8'},11:{phase:3,name:'专项表现',desc:'最高专项刺激，力量保持、篮球体能上升',type:'p3',focus:['Reaction','Basketball','Game Conditioning'],rpe:'8'},12:{phase:3,name:'Taper + 总测试',desc:'训练量下降40–50%，保持速度/力量/爆发',type:'p3',focus:['Taper','Final Test'],rpe:'5-6'}};
 
@@ -333,11 +806,56 @@ function saveReadiness(){save('readiness',{date:currentDateStr(),sleep:+sleep.va
 function updateRecommendation(){const s=calcReady(), p=+pain.value;let title='正常执行计划', txt='保持动作质量；训练后记录Session RPE和第二天反应。';if(s<60||p>=5){title='恢复 / Prehab优先';txt='取消高冲击跳跃、高速变向和高量冲刺；选择L1/L2防伤、低强度力量或恢复。'} else if(s<75||p>=3){title='减量执行';txt='总训练量下降20–30%；Plyo/COD减少，主力量保持中等RPE。'}document.getElementById('systemDecision').textContent=title;document.getElementById('systemDecisionText').textContent=txt}
 
 function renderToday(){
- const w=weekIndex(),mode=document.getElementById('mode').value, dow=currentWeekDay(), days=daysForMode(mode,w), todayDay=days.includes(dow)?dow:days[0];
- const idx=days.indexOf(todayDay)+1;document.getElementById('todayPill').textContent='DAY '+idx+' · 周'+todayDay; let title='训练日'; if(mode==='3'){title=['下肢爆发 + 力量','上肢 + 篮球技术','速度 + 减速 + 变向'][idx-1]||'训练';}else{title=['下肢A：垂直爆发 + 力量','上肢 + 篮球技术','速度 + 减速 + COD','下肢B：横向爆发 + 体能','篮球专项 / 可选恢复'][idx-1]||'训练'}
- document.getElementById('todayTitle').textContent=title;document.getElementById('todayModule').textContent=(idx===1?'Lower A':idx===2?'Upper + Skill':idx===3?'Speed / Decel':idx===4?'Lower B + Conditioning':'Basketball / Optional');const p=WEEK_PHASES[w];document.getElementById('todayPurpose').textContent=p.focus.join(' · ');document.getElementById('todayRpe').textContent='目标 RPE '+p.rpe;
- const plan=dayPlan(todayDay,mode), container=document.getElementById('sessionSlots');container.innerHTML='';let html='';plan.forEach(s=>{const dosage=s[2]||'按计划';html+='<div class="slot"><div class="slot-top"><span class="slot-name">'+s[0]+'</span><span class="slot-meta">'+dosage+'</span></div><div class="exercise-line"><div><strong>'+s[1]+'</strong></div><div class="set-note"><span class="muted">推荐内容</span></div></div></div>'});container.innerHTML=html;document.getElementById('todayReason').innerHTML='<p>① 训练顺序：速度/爆发 → 主力量 → 单腿/后链 → 核心/篮球。</p><p>② 当前阶段：'+p.name+'；重点是 '+p.focus.join('、')+'。</p><p>③ 选择规则：从动作库选择“当前阶段 + 能力短板 + 可承受冲击”的最高质量动作，而不是把动作库做遍。</p><p>④ 今日Ready状态会进一步决定训练量；训练后请使用 /record-training-2 记录实际完成内容、Session RPE 和疼痛。</p>';
- document.getElementById('todaySkills').innerHTML=['运球','投篮','终结','防守/脚步'].map((x,i)=>'<div class="skill"><h4>'+x+'</h4><p>'+(['左手主导30%时间','定点→接球→移动','左右手+对抗选择','滑步→Closeout→追防'][i])+'</p></div>').join('');
+ const w=weekIndex(),mode=document.getElementById('mode').value;
+ const TODAY_META={
+  '2026-09-23':{date:'2026-09-23',week:'W1',day:'D2（补做）',phase:'基础重建',readiness:'94/100 · 绿色',pain:'左膝 1/10（预估）',duration:'约 95 分钟',focus:'上肢力量 + 核心稳定 + 篮球技术'}
+ };
+ const TODAY_RECOMMENDATION={
+  '2026-09-23':[
+   ['动态热身','胸椎旋转 + 弹力带肩部绕环 + 世界最伟大拉伸 + 动态踝背屈','8–10分钟'],
+   ['Level 2 防伤','弹力带侧走 + 站姿膝控','约5分钟'],
+   ['上肢爆发','弓步单臂哑铃推举（Split-Stance Single-Arm DB Press）· 新动作','3×5/侧 · RPE 5-6 · 替代药球'],
+   ['推','哑铃卧推（Dumbbell Bench Press）','3×8 · RPE 6'],
+   ['拉','引体向上（Pull-Up）','3×5–8 · 自重'],
+   ['拉','哑铃划船（Dumbbell Row）','3×10 · RPE 6'],
+   ['肩部','面拉（Face Pull）','2×15'],
+   ['核心','侧桥（Side Plank）','2×20–30s/侧'],
+   ['篮球技术','弱侧手运球 → 反手上篮 → 三步上篮 → 定点投篮 → 可选轻量1v1','约45分钟'],
+   ['整理','小腿拉伸 + 髋屈肌拉伸 + 胸椎旋转','舒适范围']
+  ]
+ };
+ const recKey=Object.keys(TODAY_RECOMMENDATION).filter(d=>d>=currentDateStr()).sort()[0];
+ const meta=recKey?TODAY_META[recKey]:null;
+ if(recKey&&meta){
+  const pillIdx=meta.day.indexOf('D');
+  document.getElementById('todayPill').textContent=(pillIdx>=0?meta.day.slice(pillIdx).replace(/（.*）/,''):'计划')+' · '+meta.date;
+  document.getElementById('todayModule').textContent=meta.week+' · '+meta.day;
+  document.getElementById('todayTitle').textContent=meta.focus;
+  document.getElementById('todayPurpose').textContent=recKey===currentDateStr()?'今日推荐':'下次训练推荐 · '+meta.phase;
+  document.getElementById('todayRpe').textContent=meta.readiness;
+  document.getElementById('todayDuration').textContent=meta.duration;
+  document.getElementById('recMeta').innerHTML='<span class="pill">'+meta.date+'</span><span class="pill">'+meta.week+' · '+meta.day+'</span><span class="pill">'+meta.phase+'</span><span class="pill '+(meta.readiness.includes('绿色')?'green':meta.readiness.includes('红色')?'red':'yellow')+'">'+meta.readiness+'</span><span class="pill">'+meta.pain+'</span><span class="pill green">'+meta.duration+'</span><span class="pill blue">'+meta.focus+'</span>';
+ }else{
+  const dow=currentWeekDay(), days=daysForMode(mode,w), todayDay=days.includes(dow)?dow:days[0], idx=days.indexOf(todayDay)+1, p=WEEK_PHASES[w];
+  let title='训练日'; if(mode==='3'){title=['下肢爆发 + 力量','上肢 + 篮球技术','速度 + 减速 + 变向'][idx-1]||'训练';}else{title=['下肢A：垂直爆发 + 力量','上肢 + 篮球技术','速度 + 减速 + COD','下肢B：横向爆发 + 体能','篮球专项 / 可选恢复'][idx-1]||'训练'}
+  document.getElementById('todayPill').textContent='DAY '+idx+' · 周'+todayDay;
+  document.getElementById('todayTitle').textContent=title;
+  document.getElementById('todayModule').textContent=(idx===1?'Lower A':idx===2?'Upper + Skill':idx===3?'Speed / Decel':idx===4?'Lower B + Conditioning':'Basketball / Optional');
+  document.getElementById('todayPurpose').textContent=p.focus.join(' · ');
+  document.getElementById('todayRpe').textContent='目标 RPE '+p.rpe;
+  document.getElementById('recMeta').innerHTML='';
+ }
+ const TODAY_REASON={
+  '2026-09-23':'<p>① 周期定位：W1 基础重建进入期，RPE 6，中低训练量。</p><p>② 槽位选择：9-22 D2 因加班取消，今日补做；9-21 下肢高负荷（700 AU）到今日仅约 48h，且双膝疼痛信号未完全消失（9-21 训练中左 2/右 3，9-22 左 2，今日预估左 1），D3 冲刺/变向顺延至 9-25/26 给下肢 96h+ 恢复。</p><p>③ Readiness 绿色 94/100：疼痛 1/10 ≤ 2，无红旗，可正常执行计划量，不需减量。</p><p>④ 篮球条件：今日有场地，5 项现存篮球技巧弱点（反手终结、弱侧手运球、三步上篮、突破终结选择、转身）集中处理，篮球安排在力量之后。</p><p>⑤ 上肢无历史重量记录，按规则不给具体公斤数，统一 RPE 6（还能做约 4 次）；健身房无药球，上肢爆发槽位替换为弓步单臂哑铃推举（新动作，RPE 5–6 轻重量试做，同属 W1–4 力量传递类）。</p><p>⑥ 疼痛管理：膝痛趋势下降但仍存在，1v1 等对抗控制在 6 成强度以下，任何动作膝痛超过 2/10 立即停止。</p><p>⑦ 训练后请使用 /record-training-2 记录实际完成内容、Session RPE 和疼痛。</p>'
+ };
+ const p=WEEK_PHASES[w];
+ const plan=(recKey&&TODAY_RECOMMENDATION[recKey])||dayPlan(daysForMode(mode,w).includes(currentWeekDay())?currentWeekDay():daysForMode(mode,w)[0],mode), container=document.getElementById('sessionSlots');container.innerHTML='';let html='';plan.forEach((s,i)=>{const dosage=s[2]||'按计划';html+='<div class="rec-slot"><div class="rec-slot-num">'+(i+1)+'</div><div class="rec-slot-body"><div class="rec-slot-name">'+s[0]+'</div><div class="rec-slot-detail">'+s[1]+'</div></div><div class="rec-slot-dose">'+dosage+'</div></div>'});container.innerHTML=html;
+ const TODAY_SKILLS={
+  '2026-09-23':[['运球 10min','弱侧手（左手）主导：原地大力运球 → 行进间体前/胯下，针对弱侧手运球衔接'],['终结 20min','定点反手上篮打板（左右侧各15–20次）→ 三步上篮刻意加大步幅'],['投篮 10min','近距离打板 → 中距离定点，巩固手感'],['可选 1v1 5min','强度6成以下，膝不适立即停止'],['核心','侧桥 2×20–30s/侧，针对左侧核心稳定弱点'],['注意','左膝疼痛趋势下降但仍存在，任何动作膝痛超 2/10 立即停止']]
+ };
+ document.getElementById('todayReason').innerHTML=(recKey&&TODAY_REASON[recKey])||'<p>① 训练顺序：速度/爆发 → 主力量 → 单腿/后链 → 核心/篮球。</p><p>② 当前阶段：'+p.name+'；重点是 '+p.focus.join('、')+'。</p><p>③ 选择规则：从动作库选择“当前阶段 + 能力短板 + 可承受冲击”的最高质量动作，而不是把动作库做遍。</p><p>④ 今日Ready状态会进一步决定训练量；训练后请使用 /record-training-2 记录实际完成内容、Session RPE 和疼痛。</p>';
+ const skills=(recKey&&TODAY_SKILLS[recKey])||[['运球','左手主导30%时间'],['投篮','定点→接球→移动'],['终结','左右手+对抗选择'],['防守/脚步','滑步→Closeout→追防']];
+ document.getElementById('todaySkills').innerHTML=skills.map(x=>'<div class="skill"><h4>'+x[0]+'</h4><p>'+x[1]+'</p></div>').join('');
  updateRecommendation();
 }
 
@@ -363,23 +881,48 @@ const WEAKNESSES=[
  ['左侧踝背屈活动度不足、前移伴膝内扣','活动度/膝控制','2026-09-21','待改善','左右踝背屈差异缩小，前移时膝盖保持对准脚尖','09-21 踝背屈热身时左脚活动度明显不如右脚，用力向前伴随膝盖内扣']
 ];
 function renderWeak(){document.getElementById('weakList').innerHTML=WEAKNESSES.map(w=>'<tr><td><strong>'+escapeHtml(w[0])+'</strong></td><td>'+escapeHtml(w[1])+'</td><td>'+escapeHtml(w[2])+'</td><td><span class="weak-status">'+escapeHtml(w[3])+'</span></td><td>'+escapeHtml(w[4])+'</td><td>'+escapeHtml(w[5])+'</td></tr>').join('')}
-function updateLoad(){const entries=Object.entries(FORMAL_RECORDS),week=weekIndex(),start=(week-1)*7,weekly=entries.filter(([date,record])=>{const day=Number(date.slice(-2)),offset=day-21;return offset>=start&&offset<start+7&&!FORMAL_REST_DAYS.includes(date)&&record.status==='training'}).reduce((total,[,record])=>total+(record.sessionLoad||0),0);document.getElementById('weeklyLoad').textContent=weekly;document.getElementById('weekLoadBadge').textContent='正式周负荷 '+weekly;const dur=+document.getElementById('duration').value||0,rpe=+document.getElementById('sessionRpe').value||0;document.getElementById('sessionLoad').textContent=dur*rpe;const pb=+document.getElementById('painBefore').value||0,pa=+document.getElementById('painAfter').value||0,pn=+document.getElementById('painNext').value||0;const box=document.getElementById('painStatusBox');let state='绿色',cls='green';if(Math.max(pb,pa,pn)>=5){state='红色';cls='red'}else if(Math.max(pb,pa,pn)>=3||pn>pb){state='黄色';cls='yellow'}box.className='status-box '+cls;document.getElementById('painStatus').textContent=state}
-function saveSessionLog(){const dur=+document.getElementById('duration').value||0,rpe=+document.getElementById('sessionRpe').value||0;const logs=load('sessions',[]);logs.push({date:currentDateStr(),week:weekIndex(),duration:dur,rpe,load:dur*rpe,painBefore:+painBefore.value||0,painAfter:+painAfter.value||0,painNext:+painNext.value||0,quality:+quality.value||0,note:sessionNote.value});save('sessions',logs);updateLoad();alert('训练日志已保存。')}
-['duration','sessionRpe','painBefore','painAfter','painNext'].forEach(id=>document.getElementById(id).addEventListener('input',updateLoad));
+function updateLoad(){const entries=Object.entries(FORMAL_RECORDS),week=weekIndex(),start=(week-1)*7;const sorted=entries.filter(([,record])=>record.status==='training').sort((a,b)=>b[0].localeCompare(a[0]));if(sorted.length>0){const[date,record]=sorted[0];document.getElementById('latestTrainingDate').textContent=date;const r=record.readiness||{};document.getElementById('latestSessionLoad').textContent=(record.sessionLoad||0)+' AU';const painNote=r.painNote||'无';document.getElementById('latestPainDetail').textContent=painNote.length>45?painNote.slice(0,45)+'…':painNote;document.getElementById('latestReadyScore').textContent=r.score?(r.score+(r.level?' · '+r.level:'')):'—';document.getElementById('latestLoadBox').className='status-box '+(record.sessionLoad>=600?'green':record.sessionLoad>=400?'yellow':'');document.getElementById('latestPainBox').className='status-box '+(r.pain<=2?'green':r.pain<=4?'yellow':'red')}else{document.getElementById('latestTrainingDate').textContent='—';document.getElementById('latestSessionLoad').textContent='—';document.getElementById('latestPainDetail').textContent='—';document.getElementById('latestReadyScore').textContent='—'}const weekEntries=entries.filter(([date])=>{const day=Number(date.slice(-2)),offset=day-21;return offset>=start&&offset<start+7});const weekTraining=weekEntries.filter(([,record])=>record.status==='training');const weekLoad=weekTraining.reduce((total,[,record])=>total+(record.sessionLoad||0),0);document.getElementById('weeklyLoadDisplay').textContent=weekLoad+' AU';document.getElementById('loadTrainingDays').textContent=weekTraining.length;document.getElementById('loadWeekLabel').textContent='W'+week+' 本周统计';const painScores=weekEntries.filter(([,record])=>record.readiness).map(([,record])=>record.readiness.pain||0);const maxPain=painScores.length>0?Math.max(...painScores):-1;const trendBox=document.getElementById('weeklyPainBox');if(maxPain<=0){trendBox.className='status-box green';document.getElementById('weeklyPainTrend').textContent='无疼痛'}else if(maxPain<=2){trendBox.className='status-box green';document.getElementById('weeklyPainTrend').textContent='绿色 · 稳定'}else if(maxPain<=4){trendBox.className='status-box yellow';document.getElementById('weeklyPainTrend').textContent='黄色 · 注意'}else{trendBox.className='status-box red';document.getElementById('weeklyPainTrend').textContent='红色 · 需关注'}document.getElementById('weekLoadBadge').textContent='正式周负荷 '+weekLoad;const body=document.getElementById('loadHistoryBody');body.innerHTML=entries.filter(([,record])=>record.status==='training').sort((a,b)=>b[0].localeCompare(a[0])).map(([date,record])=>{const r=record.readiness||{};const weekNum=Math.min(12,Math.max(1,Math.floor((Number(date.slice(-2))-21)/7)+1));const painNote=r.painNote?r.painNote:'—';return '<tr><td><strong>'+date+'</strong></td><td>W'+weekNum+'</td><td>'+(record.sessionLoad||0)+' AU</td><td>'+(r.score||'—')+'</td><td>'+escapeHtml(painNote.length>35?painNote.slice(0,35)+'…':painNote)+'</td></tr>'}).join('')||'<tr><td colspan="5" class="muted" style="text-align:center">暂无正式训练记录</td></tr>'}
 function saveReview(){save('review',{date:currentDateStr(),rate:+reviewRate.value||0,gain:reviewGain.value,gap:reviewGap.value,next:reviewNext.value});alert('周期复盘已保存。')}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-const ACTION_MODULES={A:'Mobility',B:'Prehab',C:'Landing',D:'Deceleration',E:'Plyometric',F:'Strength',G:'Upper',H:'Core',I:'Speed',J:'Agility',K:'Basketball',L:'Conditioning',M:'Recovery'};
+const ACTION_MODULES={A:'活动度（Mobility）',B:'防伤（Prehab）',C:'落地（Landing）',D:'减速（Deceleration）',E:'弹跳（Plyometric）',F:'力量（Strength）',G:'上肢（Upper）',H:'核心（Core）',I:'速度（Speed）',J:'敏捷（Agility）',K:'篮球技术（Basketball）',L:'体能（Conditioning）',M:'恢复（Recovery）',N:'全身力量传递（Kinetic Chain）'};
 function replaceOptions(select,placeholder,values){select.replaceChildren(new Option(placeholder,''),...values.map(value=>new Option(value,value)))}
-function actionModule(action){return action.id.charAt(0)}
-function updateCategoryOptions(){const moduleId=fModule.value;const categories=[...new Set(ACTIONS.filter(action=>!moduleId||actionModule(action)===moduleId).map(action=>action.module))].sort();replaceOptions(fCategory,moduleId?'全部类别':'请先选择模块',categories);fCategory.disabled=!moduleId;updateActionOptions()}
-function updateActionOptions(){const moduleId=fModule.value,category=fCategory.value;const names=[...new Set(ACTIONS.filter(action=>(!moduleId||actionModule(action)===moduleId)&&(!category||action.module===category)).map(action=>action.name))].sort();replaceOptions(fAction,category?'全部动作':'请先选择类别',names);fAction.disabled=!category;filterActions()}
 let actionModalTrigger=null;
 let actionInteractionsInitialized=false;
 function actionMeta(label,value){return '<div><span>'+label+'</span><strong>'+escapeHtml(value)+'</strong></div>'}
-function openActionModal(index,trigger){const action=ACTIONS[index];if(!action)return;actionModalTrigger=trigger;actionModalCategory.textContent=action.id+' · '+action.module;actionModalTitle.textContent=action.name;actionModalDescription.textContent=actionDescription(action.name);actionModalMeta.innerHTML=actionMeta('能力',action.ability)+actionMeta('等级',action.level)+actionMeta('冲击',action.impact)+actionMeta('器材',action.equipment)+actionMeta('用途',action.use);actionModal.hidden=false;document.body.classList.add('no-scroll');actionModalClose.focus()}
+function openActionModal(index,trigger){const action=ACTIONS[index];if(!action)return;actionModalTrigger=trigger;actionModalCategory.textContent=action.id+' · '+moduleDisplayName(action.module);actionModalTitle.textContent=actionDisplayName(action);actionModalDescription.textContent=actionDescription(action);actionModalMeta.innerHTML=actionMeta('能力',action.ability)+actionMeta('等级',action.level)+actionMeta('冲击',action.impact)+actionMeta('器材',action.equipment)+actionMeta('用途',action.use);actionModal.hidden=false;document.body.classList.add('no-scroll');actionModalClose.focus()}
 function closeActionModal(){if(actionModal.hidden)return;actionModal.hidden=true;document.body.classList.remove('no-scroll');if(actionModalTrigger)actionModalTrigger.focus();actionModalTrigger=null}
-function renderActions(){replaceOptions(fModule,'全部模块',Object.entries(ACTION_MODULES).map(([id,name])=>id+' · '+name));[...fModule.options].slice(1).forEach((option,index)=>option.value=Object.keys(ACTION_MODULES)[index]);replaceOptions(fEquipment,'全部器材',[...new Set(ACTIONS.map(action=>action.equipment))].sort());if(!actionInteractionsInitialized){fModule.addEventListener('change',updateCategoryOptions);fCategory.addEventListener('change',updateActionOptions);['fAction','fLevel','fImpact','fEquipment','fSearch'].forEach(id=>document.getElementById(id).addEventListener('input',filterActions));actionGrid.addEventListener('click',event=>{const card=event.target.closest('.action');if(card)openActionModal(+card.dataset.actionIndex,card)});actionGrid.addEventListener('keydown',event=>{if(event.key!=='Enter'&&event.key!==' ')return;const card=event.target.closest('.action');if(!card)return;event.preventDefault();openActionModal(+card.dataset.actionIndex,card)});actionModalClose.addEventListener('click',closeActionModal);actionModal.addEventListener('click',event=>{if(event.target===actionModal)closeActionModal()});document.addEventListener('keydown',event=>{if(event.key==='Escape')closeActionModal()});actionInteractionsInitialized=true}updateCategoryOptions()}
-function filterActions(){const moduleId=fModule.value,category=fCategory.value,name=fAction.value,level=fLevel.value,impact=fImpact.value,equipment=fEquipment.value,query=fSearch.value.trim().toLowerCase();const list=ACTIONS.filter(action=>(!moduleId||actionModule(action)===moduleId)&&(!category||action.module===category)&&(!name||action.name===name)&&(!level||action.level===level)&&(!impact||action.impact===impact)&&(!equipment||action.equipment===equipment)&&(!query||(action.name+action.module+action.ability+action.equipment+action.use).toLowerCase().includes(query)));actionCount.textContent=list.length+' 个动作';actionGrid.innerHTML=list.map(action=>'<div class="action" role="button" tabindex="0" data-action-index="'+ACTIONS.indexOf(action)+'" aria-label="查看 '+escapeHtml(action.name)+' 动作详情"><h4>'+escapeHtml(action.name)+'</h4><p>'+escapeHtml(action.module)+' · '+escapeHtml(action.ability)+'</p><p>器材：'+escapeHtml(action.equipment)+' · 冲击：'+escapeHtml(action.impact)+'</p><div class="tags"><span class="tag">'+escapeHtml(action.level)+'</span><span class="tag">'+escapeHtml(action.use)+'</span><span class="tag">目标：'+escapeHtml(action.ability)+'</span></div></div>').join('')||'<div class="muted">没有匹配的动作。</div>'}
+function toggleActionGroup(btn){btn.parentElement.classList.toggle('open')}
+function levelPill(level){return '<span class="lvl-pill l'+level.slice(1)+'">'+escapeHtml(level)+'</span>'}
+function impactPill(impact){return '<span class="impact-pill '+(impact==='低'?'low':impact==='中'?'mid':'high')+'">'+escapeHtml(impact)+'</span>'}
+function filterActions(){
+ const level=fLevel.value,impact=fImpact.value,equipment=fEquipment.value,query=fSearch.value.trim().toLowerCase();
+ const match=action=>(!level||action.level===level)&&(!impact||action.impact===impact)&&(!equipment||action.equipment===equipment)&&(!query||((action.name||'')+(action.en||'')+moduleDisplayName(action.module)+action.ability+action.equipment+action.use).toLowerCase().includes(query));
+ let total=0;let html='';
+ Object.keys(ACTION_MODULES).forEach(letter=>{
+  const list=ACTIONS.map((a,i)=>({a,i})).filter(x=>x.a.id.charAt(0)===letter&&match(x.a));
+  if(!list.length)return;
+  total+=list.length;
+  html+='<div class="lib-group"><button type="button" class="lib-group-toggle" onclick="toggleActionGroup(this)"><span>'+letter+' · '+escapeHtml(ACTION_MODULES[letter])+' <span class="lib-group-count">（'+list.length+' 个动作）</span></span><span class="lib-group-arrow">▶</span></button><div class="lib-group-body"><div class="table-wrap"><table class="lib-table"><thead><tr><th>动作</th><th>类别</th><th>能力</th><th>等级</th><th>冲击</th><th>器材</th></tr></thead><tbody>'
+   +list.map(x=>'<tr class="lib-row" tabindex="0" data-action-index="'+x.i+'"><td class="lib-name">'+escapeHtml(x.a.name)+(x.a.en?'<span class="action-name-en">'+escapeHtml(x.a.en)+'</span>':'')+'</td><td>'+escapeHtml(moduleDisplayName(x.a.module))+'</td><td>'+escapeHtml(x.a.ability)+'</td><td>'+levelPill(x.a.level)+'</td><td>'+impactPill(x.a.impact)+'</td><td>'+escapeHtml(x.a.equipment)+'</td></tr>').join('')
+   +'</tbody></table></div></div></div>';
+ });
+ actionCount.textContent=total+' 个动作';
+ actionLibGroups.innerHTML=html;
+ actionLibEmpty.style.display=total?'none':'block';
+}
+function renderActions(){
+ replaceOptions(fEquipment,'全部器材',[...new Set(ACTIONS.map(action=>action.equipment))].sort());
+ if(!actionInteractionsInitialized){
+  ['fLevel','fImpact','fEquipment','fSearch'].forEach(id=>document.getElementById(id).addEventListener('input',filterActions));
+  actionLibGroups.addEventListener('click',event=>{const row=event.target.closest('.lib-row');if(row)openActionModal(+row.dataset.actionIndex,row)});
+  actionLibGroups.addEventListener('keydown',event=>{if(event.key!=='Enter'&&event.key!==' ')return;const row=event.target.closest('.lib-row');if(!row)return;event.preventDefault();openActionModal(+row.dataset.actionIndex,row)});
+  actionModalClose.addEventListener('click',closeActionModal);
+  actionModal.addEventListener('click',event=>{if(event.target===actionModal)closeActionModal()});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape')closeActionModal()});
+  actionInteractionsInitialized=true;
+ }
+ filterActions();
+}
 function renderFormalMonth(){
  const weekdays=['周一','周二','周三','周四','周五','周六','周日'];
  const nodes=weekdays.map(label=>{const item=document.createElement('div');item.className='monthly-weekday';item.textContent=label;return item});
@@ -397,8 +940,17 @@ function renderFormalMonth(){
  const entries=Object.entries(FORMAL_RECORDS),training=entries.filter(([date,record])=>!FORMAL_REST_DAYS.includes(date)&&record.status==='training'),load=training.reduce((total,[,record])=>total+(record.sessionLoad||0),0);
  monthlySnapshotStatus.textContent=`${training.length} 个训练日 · ${load} AU`;
 }
+function renderTodayReadiness(){
+ const r=FORMAL_TODAY_READINESS;if(!r)return;
+ document.getElementById('sleep').value=r.sleep;document.getElementById('sleepVal').textContent=r.sleep;
+ document.getElementById('fatigue').value=r.fatigue;document.getElementById('fatigueVal').textContent=r.fatigue;
+ document.getElementById('soreness').value=r.soreness;document.getElementById('sorenessVal').textContent=r.soreness;
+ document.getElementById('pain').value=r.pain;document.getElementById('painVal').textContent=r.pain;
+ document.getElementById('motivation').value=r.motivation;document.getElementById('motivationVal').textContent=r.motivation;
+ updateReadiness();
+}
 function stats(){const week=weekIndex(),entries=Object.entries(FORMAL_RECORDS),training=entries.filter(([date,record])=>!FORMAL_REST_DAYS.includes(date)&&record.status==='training'),load=training.reduce((total,[,record])=>total+(record.sessionLoad||0),0),readiness=entries.filter(([,record])=>record.readiness).length;document.getElementById('stats').innerHTML=[['本周期','W'+week,'12周周期'],['训练模式',document.getElementById('mode').value==='3'?'3日':document.getElementById('mode').value==='4'?'4日':'4+1','可随时切换'],['9月训练',training.length,'正式月度记录'],['9月负荷',load,'Session Load · AU'],['Readiness',readiness,'正式记录天数']].map((s,i)=>'<div class="stat"><div class="k">'+s[0]+'</div><div class="v '+(['orange','blue','green','yellow','purple'][i])+'">'+s[1]+'</div><div class="s">'+s[2]+'</div></div>').join('')}
-function refresh(){renderCycle();renderFormalMonth();updateReadiness();updateRecommendation();renderToday();renderAssessment();renderWeak();updateLoad();renderActions();stats()}
+function refresh(){renderCycle();renderFormalMonth();renderTodayReadiness();updateReadiness();updateRecommendation();renderToday();renderAssessment();renderWeak();updateLoad();renderActions();stats()}
 document.getElementById('cycleStart').addEventListener('change',refresh);document.getElementById('mode').addEventListener('change',refresh);document.addEventListener('DOMContentLoaded',refresh);
 </script>
 </body>
