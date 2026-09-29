@@ -234,14 +234,15 @@ tr.lib-row:focus-visible{outline:2px solid var(--orange);outline-offset:-2px}
 </div>
 <script>
 const FORMAL_MONTH={year:2026,month:'09',days:30,startOffset:1};
-const FORMAL_TODAY_READINESS={date:'2026-09-28',sleep:4,fatigue:1,soreness:2,pain:0,motivation:4,score:88,level:'绿色',painNote:'训练前 0/10；双侧踝外侧轻微酸，可能与 09-26 原地踏步跑动作有关，非疼痛且不影响动作'};
+const FORMAL_TODAY_READINESS={date:'2026-09-29',sleep:4,fatigue:2,soreness:2,pain:0,motivation:3,score:80,level:'绿色',painNote:'当前疼痛 0/10；09-28 训练次日疼痛 0/10'};
 const FORMAL_RECORDS={
  '2026-09-21':{status:'training',label:'训练 · Ready 92 · 700 AU',sessionLoad:700,readiness:{sleep:3,fatigue:1,soreness:1,pain:0,painNote:'训练前无疼痛；训练中膝盖左2/10、右3/10；训练后无疼痛',motivation:5,score:92,level:'绿色'}},
  '2026-09-22':{status:'readiness',label:'取消 · 加班',sessionLoad:0,readiness:{sleep:3,fatigue:2,soreness:2,pain:2,painNote:'左膝极轻微疼痛，静止和走路无感觉，热身后不出现；次日活动时轻微 2/10',motivation:3,score:72,level:'黄色'}},
  '2026-09-23':{status:'training',label:'训练 · Ready 94 · 840 AU',sessionLoad:840,readiness:{sleep:4,fatigue:1,soreness:1,pain:1,painNote:'训练前左膝轻微疼痛 1/10；弓步时左右膝轻微刺痛，重复欧洲步后左膝轻微刺痛；训练中最高及训练后均为 1/10',motivation:5,score:94,level:'绿色'}},
  '2026-09-26':{status:'training',label:'有氧 · Ready 82 · 90 AU',sessionLoad:90,readiness:{sleep:3,fatigue:1,soreness:1,pain:1,painNote:'训练前 0/10；训练中左膝内侧 2/10；训练后 0/10',motivation:3,score:82,level:'绿色'}},
  '2026-09-27':{status:'training',label:'居家训练 · Ready 100 · 90 AU',sessionLoad:90,readiness:{sleep:5,fatigue:1,soreness:1,pain:0,painNote:'训练前 0/10；站姿膝控开始时右膝内侧 1/10，随后逐渐缓解；训练后 0/10',motivation:5,score:100,level:'绿色'}},
- '2026-09-28':{status:'training',label:'训练 · Ready 88 · 553 AU',sessionLoad:553,readiness:{sleep:4,fatigue:1,soreness:2,pain:0,painNote:'训练前 0/10（双侧踝外侧轻微酸，非疼痛）；训练中右膝内侧 2/10（CMJ 落地不稳时）；训练后 0/10；次日 0/10',motivation:4,score:88,level:'绿色'}}
+ '2026-09-28':{status:'training',label:'训练 · Ready 88 · 553 AU',sessionLoad:553,readiness:{sleep:4,fatigue:1,soreness:2,pain:0,painNote:'训练前 0/10（双侧踝外侧轻微酸，非疼痛）；训练中右膝内侧 2/10（CMJ 落地不稳时）；训练后 0/10；次日 0/10',motivation:4,score:88,level:'绿色'}},
+ '2026-09-29':{status:'readiness',label:'建议恢复 · Ready 80',sessionLoad:0,readiness:{sleep:4,fatigue:2,soreness:2,pain:0,painNote:'当前疼痛 0/10；09-28 训练次日疼痛 0/10',motivation:3,score:80,level:'绿色'}}
 };
 const FORMAL_REST_DAYS=[];
 const ACTIONS=[
@@ -806,13 +807,14 @@ function calcReady(){const s=+sleep.value,f=+fatigue.value,so=+soreness.value,p=
 function syncSlider(id){document.getElementById(id+'Val').textContent=document.getElementById(id).value;updateReadiness()}
 function updateReadiness(){const score=calcReady();document.getElementById('readyScore').textContent=score;let note='绿色区：按计划训练。';if(score<60||+pain.value>=5)note='红色区：建议恢复/Prehab，取消高冲击Plyo、Sprint和COD。';else if(score<75||+pain.value>=3)note='黄色区：建议总量下降20–30%，优先保留力量技术，减少高冲击。';document.getElementById('readyNote').textContent=note;document.getElementById('readinessBadge').textContent='Ready '+score;document.getElementById('painBadge').textContent='疼痛 '+pain.value+'/10';return score}
 function saveReadiness(){save('readiness',{date:currentDateStr(),sleep:+sleep.value,fatigue:+fatigue.value,soreness:+soreness.value,pain:+pain.value,motivation:+motivation.value,score:calcReady()});updateRecommendation()}
-function updateRecommendation(){const s=calcReady(), p=+pain.value;let title='正常执行计划', txt='保持动作质量；训练后记录Session RPE和第二天反应。';if(s<60||p>=5){title='恢复 / Prehab优先';txt='取消高冲击跳跃、高速变向和高量冲刺；选择L1/L2防伤、低强度力量或恢复。'} else if(s<75||p>=3){title='减量执行';txt='总训练量下降20–30%；Plyo/COD减少，主力量保持中等RPE。'}document.getElementById('systemDecision').textContent=title;document.getElementById('systemDecisionText').textContent=txt}
+function updateRecommendation(){const s=calcReady(), p=+pain.value;let title='正常执行计划', txt='保持动作质量；训练后记录Session RPE和第二天反应。';if(s<60||p>=5){title='恢复 / Prehab优先';txt='取消高冲击跳跃、高速变向和高量冲刺；选择L1/L2防伤、低强度力量或恢复。'} else if(s<75||p>=3){title='减量执行';txt='总训练量下降20–30%；Plyo/COD减少，主力量保持中等RPE。'} else if(currentDateStr()===FORMAL_TODAY_READINESS.date&&FORMAL_TODAY_READINESS.date==='2026-09-29'){title='今日主动恢复';txt='绿色权限，但已连续训练3天且昨日完成下肢力量与爆发；今天不占D2槽位，执行低冲击恢复。'}document.getElementById('systemDecision').textContent=title;document.getElementById('systemDecisionText').textContent=txt}
 
 function renderToday(){
  const w=weekIndex(),mode=document.getElementById('mode').value;
  const TODAY_META={
   '2026-09-27':{date:'2026-09-27',week:'W1',day:'D3（居家适配）',phase:'基础重建（进入）',readiness:'100/100 · 绿色',pain:'当前疼痛 0/10',duration:'约 35–45 分钟',focus:'落地控制 + 踝弹性 + 单腿制动基础'},
-  '2026-09-28':{date:'2026-09-28',week:'W2',day:'D1',phase:'基础重建（增量）',readiness:'88/100 · 绿色',pain:'当前疼痛 0/10',duration:'约 60–75 分钟',focus:'下肢力量 + 爆发（垂直）'}
+  '2026-09-28':{date:'2026-09-28',week:'W2',day:'D1',phase:'基础重建（增量）',readiness:'88/100 · 绿色',pain:'当前疼痛 0/10',duration:'约 60–75 分钟',focus:'下肢力量 + 爆发（垂直）'},
+  '2026-09-29':{date:'2026-09-29',week:'W2',day:'恢复日（不占 D2）',phase:'基础重建（增量）',readiness:'80/100 · 绿色',pain:'当前疼痛 0/10',duration:'约 35–45 分钟',focus:'主动恢复 + 活动度 + Level 1 防伤'}
  };
  const TODAY_RECOMMENDATION={
   '2026-09-27':[
@@ -838,13 +840,23 @@ function renderToday(){
    ['小腿','双腿提踵（Bilateral Calf Raise）','3×15；缓慢离心'],
    ['核心','帕洛夫抗旋推（Pallof Press）· 本周期首次','3×10/侧；轻阻力'],
    ['整理恢复','小腿拉伸 + 髋屈肌拉伸 + 踝放松','约5分钟']
+  ],
+  '2026-09-29':[
+   ['主动恢复','二区有氧（Zone 2）· 轻松步行或自行车','20–30分钟；保持可轻松对话，不追求配速'],
+   ['活动度','动态踝背屈（Dynamic Ankle Dorsiflexion）','1–2×8/侧；脚跟不离地，膝盖对准第二脚趾'],
+   ['活动度','90/90 髋部转换（90/90 Hip Switch）','1–2×8/侧；保持躯干稳定'],
+   ['活动度','内收肌后坐拉伸（Adductor Rock Back）','1–2×8/侧；舒适范围，不弹震'],
+   ['Level 1 防伤','弹力带侧走（Band Lateral Walk）','2×10/侧；保持骨盆稳定'],
+   ['Level 1 防伤','站姿膝控（Standing Knee Control Drill）','2×8/侧；可缩小幅度，疼痛或膝内扣时停止'],
+   ['整理恢复','90/90 呼吸（90/90 Breathing）','3–5分钟']
   ]
  };
  const recKey=Object.keys(TODAY_RECOMMENDATION).filter(d=>d>=currentDateStr()).sort()[0];
  const meta=recKey?TODAY_META[recKey]:null;
  if(recKey&&meta){
   const pillIdx=meta.day.indexOf('D');
-  document.getElementById('todayPill').textContent=(pillIdx>=0?meta.day.slice(pillIdx).replace(/（.*）/,''):'计划')+' · '+meta.date;
+  const pillLabel=meta.day.includes('恢复日')?'恢复日':(pillIdx>=0?meta.day.slice(pillIdx).replace(/（.*）/,''):'计划');
+  document.getElementById('todayPill').textContent=pillLabel+' · '+meta.date;
   document.getElementById('todayModule').textContent=meta.week+' · '+meta.day;
   document.getElementById('todayTitle').textContent=meta.focus;
   document.getElementById('todayPurpose').textContent=recKey===currentDateStr()?'今日推荐':'下次训练推荐 · '+meta.phase;
@@ -863,13 +875,15 @@ function renderToday(){
  }
  const TODAY_REASON={
   '2026-09-27':'<p>① 周期定位：W1D7，基础重建进入期；本周 D1、D2 已完成，9-26 D3 时段实际只完成恢复性有氧，速度、减速和变向刺激尚未完成。</p><p>② Readiness：睡眠 5/5、疲劳 1/5、酸痛 1/5、疼痛 0/10、训练意愿 5/5，得分 100/100，绿色权限，无疼痛限制。</p><p>③ 场地限制：下雨且客厅空间不足以跑动，无法有效训练 10m Sprint、5m 加速急停或高速 COD；跳跃不能冒充这些能力，因此三项今日取消。</p><p>④ 今日主刺激：保留 W1 可在原地高质量完成的落地控制、低量踝弹性、单腿制动基础和内收肌稳定；不叠加高冲击跳跃、冲刺和变向。</p><p>⑤ 弱点对应：动态踝背屈、站姿膝控和 Step Down 针对左侧踝背屈不足及前移膝内扣；原地大力运球在室内条件允许时针对弱侧手衔接。</p><p>⑥ 动作退阶：Step Down 只在有稳固低台阶时执行；Snap Down 或 Pogo 出现疼痛、落地变响、膝内扣或左右差增大时立即停止。</p><p>⑦ 周期衔接：今天完成 D3 居家适配版，不在 9-28 追赶式补做完整 D3；未完成的加速、减速和 COD 在 W2 合适场地训练日按正常进度引入。</p><p>⑧ 当前正式训练历史不足 3 周；训练后请使用 /record-training-2 记录实际内容、总时长、Session RPE 和疼痛反应。</p>',
-  '2026-09-28':'<p>① 周期定位：09-28 = 第 2 周第 1 天，基础重建阶段 W2（增量周）；本周 D1/D2/D3 均未开始，今日执行 D1 下肢力量 + 爆发。</p><p>② Readiness：睡眠 4/5、疲劳 1/5、酸痛 2/5、疼痛 0/10、训练意愿 4/5，得分 88/100，绿色权限，无疼痛限制。</p><p>③ 恢复间隔：最近一次高负荷下肢为 09-21（六角杠铃深蹲、保加利亚、RDL），距今 7 天；09-26 与 09-27 为低–中冲击，下肢恢复充足。</p><p>④ 刺激预算：主刺激为垂直爆发 + 下肢力量，仅 1 个落地动作 + 1 个跳跃动作；不叠加冲刺与高速变向，速度/减速/COD 属本周 D3。</p><p>⑤ 增量方式：本周只加次数与组数、不加重——六角杠铃深蹲 3×6→3×7、保加利亚 3×8→3×9、RDL 2×8→3×8、提踵 3×12→3×15，负荷维持 09-21 水平。</p><p>⑥ 弱点对应：动态踝背屈与站姿膝控针对左侧踝背屈不足及前移膝内扣（P1）；保加利亚单腿蹲针对单腿力量与单腿爆发（P2）；帕洛夫抗旋推针对左侧核心稳定弱于右侧。</p><p>⑦ 踝部提示：双侧踝外侧轻微酸（可能与 09-26 原地踏步跑有关，非疼痛）；热身加入踝活动，跳跃或落地中酸感加重、落地变响或膝内扣时立即停止对应模块。</p><p>⑧ 当前正式训练历史不足 3 周；训练后请使用 /record-training-2 记录实际内容、总时长、Session RPE 和疼痛反应。</p>'
+  '2026-09-28':'<p>① 周期定位：09-28 = 第 2 周第 1 天，基础重建阶段 W2（增量周）；本周 D1/D2/D3 均未开始，今日执行 D1 下肢力量 + 爆发。</p><p>② Readiness：睡眠 4/5、疲劳 1/5、酸痛 2/5、疼痛 0/10、训练意愿 4/5，得分 88/100，绿色权限，无疼痛限制。</p><p>③ 恢复间隔：最近一次高负荷下肢为 09-21（六角杠铃深蹲、保加利亚、RDL），距今 7 天；09-26 与 09-27 为低–中冲击，下肢恢复充足。</p><p>④ 刺激预算：主刺激为垂直爆发 + 下肢力量，仅 1 个落地动作 + 1 个跳跃动作；不叠加冲刺与高速变向，速度/减速/COD 属本周 D3。</p><p>⑤ 增量方式：本周只加次数与组数、不加重——六角杠铃深蹲 3×6→3×7、保加利亚 3×8→3×9、RDL 2×8→3×8、提踵 3×12→3×15，负荷维持 09-21 水平。</p><p>⑥ 弱点对应：动态踝背屈与站姿膝控针对左侧踝背屈不足及前移膝内扣（P1）；保加利亚单腿蹲针对单腿力量与单腿爆发（P2）；帕洛夫抗旋推针对左侧核心稳定弱于右侧。</p><p>⑦ 踝部提示：双侧踝外侧轻微酸（可能与 09-26 原地踏步跑有关，非疼痛）；热身加入踝活动，跳跃或落地中酸感加重、落地变响或膝内扣时立即停止对应模块。</p><p>⑧ 当前正式训练历史不足 3 周；训练后请使用 /record-training-2 记录实际内容、总时长、Session RPE 和疼痛反应。</p>',
+  '2026-09-29':'<p>① 周期定位：09-29 = 第 2 周第 2 天，基础重建阶段 W2（增量周）；W2 D1 已于 09-28 完成，D2 与 D3 尚未完成。</p><p>② Readiness：睡眠 4/5、疲劳 2/5、酸痛 2/5、疼痛 0/10、训练意愿 3/5，得分 80/100，绿色权限，无疼痛红旗。</p><p>③ 最近 48–72 小时：09-26 恢复性有氧 90 AU、09-27 居家适配 90 AU、09-28 下肢爆发与力量 553 AU，已经连续训练 3 天，三日合计 733 AU。</p><p>④ 恢复间隔：昨天完成 CMJ、六角杠铃深蹲、保加利亚单腿蹲和 RDL，距离中等冲击跳跃、双腿/单腿下肢力量和后链刺激不足 24 小时；同类下肢高强度刺激继续保留至少约 48 小时恢复。</p><p>⑤ 疼痛趋势：CMJ 落地不稳时右膝内侧曾为 2/10，但训练后及今天次日均回到 0/10；这允许低冲击恢复，不代表今天需要再次用跳跃测试。</p><p>⑥ 槽位决定：今天作为主动恢复日，不占用 D2；D2 上肢 + 核心 + 篮球技术顺延至下一次状态合适的训练日，不按星期机械补做。</p><p>⑦ 刺激预算：今天只保留低冲击 Zone 2、活动度、Level 1 防伤和呼吸；取消下肢大重量、跳跃、冲刺、减速、高速变向及篮球对抗。</p><p>⑧ 弱点对应：动态踝背屈和站姿膝控针对左侧踝背屈不足及前移膝内扣（P1）；CMJ 身体倾斜与落地不稳（P1）今天不进阶、不复测，以恢复优先。</p><p>⑨ 动作模式：有氧恢复 + 踝/髋活动度 + 低冲击稳定控制，不重复堆叠昨天的膝主导、髋主导、单腿力量或垂直爆发。</p><p>⑩ 当前正式训练历史不足 3 周；若实际完成主动恢复，训练后仍使用 /record-training-2 记录时长、Session RPE 和疼痛反应。</p>'
  };
  const p=WEEK_PHASES[w];
  const plan=(recKey&&TODAY_RECOMMENDATION[recKey])||dayPlan(daysForMode(mode,w).includes(currentWeekDay())?currentWeekDay():daysForMode(mode,w)[0],mode), container=document.getElementById('sessionSlots');container.innerHTML='';let html='';plan.forEach((s,i)=>{const dosage=s[2]||'按计划';html+='<div class="rec-slot"><div class="rec-slot-num">'+(i+1)+'</div><div class="rec-slot-body"><div class="rec-slot-name">'+s[0]+'</div><div class="rec-slot-detail">'+s[1]+'</div></div><div class="rec-slot-dose">'+dosage+'</div></div>'});container.innerHTML=html;
  const TODAY_SKILLS={
   '2026-09-27':[['落地','快速下落定住 2×4；每次重置并稳定定住'],['踝弹性','踝弹跳 2×15；不追求高度，保持安静落地'],['单腿控制','站姿膝控 2×8/侧；有稳固低台阶时再做 Step Down 2×8/侧'],['内收肌/核心','短杠杆哥本哈根侧桥 2×15–20秒/侧'],['可选运球','室内允许拍球时做原地大力运球 10–15分钟，弱侧手主导'],['今日取消','10m Sprint、5m 加速急停、5-10-5 与高速篮球脚步；客厅空间不足'],['注意','出现膝痛、落地声音变大、膝内扣或左右差异增大时停止对应模块']],
-  '2026-09-28':[['下肢爆发','快速下落定住 2×5 + 反向动作纵跳 3×3；每次重置、充分休息'],['主项力量','六角杠铃深蹲 3×7 @RPE 6–7；负荷维持 35kg'],['单腿力量','保加利亚单腿蹲 3×9/侧；单侧哑铃 12kg，左右分别记录 RPE'],['后链与小腿','RDL 3×8（单侧 18kg）+ 双腿提踵 3×15'],['核心','帕洛夫抗旋推 3×10/侧；轻阻力，本周期首次'],['弱点针对','动态踝背屈 2×8/侧 + 站姿膝控 2×10–12/侧'],['今日不安排','10m Sprint、减速与 5-10-5 变向；属本周 D3 槽位，不塞入 D1'],['注意','踝外侧酸感或膝痛加重、落地声音变大、膝内扣、CMJ 高度下降时停止对应模块']]
+  '2026-09-28':[['下肢爆发','快速下落定住 2×5 + 反向动作纵跳 3×3；每次重置、充分休息'],['主项力量','六角杠铃深蹲 3×7 @RPE 6–7；负荷维持 35kg'],['单腿力量','保加利亚单腿蹲 3×9/侧；单侧哑铃 12kg，左右分别记录 RPE'],['后链与小腿','RDL 3×8（单侧 18kg）+ 双腿提踵 3×15'],['核心','帕洛夫抗旋推 3×10/侧；轻阻力，本周期首次'],['弱点针对','动态踝背屈 2×8/侧 + 站姿膝控 2×10–12/侧'],['今日不安排','10m Sprint、减速与 5-10-5 变向；属本周 D3 槽位，不塞入 D1'],['注意','踝外侧酸感或膝痛加重、落地声音变大、膝内扣、CMJ 高度下降时停止对应模块']],
+  '2026-09-29':[['主动恢复','二区有氧 20–30 分钟；轻松步行或自行车，保持可轻松对话'],['踝活动度','动态踝背屈 1–2×8/侧；针对左侧踝背屈不足'],['髋与内收肌','90/90 髋部转换 + 内收肌后坐拉伸，各 1–2×8/侧'],['Level 1 防伤','弹力带侧走 2×10/侧 + 站姿膝控 2×8/侧'],['恢复呼吸','90/90 呼吸 3–5 分钟'],['不占槽位','今天不把主动恢复计为 W2 D2；D2 顺延至下一次训练'],['今天取消','下肢大重量、跳跃、冲刺、减速、高速变向与篮球对抗'],['停止条件','右膝内侧或踝部出现疼痛、膝内扣增加、症状随时间累积时停止对应动作']]
  };
  document.getElementById('todayReason').innerHTML=(recKey&&TODAY_REASON[recKey])||'<p>① 训练顺序：速度/爆发 → 主力量 → 单腿/后链 → 核心/篮球。</p><p>② 当前阶段：'+p.name+'；重点是 '+p.focus.join('、')+'。</p><p>③ 选择规则：从动作库选择“当前阶段 + 能力短板 + 可承受冲击”的最高质量动作，而不是把动作库做遍。</p><p>④ 今日Ready状态会进一步决定训练量；训练后请使用 /record-training-2 记录实际完成内容、Session RPE 和疼痛。</p>';
  const skills=(recKey&&TODAY_SKILLS[recKey])||[['运球','左手主导30%时间'],['投篮','定点→接球→移动'],['终结','左右手+对抗选择'],['防守/脚步','滑步→Closeout→追防']];
