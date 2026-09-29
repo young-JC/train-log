@@ -8,3 +8,8 @@
 ### VS Code ###
 .vscode/
 /todo
+
+.claude/plan
+.claude/progress
+
+.codegraph
