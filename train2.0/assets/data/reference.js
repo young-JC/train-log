@@ -71,8 +71,9 @@ const PLAN4={
 };
 const ABILITY_ASSESSMENTS=[
  {category:'力量',action:'六角杠铃深蹲',metric:'同动作标准下的负重表现',best:'单侧 35kg · 3×7 · RPE 6',comparison:'负荷和完成量均不下降且至少一项提高；负荷与完成量相同时 RPE 更低',firstDate:'2026-09-21',bestDate:'2026-09-28',updatedAt:'2026-09-28',source:'records/2026-09.html#detail-2026-09-28'},
+ {category:'力量',action:'高杠后蹲',metric:'同动作标准下的负重表现',best:'30kg · 4×5 · RPE 7–8',comparison:'负荷和完成量均不下降且至少一项提高；负荷与完成量相同时 RPE 更低',firstDate:'2026-10-08',bestDate:'2026-10-08',updatedAt:'2026-10-08',source:'records/2026-10.html#detail-2026-10-08'},
  {category:'单腿力量',action:'保加利亚单腿蹲',metric:'同动作标准下的负重表现',best:'单侧哑铃 14kg · 3×8 · RPE 7（左腿 8）',comparison:'负荷和完成量均不下降且至少一项提高；负荷与完成量相同时双侧 RPE 均不升高且至少一侧更低',firstDate:'2026-09-21',bestDate:'2026-09-28',updatedAt:'2026-09-28',source:'records/2026-09.html#detail-2026-09-28'},
- {category:'后链力量',action:'RDL',metric:'同动作标准下的负重表现',best:'单侧哑铃 18kg · 3×8 · RPE 6',comparison:'负荷和完成量均不下降且至少一项提高；负荷与完成量相同时 RPE 更低',firstDate:'2026-09-21',bestDate:'2026-09-28',updatedAt:'2026-09-28',source:'records/2026-09.html#detail-2026-09-28'},
+ {category:'后链力量',action:'RDL',metric:'同动作标准下的负重表现',best:'单侧哑铃 20kg · 3×8 · RPE 5',comparison:'负荷和完成量均不下降且至少一项提高；负荷与完成量相同时 RPE 更低',firstDate:'2026-09-21',bestDate:'2026-10-08',updatedAt:'2026-10-08',source:'records/2026-10.html#detail-2026-10-08'},
  {category:'全身力量传递',action:'弓步单臂哑铃推举',metric:'同动作标准下的负重表现',best:'单侧 14kg · 3×6/侧 · RPE 5',comparison:'负荷和完成量均不下降且至少一项提高；负荷与完成量相同时 RPE 更低',firstDate:'2026-09-23',bestDate:'2026-09-23',updatedAt:'2026-09-23',source:'records/2026-09.html#detail-2026-09-23'},
  {category:'上肢推力',action:'哑铃卧推',metric:'同动作标准下的负重表现',best:'单侧 20kg · 3×12 · RPE 5',comparison:'负荷和完成量均不下降且至少一项提高；负荷与完成量相同时 RPE 更低',firstDate:'2026-09-23',bestDate:'2026-09-23',updatedAt:'2026-09-23',source:'records/2026-09.html#detail-2026-09-23'},
  {category:'上肢拉力',action:'引体向上',metric:'自重完成量',best:'自重 · 3×6',comparison:'仅比较自重引体向上；总完成次数更高且组数不下降为更好',firstDate:'2026-09-23',bestDate:'2026-09-23',updatedAt:'2026-09-23',source:'records/2026-09.html#detail-2026-09-23'},
@@ -95,5 +96,6 @@ const WEAKNESSES=[
  ['突破禁区终结选择差','篮球技巧','2026-09-11','待改善','根据防守做出正确终结决策','慢下来观察/分球中投/假动作后终结'],
  ['左侧踝背屈活动度不足、前移伴膝内扣','活动度/膝控制','2026-09-21','待改善','左右踝背屈差异缩小，前移时膝盖保持对准脚尖','09-21 踝背屈热身时左脚活动度明显不如右脚，用力向前伴随膝盖内扣'],
  ['左侧上肢拉力弱于右侧','上肢力量','2026-09-23','待改善','同负荷划船时双侧主观用力程度接近','09-23 单臂俯身哑铃划船 18kg 3×10：右侧 RPE 5、左侧 RPE 6，左侧最后一组约 RPE 9'],
- ['CMJ 起跳后身体倾斜、落地不稳','落地控制','2026-09-28','待改善','起跳后身体保持稳定，落地平稳无晃动且无右膝内侧不适','09-28 不摆臂 CMJ 3×3：跳起后空中身体倾斜导致落地不稳，后段明显改善；不稳落地时右膝内侧 2/10，平稳落地无疼痛']
+ ['CMJ 起跳后身体倾斜、落地不稳','落地控制','2026-09-28','待改善','起跳后身体保持稳定，落地平稳无晃动且无右膝内侧不适','09-28 不摆臂 CMJ 3×3：跳起后空中身体倾斜导致落地不稳，后段明显改善；不稳落地时右膝内侧 2/10，平稳落地无疼痛'],
+ ['左侧单腿力量弱于右侧','单腿力量','2026-09-28','待改善','同负荷保加利亚单腿蹲时双侧 RPE 接近','09-28 保加利亚单腿蹲 单侧14kg 3×8：左腿 RPE 8、右腿 RPE 7；10-08 单侧12kg：左 RPE 7、右 RPE 6，左侧主观用力持续高于右侧']
 ];

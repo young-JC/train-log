@@ -3,7 +3,7 @@ name: recommend-training-2.0
 description: >
   基于 Readiness、疼痛与恢复、12 周周期、近期训练记录、
   动作模式、刺激预算、动作进退阶链、弱点优先级和篮球运动员动作库，
-  为 train2.0 生成今日训练推荐，并同步 Dashboard 今日推荐与每日 Readiness。
+  为 train2.0 生成今日训练推荐，并写入 Dashboard 训练推荐模块（含当日 Readiness 原始值）。
 ---
 
 # recommend-training-2.0
@@ -19,9 +19,9 @@ description: >
 1. 确认日期并采集当日状态；
 2. 计算 Readiness 并确定训练权限；
 3. 结合周期、计划槽位、近期刺激、恢复和弱点生成推荐；
-4. 同步每日 Readiness 与 Dashboard 今日推荐。
+4. 把推荐与当日 Readiness 写入 Dashboard 训练推荐模块（本技能唯一落盘位置）。
 
-训练结束后使用 `record-training-2` 记录实际完成内容。**推荐计划不得写成正式训练记录。**
+训练结束后使用 `record-training-2` 记录实际完成内容。**推荐计划不得写成正式训练记录；本技能不写入也不修改 `train2.0/records/` 下的任何记录文件。**
 
 ### 固定配置与事实源
 
@@ -32,6 +32,8 @@ description: >
 - 弱点管理唯一事实源：`train2.0/weakness-tracking.md`。
 - 动作唯一事实源：`train2.0/动作库/`（`00_索引.md` 负责筛选路由，`A_活动度.md` … `Q_训练后整理与拉伸.md` 共 17 本分册负责动作详情）。
 - Dashboard：`train2.0/dashboard.html`（外壳）+ `train2.0/assets/`（样式与数据）。
+- 训练推荐数据层：`train2.0/assets/data/recommend-YYYY-MM.js`（推荐与当日 Readiness 的唯一落盘位置；`assets/data/recommend-index.js` 负责汇总）。推荐在未再次生成时保持上一条内容，Dashboard 提供日期选择器查看过往推荐。
+- `train2.0/assets/data/records.js` 与 `train2.0/records/` 下所有文件都是正式训练记录或其镜像，只由 `record-training-2` 更新；本技能不写入、不修改。
 - `train2.0/archive/` 是拆分前原件与历史版本，**不是事实源，不得读取或引用**。
 - 月度 HTML 与 Dashboard 都是展示层。
 - 不读取旧 `localStorage` 作为正式训练历史，不迁移或调用 `train1.0/` 补齐历史。
@@ -381,7 +383,7 @@ Strength、Accessory、Core、Conditioning 和一般肌耐力可主要按 Sets /
 
 ---
 
-## 9. 阶段 8：输出并同步
+## 9. 阶段 8：输出并写入推荐模块
 
 ### 输出格式
 
@@ -452,46 +454,41 @@ Strength、Accessory、Core、Conditioning 和一般肌耐力可主要按 Sets /
 - 动作质量和篮球表现
 ```
 
-### 同步每日 Readiness
+### 唯一落盘位置：Dashboard 推荐模块
 
-五项数据齐全后同步：
+**推荐流程不写入任何训练记录文件。** `train2.0/records/YYYY-MM.md`、`train2.0/records/YYYY-MM.html`、`train2.0/records/00_摘要.md` 与 `train2.0/assets/data/records.js` 只由 `record-training-2` 在训练后更新；本技能不得修改它们，也不得为了「仅记录 Readiness」而在月度记录、摘要或正式月历中创建条目。
 
-1. `train2.0/records/YYYY-MM.md`；
-2. 对应月度 HTML（若存在）；
-3. `train2.0/dashboard.html` 的数据层 `train2.0/assets/data/records.js`（`FORMAL_TODAY_READINESS` 与 `FORMAL_RECORDS`）；
-4. `train2.0/records/00_摘要.md`：该日尚无行时追加一行，状态写「Readiness 已记录」。
+五项数据齐全后，把同一份内容写入 `train2.0/assets/data/recommend-YYYY-MM.js`（按记录日期归属月份），五个分节缺一不可：
 
-**不要改动 `dashboard.html` 本身**：它是外壳（含标记与 `<script src>`），数据在 `assets/data/` 下。仅在挂载结构本身需要变化时才动外壳。
+- `meta`：日期、周次、周期阶段、计划模式、今日槽位，以及 `readiness` 与 `pain` 展示字符串；
+- `readiness`：当日五项原始值（睡眠、疲劳、酸痛、疼痛、训练意愿）、`score`、`level` 和 `painNote`；
+- `plans`：动作、组数、次数、RPE、距离和时长；
+- `reason`：`todayReason`，必须与「为什么今天这样练？」一致并点名实际弱点或延后原因；
+- `skills`：`todaySkills`，只写推荐中实际安排的篮球内容，本次未安排篮球时写空数组 `[]`，**不得沿用上一次的篮球技能**。
 
-三处的日期、睡眠、疲劳、酸痛、疼痛、疼痛部位、疼痛性质、训练意愿、Readiness 和权限颜色必须一致。当天尚未训练时只记录 Readiness，不创建虚假训练内容。
+跨月时新建 `recommend-YYYY-MM.js`，并在 `assets/data/recommend-index.js` 的 `RECOMMEND_FILES` 末尾登记。**不要读或改 `dashboard.html` 外壳**：它是外壳（含标记与 `<script src>`），数据在 `assets/data/` 下。缺少对应挂载点时，报告未同步项并停止，不创建不兼容结构。
 
-如当月 Markdown 模板尚未建立，报告未同步项并停止，不得发明临时结构。
+同一天重新推荐时，覆盖该日的五个分节，不重复追加动作，也不保留旧剂量、旧 `todayReason` 或已取消的 `todaySkills`；同日未重新推荐时保留原推荐不动。
 
-### 同步 Dashboard 今日推荐
+### 推荐持久化与过往推荐
 
-推荐生成后同步同一份：
+训练推荐独立于训练记录：**未再次运行推荐时，Dashboard 始终显示最近一条推荐内容**，不会因为日期推进、训练完成或记录写入而清空或被覆盖。
 
-- 日期、周次、周期阶段、计划模式和今日槽位；
-- 动作、组数、次数、RPE、距离和时长；
-- Readiness 调整、弱点目标、`todayReason` 和 `todaySkills`。
+`train2.0/dashboard.html` 的训练推荐模块提供日期选择器，默认显示最近一条推荐，可切换查看任意一条过往推荐；切换时同步展示该日的 `meta`、`plans`、`reason`、`skills`。每日 Readiness 面板始终显示最近一条推荐的 `readiness` 原始值，不随浏览历史推荐而改变。推荐模块不添加完成勾选、数量输入或「完成今日训练」逻辑。
 
-**落盘位置：** `train2.0/assets/data/recommend-YYYY-MM.js`（按记录日期归属月份），四个分节 `meta` / `plans` / `reason` / `skills`。跨月时新建 `recommend-YYYY-MM.js` 并在 `assets/data/recommend-index.js` 的 `RECOMMEND_FILES` 末尾登记。**不要读或改 `dashboard.html` 外壳。**
+### 与正式训练记录的边界
 
-`todayReason` 必须与“为什么今天这样练？”一致并点名实际弱点或延后原因；`todaySkills` 只写推荐中实际安排的篮球内容，本次未安排篮球时写空数组 `[]`，**不得沿用上一次的篮球技能**。缺少对应挂载点时，报告未同步项并停止，不创建不兼容结构。
-
-同日 Readiness 重新评估或状态变化时，覆盖该日 Dashboard 推荐，不重复追加动作，也不保留旧剂量、旧 `todayReason` 或已取消的 `todaySkills`；正式训练记录不受推荐覆盖。
-
-### Dashboard 与正式记录边界
-
-Dashboard 是只读展示层，不添加完成勾选、数量输入或“完成今日训练”逻辑。推荐阶段不得：
+推荐阶段不得：
 
 - 增加训练天数或 Session Load；
-- 写入已完成动作、预计 Session RPE、预计疼痛或正式训练历史；
-- 将推荐自动标记为完成。
+- 写入已完成动作、实际 Session RPE、实际疼痛或正式训练历史；
+- 将推荐自动标记为完成；
+- 写入或改写 `train2.0/assets/data/records.js` 的 `FORMAL_TODAY_READINESS` 与 `FORMAL_RECORDS`（只由 `record-training-2` 维护）；
+- 在 `train2.0/records/` 下的 Markdown、月度 HTML 或 `00_摘要.md` 中新增条目。
 
-日历继续区分计划训练、已完成、恢复/休息和当前查看日期。点击日期时显示该日槽位、推荐、已有正式训练、Readiness、疼痛和周期位置；完成状态只能来自正式记录。
+月历与日历的完成状态只能来自正式记录；推荐内容只影响 Dashboard 的训练推荐模块。
 
-同步后核对页面刷新后的日期、槽位、推荐、`todayReason`、`todaySkills` 与最终输出一致，且正式训练天数和 Session Load 未增加。训练完成后交由 `record-training-2` 写入正式记录，并让正式结果成为下一次推荐依据。
+同步后核对页面刷新后的日期、槽位、推荐、`todayReason`、`todaySkills`、`readiness` 与最终输出一致，且正式训练天数和 Session Load 未变化。训练完成后交由 `record-training-2` 写入正式记录，并让正式结果成为下一次推荐的输入。
 
 ---
 
@@ -505,6 +502,8 @@ Dashboard 是只读展示层，不添加完成勾选、数量输入或“完成�
 - 动态热身没有与后续 Mobility、Prehab 或主项预演重复堆叠；训练后只选择当天主要受力区域。
 - 48–72 小时刺激、恢复间隔、疼痛趋势、弱点、动作模式和刺激预算均已进入决策。
 - 训练只保留必要动作，质量项目附有针对性的 Quality Stop。
-- 输出、月度 Readiness 和 Dashboard 展示一致。
-- 推荐没有进入正式训练统计，也没有使用旧 `localStorage` 或 `train1.0` 数据。
+- 输出与 `recommend-YYYY-MM.js` 的 `meta` / `readiness` / `plans` / `reason` / `skills` 五个分节一致。
+- `train2.0/records/` 下的 Markdown、月度 HTML、`00_摘要.md` 与 `assets/data/records.js` 未被本技能修改。
+- Dashboard 训练推荐模块默认显示最近一条推荐，日期选择器可切换查看过往推荐且切换后内容正确。
+- 推荐没有进入正式训练统计，训练天数与 Session Load 未因本次推荐变化，也没有使用旧 `localStorage` 或 `train1.0` 数据。
 - 所有建议均为训练负荷管理，不表述为疾病诊断或治疗方案。

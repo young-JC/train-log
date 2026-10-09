@@ -7,3 +7,4 @@ const TODAY_META=Object.assign({},...RECOMMEND_FILES.map(f=>f.meta));
 const TODAY_RECOMMENDATION=Object.assign({},...RECOMMEND_FILES.map(f=>f.plans));
 const TODAY_REASON=Object.assign({},...RECOMMEND_FILES.map(f=>f.reason));
 const TODAY_SKILLS=Object.assign({},...RECOMMEND_FILES.map(f=>f.skills));
+const TODAY_READINESS=Object.assign({},...RECOMMEND_FILES.map(f=>f.readiness));

@@ -35,7 +35,7 @@
 <div class="stats" id="stats"></div>
 
 <section class="section" id="monthCalendar">
- <div class="section-head"><div><h2>📅 2026 年 10 月正式记录</h2><p>数据镜像自月度 Markdown；旧 localStorage 历史不计入月历或统计。</p></div><div class="monthly-links"><span class="pill" id="monthlySnapshotStatus">0 个训练日 · 0 AU</span><a class="btn blue small" href="records/2026-10.html">查看月度记录</a></div></div>
+ <div class="section-head"><div><h2 id="monthlyTitle">📅 2026 年 10 月正式记录</h2><p>数据镜像自月度 Markdown；旧 localStorage 历史不计入月历或统计。</p></div><div class="monthly-links"><div class="month-nav"><button class="btn small" id="monthPrev" type="button" aria-label="上一月">‹</button><span class="pill" id="monthLabel">2026 年 10 月</span><button class="btn small" id="monthNext" type="button" aria-label="下一月">›</button></div><span class="pill" id="monthlySnapshotStatus">0 个训练日 · 0 AU</span><a class="btn blue small" id="monthlyRecordLink" href="records/2026-10.html">查看月度记录</a></div></div>
  <div class="card"><div class="monthly-calendar" id="monthlyCalendar" aria-label="2026 年 10 月正式训练月历"></div></div>
 </section>
 
@@ -59,7 +59,7 @@
 </section>
 
 <section class="section" id="today">
- <div class="section-head"><div><h2>📋 训练推荐</h2><p>下次训练推荐基于周期、Readiness 和恢复状态生成；训练后请使用 /record-training-2 记录实际完成内容。</p></div><span class="pill orange" id="todayPill">DAY 1</span></div>
+ <div class="section-head"><div><h2>📋 训练推荐</h2><p>显示最近一次生成的推荐；若未再次生成推荐则保持上一条内容，可在右侧切换查看过往推荐。训练后请使用 /record-training-2 记录实际完成内容。</p></div><div class="rec-picker"><span class="pill orange" id="todayPill">DAY 1</span><label><span>查看推荐</span><select id="recDateSelect" aria-label="选择要查看的推荐日期"></select></label></div></div>
  <div class="today">
   <div class="card">
    <div class="session-head">

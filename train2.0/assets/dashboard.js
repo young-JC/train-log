@@ -20,12 +20,20 @@ function calcReady(){const s=+sleep.value,f=+fatigue.value,so=+soreness.value,p=
 function syncSlider(id){document.getElementById(id+'Val').textContent=document.getElementById(id).value;updateReadiness()}
 function updateReadiness(){const score=calcReady();document.getElementById('readyScore').textContent=score;let note='绿色区：按计划训练。';if(score<60||+pain.value>=5)note='红色区：建议恢复/Prehab，取消高冲击Plyo、Sprint和COD。';else if(score<75||+pain.value>=3)note='黄色区：建议总量下降20–30%，优先保留力量技术，减少高冲击。';document.getElementById('readyNote').textContent=note;document.getElementById('readinessBadge').textContent='Ready '+score;document.getElementById('painBadge').textContent='疼痛 '+pain.value+'/10';return score}
 function saveReadiness(){save('readiness',{date:currentDateStr(),sleep:+sleep.value,fatigue:+fatigue.value,soreness:+soreness.value,pain:+pain.value,motivation:+motivation.value,score:calcReady()});updateRecommendation()}
-function updateRecommendation(){const s=calcReady(), p=+pain.value;let title='正常执行计划', txt='保持动作质量；训练后记录Session RPE和第二天反应。';if(s<60||p>=5){title='恢复 / Prehab优先';txt='取消高冲击跳跃、高速变向和高量冲刺；选择L1/L2防伤、低强度力量或恢复。'} else if(s<75||p>=3){title='减量执行';txt='总训练量下降20–30%；Plyo/COD减少，主力量保持中等RPE。'} else if(currentDateStr()===FORMAL_TODAY_READINESS.date&&FORMAL_TODAY_READINESS.date==='2026-09-29'){title='今日主动恢复已完成';txt='已完成 65 分钟主动恢复，Session RPE 2，Session Load 130 AU；训练中右膝内侧最高 2/10，训练后回到 0/10。'}else if(currentDateStr()===FORMAL_TODAY_READINESS.date&&FORMAL_TODAY_READINESS.date==='2026-10-01'){title='今日半场实战已完成';txt='半场篮球实战 80 分钟，Session RPE 7，Session Load 560 AU；训练中膝盖轻微疼痛 1/10、不影响运动，训练后 0/10。'}else if(currentDateStr()===FORMAL_TODAY_READINESS.date&&FORMAL_TODAY_READINESS.date==='2026-10-08'){title='执行 W3 D1 · 落地门槛优先';txt='Readiness 88、当前疼痛 0/10；执行下肢力量 + 垂直爆发，Snap Down 替代 Drop Landing，不安排冲刺、COD 或篮球。'}document.getElementById('systemDecision').textContent=title;document.getElementById('systemDecisionText').textContent=txt}
+function updateRecommendation(){const s=calcReady(), p=+pain.value;let title='正常执行计划', txt='保持动作质量；训练后记录Session RPE和第二天反应。';if(s<60||p>=5){title='恢复 / Prehab优先';txt='取消高冲击跳跃、高速变向和高量冲刺；选择L1/L2防伤、低强度力量或恢复。'} else if(s<75||p>=3){title='减量执行';txt='总训练量下降20–30%；Plyo/COD减少，主力量保持中等RPE。'} else if(currentRecKey==='2026-09-29'){title='今日主动恢复已完成';txt='已完成 65 分钟主动恢复，Session RPE 2，Session Load 130 AU；训练中右膝内侧最高 2/10，训练后回到 0/10。'}else if(currentRecKey==='2026-10-01'){title='今日半场实战已完成';txt='半场篮球实战 80 分钟，Session RPE 7，Session Load 560 AU；训练中膝盖轻微疼痛 1/10、不影响运动，训练后 0/10。'}else if(currentRecKey==='2026-10-08'){title='执行 W3 D1 · 落地门槛优先';txt='Readiness 88、当前疼痛 0/10；执行下肢力量 + 垂直爆发，Snap Down 替代 Drop Landing，不安排冲刺、COD 或篮球。'}else if(currentRecKey==='2026-10-09'){title='执行 W3 D2 · 上肢 + 核心 + 篮球技术';txt='Readiness 84、当前疼痛 0/10；10-08 下肢高负荷仅约 24 小时，今日不安排下肢大重量、跳跃、冲刺与高速变向；上肢动作不做力竭，篮球只做运球、投篮与终结。'}document.getElementById('systemDecision').textContent=title;document.getElementById('systemDecisionText').textContent=txt}
 
-function renderToday(){
+let currentRecKey='';
+function recommendationDates(){return Object.keys(TODAY_RECOMMENDATION).sort()}
+function latestRecKey(){const today=currentDateStr(),dates=recommendationDates();return dates.filter(d=>d<=today).pop()||dates[dates.length-1]||''}
+function renderToday(pickedKey){
  const w=weekIndex(),mode=document.getElementById('mode').value;
- const today=currentDateStr(),recDates=Object.keys(TODAY_RECOMMENDATION).sort();
- const recKey=recDates.filter(d=>d<=today).pop()||recDates[0];
+ const today=currentDateStr();
+ const recKey=pickedKey&&TODAY_RECOMMENDATION[pickedKey]?pickedKey:latestRecKey();
+ currentRecKey=recKey||'';
+ const select=document.getElementById('recDateSelect');
+ if(select){const dates=recommendationDates();
+  if(select.options.length!==dates.length)select.innerHTML=dates.slice().reverse().map(d=>'<option value="'+d+'">'+d+'</option>').join('');
+  if(select.value!==currentRecKey)select.value=currentRecKey;}
  const meta=recKey?TODAY_META[recKey]:null;
  if(recKey&&meta){
   const pillIdx=meta.day.indexOf('D');
@@ -33,7 +41,7 @@ function renderToday(){
   document.getElementById('todayPill').textContent=pillLabel+' · '+meta.date;
   document.getElementById('todayModule').textContent=meta.week+' · '+meta.day;
   document.getElementById('todayTitle').textContent=meta.focus;
-  document.getElementById('todayPurpose').textContent=FORMAL_RECORDS[recKey]?.status==='training'?(recKey===today?'今日实际完成':'最近正式记录'):(recKey===today?'今日推荐':'下次训练推荐 · '+meta.phase);
+  document.getElementById('todayPurpose').textContent=recKey===today?'今日推荐 · '+meta.phase:(recKey===latestRecKey()?'最近一次推荐 · 未再次推荐时保持此内容':'过往推荐 · '+meta.date);
   document.getElementById('todayRpe').textContent=meta.readiness;
   document.getElementById('todayDuration').textContent=meta.duration;
   document.getElementById('recMeta').innerHTML='<span class="pill">'+meta.date+'</span><span class="pill">'+meta.week+' · '+meta.day+'</span><span class="pill">'+meta.phase+'</span><span class="pill '+(meta.readiness.includes('绿色')?'green':meta.readiness.includes('红色')?'red':'yellow')+'">'+meta.readiness+'</span><span class="pill">'+meta.pain+'</span><span class="pill green">'+meta.duration+'</span><span class="pill blue">'+meta.focus+'</span>';
@@ -101,25 +109,36 @@ function renderActions(){
  }
  filterActions();
 }
+function calendarMonths(){return [...new Set([...Object.keys(FORMAL_RECORDS).map(date=>date.slice(0,7)),`${FORMAL_MONTH.year}-${FORMAL_MONTH.month}`])].sort()}
+let calendarMonth='';
+function shiftMonth(delta){const months=calendarMonths(),index=months.indexOf(calendarMonth),next=months[index+delta];if(index<0||!next)return;calendarMonth=next;renderFormalMonth()}
 function renderFormalMonth(){
+ const months=calendarMonths();
+ if(!calendarMonth||!months.includes(calendarMonth))calendarMonth=months[months.length-1]||`${FORMAL_MONTH.year}-${FORMAL_MONTH.month}`;
+ const [year,month]=calendarMonth.split('-'),monthNumber=+month;
+ const days=new Date(+year,monthNumber,0).getDate();
+ const startOffset=(new Date(`${calendarMonth}-01T00:00:00`).getDay()+6)%7;
  const weekdays=['周一','周二','周三','周四','周五','周六','周日'];
  const nodes=weekdays.map(label=>{const item=document.createElement('div');item.className='monthly-weekday';item.textContent=label;return item});
- for(let index=0;index<FORMAL_MONTH.startOffset;index++){const blank=document.createElement('div');blank.className='monthly-day outside';blank.setAttribute('aria-hidden','true');nodes.push(blank)}
- for(let day=1;day<=FORMAL_MONTH.days;day++){
-  const date=`${FORMAL_MONTH.year}-${FORMAL_MONTH.month}-${String(day).padStart(2,'0')}`,record=FORMAL_RECORDS[date],isRest=FORMAL_REST_DAYS.includes(date),offset=Math.floor((new Date(date+'T00:00:00')-new Date('2026-09-21T00:00:00'))/86400000);
+ for(let index=0;index<startOffset;index++){const blank=document.createElement('div');blank.className='monthly-day outside';blank.setAttribute('aria-hidden','true');nodes.push(blank)}
+ for(let day=1;day<=days;day++){
+  const date=`${calendarMonth}-${String(day).padStart(2,'0')}`,record=FORMAL_RECORDS[date],isRest=FORMAL_REST_DAYS.includes(date),offset=Math.floor((new Date(date+'T00:00:00')-new Date('2026-09-21T00:00:00'))/86400000);
   const cell=document.createElement('div');cell.className='monthly-day';if(date==='2026-09-21')cell.classList.add('cycle-start');if(isRest)cell.classList.add('rest');else if(record?.status==='training')cell.classList.add('training');else if(record?.status==='readiness')cell.classList.add('readiness');
-  const content=document.createElement(record&&!isRest?'a':'div');if(record&&!isRest)content.href=`records/${date.slice(0,7)}.html#detail-${date}`;
+  const content=document.createElement(record&&!isRest?'a':'div');if(record&&!isRest)content.href=`records/${calendarMonth}.html#detail-${date}`;
   const number=document.createElement('span');number.className='monthly-day-number';number.textContent=day;content.append(number);
   if(offset>=0){const position=document.createElement('span');position.className='monthly-position';position.textContent=`W${Math.floor(offset/7)+1}D${offset%7+1}`;content.append(position)}
   if(record||isRest||offset>=0){const status=document.createElement('span');status.className='monthly-status';status.textContent=isRest?'休息':record?.label||(date==='2026-09-21'?'正式周期开始':'等待记录');content.append(status)}
   cell.append(content);nodes.push(cell);
  }
  monthlyCalendar.replaceChildren(...nodes);
- const entries=Object.entries(FORMAL_RECORDS).filter(([date])=>date.startsWith(`${FORMAL_MONTH.year}-${FORMAL_MONTH.month}-`)),training=entries.filter(([date,record])=>!FORMAL_REST_DAYS.includes(date)&&record.status==='training'),load=training.reduce((total,[,record])=>total+(record.sessionLoad||0),0);
+ const entries=Object.entries(FORMAL_RECORDS).filter(([date])=>date.startsWith(`${calendarMonth}-`)),training=entries.filter(([date,record])=>!FORMAL_REST_DAYS.includes(date)&&record.status==='training'),load=training.reduce((total,[,record])=>total+(record.sessionLoad||0),0);
  monthlySnapshotStatus.textContent=`${training.length} 个训练日 · ${load} AU`;
+ const label=`${year} 年 ${monthNumber} 月`;
+ monthlyTitle.textContent=`📅 ${label}正式记录`;monthLabel.textContent=label;monthlyCalendar.setAttribute('aria-label',`${label}正式训练月历`);monthlyRecordLink.href=`records/${calendarMonth}.html`;
+ const monthIndex=months.indexOf(calendarMonth);monthPrev.disabled=monthIndex<=0;monthNext.disabled=monthIndex>=months.length-1;
 }
 function renderTodayReadiness(){
- const r=FORMAL_TODAY_READINESS;if(!r)return;
+ const r=TODAY_READINESS[latestRecKey()]||FORMAL_TODAY_READINESS;if(!r)return;
  document.getElementById('sleep').value=r.sleep;document.getElementById('sleepVal').textContent=r.sleep;
  document.getElementById('fatigue').value=r.fatigue;document.getElementById('fatigueVal').textContent=r.fatigue;
  document.getElementById('soreness').value=r.soreness;document.getElementById('sorenessVal').textContent=r.soreness;
@@ -128,5 +147,8 @@ function renderTodayReadiness(){
  updateReadiness();
 }
 function stats(){const week=weekIndex(),entries=Object.entries(FORMAL_RECORDS),training=entries.filter(([date,record])=>!FORMAL_REST_DAYS.includes(date)&&record.status==='training'),load=training.reduce((total,[,record])=>total+(record.sessionLoad||0),0),readiness=entries.filter(([,record])=>record.readiness).length;document.getElementById('stats').innerHTML=[['本周期','W'+week,'12周周期'],['训练模式',document.getElementById('mode').value==='3'?'3日':document.getElementById('mode').value==='4'?'4日':'4+1','可随时切换'],['10月训练',Object.entries(FORMAL_RECORDS).filter(([d,r])=>d.startsWith('2026-10-')&&r.status==='training').length,'正式月度记录'],['10月负荷',Object.entries(FORMAL_RECORDS).filter(([d,r])=>d.startsWith('2026-10-')&&r.status==='training').reduce((t,[,r])=>t+(r.sessionLoad||0),0),'Session Load · AU'],['Readiness',readiness,'正式记录天数']].map((s,i)=>'<div class="stat"><div class="k">'+s[0]+'</div><div class="v '+(['orange','blue','green','yellow','purple'][i])+'">'+s[1]+'</div><div class="s">'+s[2]+'</div></div>').join('')}
-function refresh(){renderCycle();renderFormalMonth();renderTodayReadiness();updateReadiness();updateRecommendation();renderToday();renderAssessment();renderWeak();updateLoad();renderActions();stats()}
-document.getElementById('cycleStart').addEventListener('change',refresh);document.getElementById('mode').addEventListener('change',refresh);document.addEventListener('DOMContentLoaded',refresh);
+function refresh(){renderCycle();renderFormalMonth();renderToday();renderTodayReadiness();updateReadiness();updateRecommendation();renderAssessment();renderWeak();updateLoad();renderActions();stats()}
+document.getElementById('cycleStart').addEventListener('change',refresh);document.getElementById('mode').addEventListener('change',refresh);
+document.getElementById('monthPrev').addEventListener('click',()=>shiftMonth(-1));document.getElementById('monthNext').addEventListener('click',()=>shiftMonth(1));
+document.getElementById('recDateSelect').addEventListener('change',e=>{renderToday(e.target.value);updateReadiness();updateRecommendation()});
+document.addEventListener('DOMContentLoaded',refresh);

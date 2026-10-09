@@ -51,7 +51,7 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 - `records/00_摘要.md` 是训练趋势速查索引（每次训练一行），不是事实源；细节以月度记录为准。
 - `weakness-tracking.md` 是 2.0 弱点管理的唯一事实源；Dashboard 完整镜像其弱点项、板块、发现日期、状态、目标和备注。
 - `ability-assessment.md` 是 2.0 能力评估的唯一事实源；只从正式训练记录提取可比较的真实动作结果，首次有效结果建立基线，后续仅由更优结果更新，并保留每项首次日期、最佳结果日期和更新时间。
-- `records/YYYY-MM.html` 与 Dashboard 是月度记录、弱点管理和能力评估的同步展示层，不是独立数据源。Dashboard 拆为 `dashboard.html` 外壳 + `assets/dashboard.css`、`assets/dashboard.js`、`assets/data/*.js`：外壳只含标记与经典 `<script src>`，数据改动一律落在 `assets/data/`。Dashboard 能力评估保持只读，不使用手工输入或 localStorage。
+- `records/YYYY-MM.html` 与 Dashboard 是月度记录、弱点管理和能力评估的同步展示层，不是独立数据源。Dashboard 拆为 `dashboard.html` 外壳 + `assets/dashboard.css`、`assets/dashboard.js`、`assets/data/*.js`：外壳只含标记与经典 `<script src>`，数据改动一律落在 `assets/data/`。Dashboard 能力评估保持只读，不使用手工输入或 localStorage。Dashboard 的训练推荐模块数据来自 `assets/data/recommend-YYYY-MM.js`（由 `assets/data/recommend-index.js` 汇总），与正式训练记录相互独立：推荐只由推荐流程写入、正式记录只由 `record-training-2` 写入，两者互不覆盖。
 - `archive/` 存放拆分前原件（`动作库3.0-拆分前原件.md`）与历史版本（`动作库2.0-历史版本.md`），**不是事实源，任何技能都不得读取或引用**。
 
 **`file://` 约束：** 页面用 `explorer.exe` 双击打开，因此只能用 `<link rel="stylesheet">` 与**经典** `<script src>`；**禁止 `fetch()` 与 `<script type="module">`**（两者在 `file://` 下被 CORS 拦截）。新增顶层 `const`/`let`/`function` 必须跨文件唯一——多份经典脚本共享全局词法作用域，重名会让整页失效。
@@ -75,7 +75,7 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 
 ## 2.0 推荐与记录工作流
 
-- `.claude/skills/recommend-training-2/skill.md` 负责采集睡眠、疲劳、酸痛、疼痛和训练意愿，计算当日 Readiness，并结合当前周期、最近 3 个训练周、恢复间隔、疼痛、`train2.0/weakness-tracking.md` 的现存弱点及四份 2.0 训练文档推荐今日训练。疼痛限制优先于 Readiness 总分；推荐内容不能写成已完成训练。
+- `.claude/skills/recommend-training-2/skill.md` 负责采集睡眠、疲劳、酸痛、疼痛和训练意愿，计算当日 Readiness，并结合当前周期、最近 3 个训练周、恢复间隔、疼痛、`train2.0/weakness-tracking.md` 的现存弱点及四份 2.0 训练文档推荐今日训练。疼痛限制优先于 Readiness 总分；推荐内容不能写成已完成训练。**推荐流程只写 Dashboard 训练推荐模块 `train2.0/assets/data/recommend-YYYY-MM.js`（`meta` / `readiness` / `plans` / `reason` / `skills` 五个分节），不写入也不修改 `train2.0/records/` 下的任何文件或 `assets/data/records.js`。** 推荐独立于训练记录：未再次推荐时 Dashboard 始终显示最近一条推荐，训练推荐模块的日期选择器可查看过往推荐。
 - `.claude/skills/record-training-2/skill.md` 负责解析用户实际完成的训练，按需引导补充总时长、Session RPE、疼痛和 Readiness，并主动维护 `train2.0/weakness-tracking.md` 与 `train2.0/ability-assessment.md`：弱点仅根据明确反馈、动作表现、左右差异或测试数据新增/更新，同义项不得重复；能力评估只接受正式训练中完整、真实且可比较的动作结果，首次有效数据创建条目，之后仅在严格更优时更新最佳值和更新时间。一次最多询问 2–3 项；用户记不清的字段标记为未记录，不得推测。
 - `Session Load = 训练时长（分钟）× Session RPE`。任一输入缺失时不得估算；同日重复记录更新原条目，不重复增加训练天数或负荷。
 
@@ -88,7 +88,7 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 5. `train2.0/records/YYYY-MM.html`
 6. `train2.0/assets/data/records.js` 与 `reference.js`（Dashboard 数据层；**不写 `dashboard.html` 外壳**）
 
-若月度模板或 Dashboard 对应模块尚未建立，应报告未同步项并停止，不得发明临时数据结构。月度 Markdown 可以只记录当天 Readiness 而不创建虚假的已完成训练；休息日不计入训练天数或 Session Load。
+若月度模板或 Dashboard 对应模块尚未建立，应报告未同步项并停止，不得发明临时数据结构。训练记录只在运行 `record-training-2` 后写入：月度 Markdown、月度 HTML 与 `records.js` 都不得由推荐流程更新；当日 Readiness 由推荐模块的 `readiness` 分节提供原始值，训练时复用后写入正式记录。取消或未训练的日子可以只记录 Readiness 与原因，训练状态写「未训练」，不创建虚假的已完成训练，也不计入训练天数或 Session Load。
 
 ## 训练领域约定
 
@@ -101,17 +101,16 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 
 ## 验证与 Git
 
-修改训练记录后至少核对：对应系统的月度 Markdown 与 HTML 详情一致，Dashboard 日历链接到正确日期，训练天数、Readiness、疼痛和 Session Load 没有因同日更新重复累计；休息日与训练日视觉状态正确。2.0 Dashboard 改动还需验证动作级联、详情弹层、刷新后的正式数据展示，以及旧 `localStorage` 数据不会被纳入训练历史。
+修改训练记录后至少核对：对应系统的月度 Markdown 与 HTML 详情一致，Dashboard 日历链接到正确日期，训练天数、Readiness、疼痛和 Session Load 没有因同日更新重复累计；休息日与训练日视觉状态正确。2.0 Dashboard 改动还需验证动作级联、详情弹层、刷新后的正式数据展示，以及旧 `localStorage` 数据不会被纳入训练历史。改动训练推荐模块时，需验证默认显示最近一条推荐、日期选择器可切换过往推荐且切换后槽位/依据/技能/Readiness 正确，并且推荐改动没有改变正式训练天数与 Session Load。
 
 改动 2.0 结构时运行（`tools/` 下为一次性校验脚本，不参与运行时，也不是构建步骤）：
 
 ```bash
 PYTHONIOENCODING=utf-8 python tools/verify_action_library_split.py   # 动作库分册与索引 1:1、逐字抽样一致
-PYTHONIOENCODING=utf-8 python tools/verify_dashboard_split.py        # Dashboard 数据结构与原文一致、满足 file:// 约束
 node --check train2.0/assets/dashboard.js                            # 逐文件语法（assets/data/*.js 同）
 git diff --check
 ```
 
-浏览器验证用本机 Chrome/Edge 无头模式打开 `train2.0/dashboard.html`（`--dump-dom` 或 `--screenshot`），确认无 JS 报错、动作库筛选与详情弹层可用、月历链接正确，且当月训练天数与 Session Load 未因同日更新重复累计。
+浏览器验证用本机 Chrome/Edge 无头模式打开 `train2.0/dashboard.html`（`--dump-dom` 或 `--screenshot`），确认无 JS 报错、动作库筛选与详情弹层可用、月历链接正确、训练推荐日期选择器可切换，且当月训练天数与 Session Load 未因同日更新推荐或记录而重复累计。
 
 提交信息使用中文说明和 conventional 前缀，例如 `feat(records):`、`feat(training):`。仓库路径包含中文，文件工具始终使用完整绝对 Windows 路径，如 `D:\个人文件\train-log\train1.0\dashboard.html`。

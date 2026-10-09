@@ -28,6 +28,7 @@ description: 记录 train2.0 今日训练，通过引导补齐必要信息，并
 - 能力评估唯一事实源：`train2.0/ability-assessment.md`
 - 动作唯一事实源：`train2.0/动作库/`（`00_索引.md` 负责筛选路由，17 本模块分册负责动作详情）
 - 同步展示：`train2.0/records/YYYY-MM.html`、`train2.0/dashboard.html`（外壳）+ `train2.0/assets/`（样式与数据）
+- 训练推荐数据层：`train2.0/assets/data/recommend-YYYY-MM.js`（推荐与当日 Readiness 的落盘位置）。本技能只从其中 `readiness` 分节复用当日原始值，**不得修改该文件任何内容**
 - `train2.0/archive/` 是拆分前原件与历史版本，**不是事实源，不得读取或引用**
 - Dashboard 能力评估是只读镜像；不得通过输入框、按钮或 localStorage 手工创建、修改正式能力成绩
 - 不读取、迁移或清理旧 `localStorage` Readiness 与 Session 历史
@@ -77,7 +78,7 @@ description: 记录 train2.0 今日训练，通过引导补齐必要信息，并
 - 当前训练意愿：1–5
 - Readiness 得分和绿/黄/红等级
 
-如果当天已通过 `recommend-training-2` 写入 Readiness，读取并复用该日原始值；不得重新推断。用户明确表示状态发生变化时，记录训练前最终值，并在备注中说明更新。
+如果当天已运行 `recommend-training-2`，读取 `train2.0/assets/data/recommend-YYYY-MM.js` 中该日 `readiness` 分节的五项原始值并复用；不得重新推断。该日的训练推荐内容（`meta` / `readiness` / `plans` / `reason` / `skills`）保留不动，本技能不得改写。用户明确表示状态发生变化时，记录训练前最终值，并在备注中说明更新。
 
 ## Step 3：检查必要信息并引导补充
 
@@ -89,7 +90,7 @@ description: 记录 train2.0 今日训练，通过引导补齐必要信息，并
 4. 训练总时长（分钟）。
 5. Session RPE（0–10）。
 6. 训练前和训练后疼痛（0–10）；疼痛大于 0 时补充部位，能回忆时补充性质。
-7. 当日五项 Readiness；若当天已有正式条目则不重复询问。
+7. 当日五项 Readiness；若当天已有正式条目则不重复询问；若推荐模块已有该日 `readiness` 分节，直接复用，不重新询问。
 
 引导规则：
 
@@ -151,6 +152,7 @@ Readiness = round(20 × (
 5. `train2.0/weakness-tracking.md`，用于核对已有弱点、避免重复项并维护状态。
 6. `train2.0/ability-assessment.md`，用于核对已有动作、比较口径、当前最佳结果和更新时间。
 7. `train2.0/records/YYYY-MM.html` 与 `train2.0/assets/data/`（`records.js`、`reference.js`），用于同步现有结构。**不要读或改 `dashboard.html` 外壳。**
+8. `train2.0/assets/data/recommend-YYYY-MM.js`（若存在）：只读取该日 `readiness` 分节用于复用；**只读，不得写入或改写推荐内容的任何分节**。
 
 总结只可基于：
 
@@ -194,7 +196,7 @@ Readiness = round(20 × (
 ### 日历条目
 
 - 找到对应日期行，填入训练类型并链接 `#训练详情-YYYY-MM-DD`。
-- 若只有 Readiness 尚未训练，标记“Readiness 已记录”，不得显示为已完成训练。
+- 若只有 Readiness 尚未训练，标记“Readiness 已记录”，训练状态写“未训练（取消或休息）”，不得显示为已完成训练，也不创建训练结果或 Session Load。
 - 同日已有记录时原位更新，不新增重复日期。
 - 休息日使用 `🧘`，不计入训练天数或负荷。
 
@@ -205,7 +207,7 @@ Readiness = round(20 × (
 
 **周期位置**：第 N 周 · 阶段名称 · 3 日版槽位
 **训练板块**：按实际内容
-**训练状态**：已完成 / 部分完成 / 恢复日
+**训练状态**：已完成 / 部分完成 / 恢复日 / 未训练（取消或休息，不创建训练结果）
 
 #### 当日 Readiness
 
@@ -308,7 +310,7 @@ Readiness = round(20 × (
 6. 疼痛趋势和需要继续观察的客观事项 → `assets/data/records.js`。
 7. 弱点管理模块：完整镜像 `train2.0/weakness-tracking.md` 的弱点项、板块、发现日期、当前状态、目标和备注 → `assets/data/reference.js`（`WEAKNESSES`）。
 8. 能力评估模块：完整只读镜像 `train2.0/ability-assessment.md` 的真实动作成绩、比较规则、首次记录日期、最佳结果日期、更新时间和来源记录 → `assets/data/reference.js`（`ABILITY_ASSESSMENTS`）。
-9. 当日推荐仍来自 `assets/data/recommend-YYYY-MM.js`；正式结果不得改写该文件中的推荐内容。
+9. 当日推荐来自 `assets/data/recommend-YYYY-MM.js`，与正式记录相互独立；**正式结果不得改写该文件的任何分节（`meta` / `readiness` / `plans` / `reason` / `skills`）**，也不得用实际完成内容替换推荐内容。推荐模块保持原样，只在下次运行 `recommend-training-2` 时更新。
 
 规则：
 
@@ -335,6 +337,7 @@ Readiness = round(20 × (
 - `ability-assessment.md` 与 Dashboard 能力评估逐项一致，首次日期、最佳结果日期、更新时间和来源完整，且无手工输入或 localStorage 依赖。
 - `records/00_摘要.md` 新增或更新的一行与月度记录逐字段一致，同日没有重复行，「速览」数字同步更新。
 - Dashboard 改动只落在 `assets/data/` 下的数据文件，没有把内容写回 `dashboard.html` 外壳，也没有引入跨文件重名的顶层声明。
+- `assets/data/recommend-YYYY-MM.js` 未被修改：推荐内容与当日 Readiness 保持原样，没有用实际完成内容覆盖推荐。
 - 未超过既有最佳值的动作没有覆盖最佳表现或刷新更新时间。
 - 月度 HTML 使用分阶段动作表、负荷疼痛反馈、训练总结和后续关注的完整详情结构，而不是简化正文卡片。
 - 执行 `git diff --check`。
@@ -369,3 +372,4 @@ Readiness = round(20 × (
 9. 禁止把只有计划组次、定性反馈或缺少测量值的动作伪造成能力成绩。
 10. 禁止用不可比条件覆盖最佳表现，或在成绩未提高时刷新能力评估更新时间。
 11. 禁止从输入框、按钮、旧 localStorage、推荐计划或未完成动作创建正式能力评估。
+12. 禁止修改或覆盖 `assets/data/recommend-YYYY-MM.js`，或用正式训练结果替换该日的推荐内容。
