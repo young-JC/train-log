@@ -146,7 +146,7 @@ Readiness = round(20 × (
 3. `train2.0/12周计划安排.md`。
 4. `train2.0/训练周期安排建议.md`。
 5. `train2.0/篮球运动训练理念.md`。
-6. `train2.0/篮球运动员版动作库 2.0.md`。
+6. `train2.0/动作库/`（`00_索引.md` 负责筛选路由与索引表，`A_活动度.md` … `Q_训练后整理与拉伸.md` 共 17 本分册负责动作详情）。
 7. `train2.0/weakness-tracking.md`，用于核对已有弱点、避免重复项并维护状态。
 8. `train2.0/ability-assessment.md`，用于核对已有动作、比较口径、当前最佳结果和更新时间。
 9. `train2.0/dashboard.html` 和当月 HTML，用于同步现有结构。

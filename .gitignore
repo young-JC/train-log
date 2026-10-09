@@ -13,3 +13,6 @@
 .claude/progress
 
 .codegraph
+### Python ###
+__pycache__/
+*.pyc

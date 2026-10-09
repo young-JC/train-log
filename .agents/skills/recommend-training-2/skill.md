@@ -84,7 +84,7 @@ description: >
 - 弱点管理唯一事实源：
   `train2.0/weakness-tracking.md`
 - 动作唯一事实源：
-  `train2.0/篮球运动员版动作库 3.0.md`
+  `train2.0/动作库/`（`00_索引.md` 负责筛选路由与索引表，`A_活动度.md` … `Q_训练后整理与拉伸.md` 共 17 本分册负责动作详情）
 - Dashboard：
   `train2.0/dashboard.html`
 - 月度 HTML 与 Dashboard 均属于展示层
@@ -294,7 +294,7 @@ Readiness = 83
 
 ## 8.4 动作库
 
-`train2.0/篮球运动员版动作库 3.0.md`
+`train2.0/动作库/`（`00_索引.md` 负责筛选路由与索引表，`A_活动度.md` … `Q_训练后整理与拉伸.md` 共 17 本分册负责动作详情）
 
 动作推荐必须来自动作库。
 

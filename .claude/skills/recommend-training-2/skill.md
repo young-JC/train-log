@@ -28,9 +28,11 @@ description: >
 - 12 周周期开始日期：`2026-09-21`。
 - 默认计划：`train2.0/12周计划安排.md` 的 **3 日版**。
 - 正式训练记录唯一事实源：`train2.0/records/YYYY-MM.md`。
+- 训练趋势速查索引：`train2.0/records/00_摘要.md`（每次训练一行，非事实源；以月度记录为准）。
 - 弱点管理唯一事实源：`train2.0/weakness-tracking.md`。
-- 动作唯一事实源：`train2.0/篮球运动员版动作库 3.0.md`。
-- Dashboard：`train2.0/dashboard.html`。
+- 动作唯一事实源：`train2.0/动作库/`（`00_索引.md` 负责筛选路由，`A_活动度.md` … `Q_训练后整理与拉伸.md` 共 17 本分册负责动作详情）。
+- Dashboard：`train2.0/dashboard.html`（外壳）+ `train2.0/assets/`（样式与数据）。
+- `train2.0/archive/` 是拆分前原件与历史版本，**不是事实源，不得读取或引用**。
 - 月度 HTML 与 Dashboard 都是展示层。
 - 不读取旧 `localStorage` 作为正式训练历史，不迁移或调用 `train1.0/` 补齐历史。
 
@@ -129,19 +131,34 @@ Readiness = round(20 × (
 
 ---
 
-## 4. 阶段 3：读取必需数据源
+## 4. 阶段 3：读取必需数据源（分级读取）
 
-正式推荐前读取全部来源：
+**按需读取、读完即停。不要全量读取任何一本分册或整个页面。**
 
-| 来源 | 必读内容 |
+### 每次必读
+
+| 来源 | 读取内容 |
 |---|---|
-| `train2.0/篮球运动训练理念.md` | 能力模型、动作排序、训练原则、爆发/速度/力量关系、防伤原则 |
-| `train2.0/训练周期安排建议.md` | 大周期、中周期、周微周期、Deload、训练量调整和阶段目标 |
-| `train2.0/12周计划安排.md` | 当前周次和阶段、周目标、3 日版槽位、当日结构、组次、RPE、Deload 和测试 |
-| `train2.0/篮球运动员版动作库 3.0.md` | 中英文名称、模块、能力、动作模式、Level、冲击、意图、覆盖区域、适用环节、单/双侧、器材、周期适用、进退阶、替代和疼痛限制；动态热身 P 与训练后整理/拉伸 Q |
+| `train2.0/动作库/00_索引.md` | 使用原则、刺激预算、Quality Stop、AI 选动作过滤流程、**全部动作索引表**（模块 / 动作模式 / 主要能力 / 等级 / 冲击 / 周期）、槽位→模块映射、动作关系链 |
+| `train2.0/records/00_摘要.md` | 目标日前最近 **3 个训练周**的逐次摘要：类型、时长、Session RPE、Session Load、训练中最高疼痛、主要负荷、状态 |
 | `train2.0/weakness-tracking.md` | 弱点、优先级、板块、日期、状态、目标、证据和最近表现 |
-| `train2.0/records/` | 训练日前最近 **3 个训练周**的日期、类型、动作、重量、组次、RPE、时长、Session Load、疼痛、Readiness、技术表现、总结和弱点证据 |
-| `train2.0/dashboard.html` | 页面结构、Readiness 与今日推荐挂载位置、`todayReason`、`todaySkills`、日历结构和当前计划模式 |
+
+### 按需读取
+
+| 来源 | 何时读 |
+|---|---|
+| `train2.0/12周计划安排.md` | 只读当前所处的 4 周区块（W1–4 / W5–8 / W9–12），不读全文 |
+| `train2.0/动作库/X_模块.md` | 选定候选动作后，按 `00_索引.md` 的槽位映射只读所需模块；**优先按动作名定位单条详情，而不是整读分册**（A–N 为 `### 动作名`，O/P/Q 为 `#### 动作名`） |
+| `train2.0/records/YYYY-MM.md` | 仅当摘要不足以判断时，读其中 1–3 天的完整条目（动作级 RPE、技术表现、总结、后续关注） |
+| `train2.0/篮球运动训练理念.md`、`train2.0/训练周期安排建议.md` | 仅在需要核对能力模型或周期原则时读；日常推荐不必每次全读 |
+| `train2.0/dashboard.html` 与 `train2.0/assets/` | 只在同步展示层时读：看结构读 HTML 外壳，改数据改 `assets/data/` 下对应文件 |
+
+### 明确禁止
+
+- 一次性读取全部 17 个动作库模块分册；
+- 用模块分册代替 `00_索引.md` 做动作筛选；
+- 把 `train2.0/archive/`（拆分前原件与历史版本）当作事实源读取或引用；
+- 在索引表里找剂量：**剂量、进退阶、Quality Stop、疼痛限制以模块分册原文为准**。
 
 动作推荐必须来自动作库。历史不足 3 个训练周时使用现有全部正式记录，并明确：**“当前正式训练历史不足 3 周。”** 不得使用 `train1.0` 或旧 `localStorage` 补足。
 
@@ -441,7 +458,10 @@ Strength、Accessory、Core、Conditioning 和一般肌耐力可主要按 Sets /
 
 1. `train2.0/records/YYYY-MM.md`；
 2. 对应月度 HTML（若存在）；
-3. `train2.0/dashboard.html`。
+3. `train2.0/dashboard.html` 的数据层 `train2.0/assets/data/records.js`（`FORMAL_TODAY_READINESS` 与 `FORMAL_RECORDS`）；
+4. `train2.0/records/00_摘要.md`：该日尚无行时追加一行，状态写「Readiness 已记录」。
+
+**不要改动 `dashboard.html` 本身**：它是外壳（含标记与 `<script src>`），数据在 `assets/data/` 下。仅在挂载结构本身需要变化时才动外壳。
 
 三处的日期、睡眠、疲劳、酸痛、疼痛、疼痛部位、疼痛性质、训练意愿、Readiness 和权限颜色必须一致。当天尚未训练时只记录 Readiness，不创建虚假训练内容。
 
@@ -455,7 +475,9 @@ Strength、Accessory、Core、Conditioning 和一般肌耐力可主要按 Sets /
 - 动作、组数、次数、RPE、距离和时长；
 - Readiness 调整、弱点目标、`todayReason` 和 `todaySkills`。
 
-`todayReason` 必须与“为什么今天这样练？”一致并点名实际弱点或延后原因；`todaySkills` 只写推荐中实际安排的篮球内容。Dashboard 缺少推荐结构、`todayReason` 或 `todaySkills` 挂载点时，报告未同步项并停止，不创建不兼容结构。
+**落盘位置：** `train2.0/assets/data/recommend-YYYY-MM.js`（按记录日期归属月份），四个分节 `meta` / `plans` / `reason` / `skills`。跨月时新建 `recommend-YYYY-MM.js` 并在 `assets/data/recommend-index.js` 的 `RECOMMEND_FILES` 末尾登记。**不要读或改 `dashboard.html` 外壳。**
+
+`todayReason` 必须与“为什么今天这样练？”一致并点名实际弱点或延后原因；`todaySkills` 只写推荐中实际安排的篮球内容，本次未安排篮球时写空数组 `[]`，**不得沿用上一次的篮球技能**。缺少对应挂载点时，报告未同步项并停止，不创建不兼容结构。
 
 同日 Readiness 重新评估或状态变化时，覆盖该日 Dashboard 推荐，不重复追加动作，也不保留旧剂量、旧 `todayReason` 或已取消的 `todaySkills`；正式训练记录不受推荐覆盖。
 

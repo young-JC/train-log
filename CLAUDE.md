@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目性质与运行方式
 
-这是一个个人篮球训练记录与管理仓库，不是需要编译的软件项目。Markdown 是人工维护的数据源，HTML 是无依赖的静态展示页；仓库没有包管理器、构建脚本、lint 配置或自动化测试套件。
+这是一个个人篮球训练记录与管理仓库，不是需要编译的软件项目。Markdown 是人工维护的数据源，HTML 是无依赖的静态展示页（`file://` 直接打开即可，不需要服务器）；仓库没有包管理器、构建脚本、lint 配置或自动化测试套件。`tools/` 下只有一次性拆分与校验脚本，不属于运行时依赖。
 
 直接在浏览器中预览：
 
@@ -13,7 +13,7 @@ explorer.exe "$(cygpath -w "$PWD/train1.0/dashboard.html")"
 explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 ```
 
-因此不存在 build、lint、test 或“运行单个测试”的命令。修改后应在浏览器中分别检查相关 HTML 页面，并用 `git diff --check` 检查文本格式问题。
+因此不存在 build、lint、test 或“运行单个测试”的命令。修改后应在浏览器中分别检查相关 HTML 页面，并用 `git diff --check` 检查文本格式问题；2.0 的结构性改动另见文末「验证与 Git」。
 
 ## 双系统架构
 
@@ -46,11 +46,17 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 - `篮球运动训练理念.md` 定义能力模型与动作选择原则。
 - `训练周期安排建议.md` 定义大周期、中周期、周微周期和每日训练之间的层级。
 - `12周计划安排.md` 提供 A 版 3 日与 B 版 4–5 日计划，每 4 周按进入、增量、高刺激、Deload+测试推进。
-- `篮球运动员版动作库 2.0.md` 是面向篮球专项能力的扩展动作库，也是 Dashboard 动作详情的内容来源。
+- `动作库/` 是动作唯一事实源，按模块分册：`00_索引.md`（使用原则、刺激预算、Quality Stop、AI 选动作过滤流程、全部动作索引表、槽位→模块映射、动作关系链）加 `A_活动度.md` … `Q_训练后整理与拉伸.md` 共 17 本分册（动作详情：剂量、进退阶、Quality Stop、疼痛限制、标准描述）。`00_附录_等级体系与动作树.md` 是按需参考。
 - `records/YYYY-MM.md` 是 Readiness、实际训练、Session Load 和疼痛数据的唯一事实源。
+- `records/00_摘要.md` 是训练趋势速查索引（每次训练一行），不是事实源；细节以月度记录为准。
 - `weakness-tracking.md` 是 2.0 弱点管理的唯一事实源；Dashboard 完整镜像其弱点项、板块、发现日期、状态、目标和备注。
 - `ability-assessment.md` 是 2.0 能力评估的唯一事实源；只从正式训练记录提取可比较的真实动作结果，首次有效结果建立基线，后续仅由更优结果更新，并保留每项首次日期、最佳结果日期和更新时间。
-- `records/YYYY-MM.html` 与 `dashboard.html` 是月度记录、弱点管理和能力评估的同步展示层，不是独立数据源。Dashboard 能力评估保持只读，不使用手工输入或 localStorage。
+- `records/YYYY-MM.html` 与 Dashboard 是月度记录、弱点管理和能力评估的同步展示层，不是独立数据源。Dashboard 拆为 `dashboard.html` 外壳 + `assets/dashboard.css`、`assets/dashboard.js`、`assets/data/*.js`：外壳只含标记与经典 `<script src>`，数据改动一律落在 `assets/data/`。Dashboard 能力评估保持只读，不使用手工输入或 localStorage。
+- `archive/` 存放拆分前原件（`动作库3.0-拆分前原件.md`）与历史版本（`动作库2.0-历史版本.md`），**不是事实源，任何技能都不得读取或引用**。
+
+**`file://` 约束：** 页面用 `explorer.exe` 双击打开，因此只能用 `<link rel="stylesheet">` 与**经典** `<script src>`；**禁止 `fetch()` 与 `<script type="module">`**（两者在 `file://` 下被 CORS 拦截）。新增顶层 `const`/`let`/`function` 必须跨文件唯一——多份经典脚本共享全局词法作用域，重名会让整页失效。
+
+**2.0 读取协议：** 先读 `动作库/00_索引.md` + `records/00_摘要.md` + `weakness-tracking.md`；动作详情按动作名在对应 `X_模块.md` 中检索（A–N 为 `### 动作名`，O/P/Q 为 `#### 动作名`），`12周计划安排.md` 只读当前 4 周区块，`records/YYYY-MM.md` 只按需打开 1–3 天。**不要整读全部 17 本分册，也不要整读 `dashboard.html` 外壳。**
 
 旧 `localStorage` 中的 Readiness 和 Session 数据不迁移、不主动清除，也不得用于补齐正式历史。除非用户明确要求迁移，不要在 1.0 和 2.0 之间自动同步数据。
 
@@ -76,10 +82,11 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 一次 2.0 正式训练记录按以下顺序同步，所有原始值、派生值和备注必须一致：
 
 1. `train2.0/records/YYYY-MM.md`
-2. `train2.0/weakness-tracking.md`（本次有可直接证实的新增弱点或已有弱点新证据时）
-3. `train2.0/ability-assessment.md`（本次有首次有效动作结果、更优结果或正式记录纠错时）
-4. `train2.0/records/YYYY-MM.html`
-5. `train2.0/dashboard.html`
+2. `train2.0/records/00_摘要.md`（追加或原位更新本次训练一行，字段与月度记录一致）
+3. `train2.0/weakness-tracking.md`（本次有可直接证实的新增弱点或已有弱点新证据时）
+4. `train2.0/ability-assessment.md`（本次有首次有效动作结果、更优结果或正式记录纠错时）
+5. `train2.0/records/YYYY-MM.html`
+6. `train2.0/assets/data/records.js` 与 `reference.js`（Dashboard 数据层；**不写 `dashboard.html` 外壳**）
 
 若月度模板或 Dashboard 对应模块尚未建立，应报告未同步项并停止，不得发明临时数据结构。月度 Markdown 可以只记录当天 Readiness 而不创建虚假的已完成训练；休息日不计入训练天数或 Session Load。
 
@@ -95,5 +102,16 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 ## 验证与 Git
 
 修改训练记录后至少核对：对应系统的月度 Markdown 与 HTML 详情一致，Dashboard 日历链接到正确日期，训练天数、Readiness、疼痛和 Session Load 没有因同日更新重复累计；休息日与训练日视觉状态正确。2.0 Dashboard 改动还需验证动作级联、详情弹层、刷新后的正式数据展示，以及旧 `localStorage` 数据不会被纳入训练历史。
+
+改动 2.0 结构时运行（`tools/` 下为一次性校验脚本，不参与运行时，也不是构建步骤）：
+
+```bash
+PYTHONIOENCODING=utf-8 python tools/verify_action_library_split.py   # 动作库分册与索引 1:1、逐字抽样一致
+PYTHONIOENCODING=utf-8 python tools/verify_dashboard_split.py        # Dashboard 数据结构与原文一致、满足 file:// 约束
+node --check train2.0/assets/dashboard.js                            # 逐文件语法（assets/data/*.js 同）
+git diff --check
+```
+
+浏览器验证用本机 Chrome/Edge 无头模式打开 `train2.0/dashboard.html`（`--dump-dom` 或 `--screenshot`），确认无 JS 报错、动作库筛选与详情弹层可用、月历链接正确，且当月训练天数与 Session Load 未因同日更新重复累计。
 
 提交信息使用中文说明和 conventional 前缀，例如 `feat(records):`、`feat(training):`。仓库路径包含中文，文件工具始终使用完整绝对 Windows 路径，如 `D:\个人文件\train-log\train1.0\dashboard.html`。
