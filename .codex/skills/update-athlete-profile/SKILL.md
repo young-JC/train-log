@@ -22,7 +22,7 @@ description: 根据用户明确输入建立或更新 train2.0 个人训练档案
 5. 先改涉及的 Markdown，再同步完整 `ATHLETE_DATA`。未涉及的资料或指标不改写；只补测量不刷新档案更新时间。实质档案变化记入重要变更；重复输入不新增记录、不刷新更新时间。
 6. 运行 `python tools/verify_athlete_profile.py` 和 `node --check train2.0/assets/data/athlete.js`，再运行 `git diff --check`。核对日期、来源、数值、方法、历史条数与纠错记录一致。失败时修正同步问题后再报告完成。
 
-维护只修改涉及的两个事实源与 `athlete.js`。不要修改训练记录、能力成绩、弱点或过往推荐。不编辑 Dashboard 外壳，不需要服务器、fetch、网页输入或 localStorage。
+日常维护只修改涉及的两个事实源与 `athlete.js`。用户要求扩展现有字段无法表达的指标时，可同步扩展只读面板、校验脚本和镜像格式说明。不要修改训练记录、能力成绩、弱点或过往推荐。不编辑 Dashboard 外壳，不需要服务器、fetch、网页输入或 localStorage。
 
 ## 镜像格式
 
@@ -36,6 +36,7 @@ description: 根据用户明确输入建立或更新 train2.0 个人训练档案
 - `profile.changes[]`：`{date, detail, source}`，与 Markdown 重要变更逐行一致。
 - `metricsUpdatedAt`：测量记录最近一次维护日期，无记录时 null。
 - `measurements[]`：`{id, date, time, heightCm, weightKg, bodyFatPct, waistCm, methods, note, source, updatedAt}`。四个指标为数字或 null；`methods` 对象使用相同四个键，值为每项测量的方法/设备文本或 null。备注和来源为文本，来源可写“用户对话（日期）”；不要编造对话 ID 或医疗来源。
+- 每条测量可带 `observations[]`，没有时视为空列表。每项为 `{key, label, value, unit, method, note}`，镜像 `body-metrics.md` 的「体脂秤补充指标」表；支持肌肉量 `muscleMassKg`（kg）、去脂体重 `leanBodyMassKg`（kg）、皮下脂肪率 `subcutaneousFatPct`（%）、内脏脂肪 `visceralFat`（截图无单位时 null）、体水分率 `bodyWaterPct`（%）、基础代谢 `basalMetabolismKcal`（kcal）和 `bmi`（无单位时 null）。value 为正数，百分比小于 100；单位、方法或备注未记录时用 null。每条测量内 key 唯一；沿用该次测量日期、时间、来源、更新时间与纠错审计，不新增测量次数。设备估算值保留原始口径，不据未知设备或条件直接计算改善，不将肌肉量改称骨骼肌量，不把基础代谢当热量摄入目标。
 - `corrections[]`：`{date, recordId, field, previous, value, reason}`。previous、value 用文本保存旧值与修正值，reason 包含原因和来源。
 
 Markdown 表格的缺失值写“未记录”，不新增占位数据行；文本中的竖线转义为 `\|`。不要使用 `undefined`、NaN 或任意计算填充原始值；保留 JS 数字类型，不加单位字符串。

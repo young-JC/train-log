@@ -3,6 +3,7 @@
 const FORMAL_MONTH={year:2026,month:'10',days:31,startOffset:3};
 const FORMAL_TODAY_READINESS={date:'2026-10-08',sleep:4,fatigue:1,soreness:1,pain:0,motivation:3,score:88,level:'绿色',painNote:'训练前 0/10；高杠后蹲整套动作双膝内侧疼痛 2/10，保加利亚单腿蹲时右膝内侧疼痛 2/10；训练后 0/10'};
 const FORMAL_RECORDS={
+ '2026-10-09':{status:'assessment',label:'踝背屈自测 · 左 7 / 右 10.5 cm（仅测试）',sessionLoad:null},
  '2026-09-21':{status:'training',label:'训练 · Ready 92 · 700 AU',sessionLoad:700,readiness:{sleep:3,fatigue:1,soreness:1,pain:0,painNote:'训练前无疼痛；训练中膝盖左2/10、右3/10；训练后无疼痛',motivation:5,score:92,level:'绿色'}},
  '2026-09-22':{status:'readiness',label:'取消 · 加班',sessionLoad:0,readiness:{sleep:3,fatigue:2,soreness:2,pain:2,painNote:'左膝极轻微疼痛，静止和走路无感觉，热身后不出现；次日活动时轻微 2/10',motivation:3,score:72,level:'黄色'}},
  '2026-09-23':{status:'training',label:'训练 · Ready 94 · 840 AU',sessionLoad:840,readiness:{sleep:4,fatigue:1,soreness:1,pain:1,painNote:'训练前左膝轻微疼痛 1/10；弓步时左右膝轻微刺痛，重复欧洲步后左膝轻微刺痛；训练中最高及训练后均为 1/10',motivation:5,score:94,level:'绿色'}},

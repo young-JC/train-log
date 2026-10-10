@@ -79,6 +79,56 @@ const ATHLETE_DATA = {
     weightKg: 72.35,
     bodyFatPct: 19.3,
     waistCm: 81,
+    observations: [{
+      key: "muscleMassKg",
+      label: "肌肉量",
+      value: 55.5,
+      unit: "kg",
+      method: "家用体脂秤（品牌/型号未记录）",
+      note: "保留应用报告的肌肉量名称，不改称骨骼肌量。"
+    }, {
+      key: "leanBodyMassKg",
+      label: "去脂体重",
+      value: 58.40,
+      unit: "kg",
+      method: "家用体脂秤（品牌/型号未记录）",
+      note: "保留应用报告值，不由体重与体脂率反算。"
+    }, {
+      key: "subcutaneousFatPct",
+      label: "皮下脂肪率",
+      value: 12.9,
+      unit: "%",
+      method: "家用体脂秤（品牌/型号未记录）",
+      note: "设备报告值，作为补充观察项。"
+    }, {
+      key: "visceralFat",
+      label: "内脏脂肪",
+      value: 9,
+      unit: null,
+      method: "家用体脂秤（品牌/型号未记录）",
+      note: "截图未注明单位或分级口径。"
+    }, {
+      key: "bodyWaterPct",
+      label: "体水分率",
+      value: 55.3,
+      unit: "%",
+      method: "家用体脂秤（品牌/型号未记录）",
+      note: "设备报告值，保留测量背景。"
+    }, {
+      key: "basalMetabolismKcal",
+      label: "基础代谢",
+      value: 1557.0,
+      unit: "kcal",
+      method: "家用体脂秤（品牌/型号未记录）",
+      note: "应用标注偏低；仅保留设备估算背景，不作为每日热量摄入目标。"
+    }, {
+      key: "bmi",
+      label: "BMI",
+      value: 22.5,
+      unit: null,
+      method: "家用体脂秤（品牌/型号未记录）",
+      note: "应用报告值，不用后来补充的身高重算或覆盖。"
+    }],
     methods: {
       heightCm: null,
       weightKg: "家用体脂秤（品牌/型号未记录）",

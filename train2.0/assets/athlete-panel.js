@@ -105,6 +105,16 @@
     const startDate = start.toISOString().slice(0, 10);
     const all = document.getElementById('athleteRange').value === 'all';
     const selected = rows.filter(row => all || row.date >= startDate);
+    let supplementary = document.getElementById('athleteSupplementary');
+    if (!supplementary) {
+      supplementary = document.createElement('details');
+      supplementary.id = 'athleteSupplementary';
+      supplementary.className = 'athlete-history';
+      supplementary.open = true;
+      document.getElementById('athleteRangeNote').insertAdjacentElement('afterend', supplementary);
+    }
+    const observations = selected.slice().reverse().flatMap(row => (row.observations || []).map(observation => ({row, observation})));
+    supplementary.innerHTML = '<summary>体脂秤补充指标（' + observations.length + ' 项记录）</summary><p class="hint">家用体脂秤报告值，历史范围与上方选择一致。设备与测量条件确认可比后再对照变化，不自动判定健康状态或训练进步。</p>' + (observations.length ? '<div class="table-wrap"><table><thead><tr><th>测量日期 / ID</th><th>指标</th><th>报告值</th><th>单位</th><th>方法 / 设备</th><th>备注 / 来源</th></tr></thead><tbody>' + observations.map(({row, observation}) => '<tr><td>' + esc(measuredAt(row)) + '<br>' + esc(row.id) + '</td><td>' + shown(observation.label) + '</td><td><strong>' + shown(observation.value) + '</strong></td><td>' + shown(observation.unit) + '</td><td>' + shown(observation.method) + '</td><td>' + shown(observation.note) + '<br><span class="hint">来源：' + shown(row.source) + ' · 更新：' + shown(row.updatedAt) + '</span></td></tr>').join('') + '</tbody></table></div>' : '<p class="hint">此范围内未记录补充指标。</p>');
     document.getElementById('athleteRangeNote').textContent = (all ? '全部历史（截至 ' + today + '）' : startDate + ' 至 ' + today) + ' · ' + selected.length + ' 条测量；最新值不受范围筛选影响。同日时间未记录时按记录 ID 排序。';
     document.getElementById('athleteCharts').innerHTML = metrics.map(metric => chart(metric, selected)).join('');
     document.getElementById('athleteHistoryLabel').textContent = '查看测量历史（' + selected.length + ' 条）';

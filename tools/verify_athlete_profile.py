@@ -7,6 +7,7 @@ import argparse
 from datetime import date, time
 from decimal import Decimal, InvalidOperation
 import json
+import math
 from pathlib import Path
 import re
 import subprocess
@@ -109,6 +110,16 @@ def verify(root):
     keys = ['heightCm', 'weightKg', 'bodyFatPct', 'waistCm']
     measurements = data['measurements']
     expected = []
+    expected_observations = []
+    observation_definitions = {
+        'muscleMassKg': ('肌肉量', 'kg'),
+        'leanBodyMassKg': ('去脂体重', 'kg'),
+        'subcutaneousFatPct': ('皮下脂肪率', '%'),
+        'visceralFat': ('内脏脂肪', None),
+        'bodyWaterPct': ('体水分率', '%'),
+        'basalMetabolismKcal': ('基础代谢', 'kcal'),
+        'bmi': ('BMI', None),
+    }
     ids = set()
     for row in measurements:
         record_id = row['id']
@@ -123,7 +134,7 @@ def verify(root):
                 check(time.fromisoformat(row['time']).strftime('%H:%M') == row['time'], record_id + ' 时间应为 HH:mm')
             except (ValueError, TypeError):
                 check(False, record_id + ' 时间格式错误')
-        check(any(row[key] is not None for key in keys), record_id + ' 至少需要一个指标')
+        check(any(row[key] is not None for key in keys) or bool(row.get('observations')), record_id + ' 至少需要一个指标')
         for key in keys:
             value = row[key]
             check(value is None or type(value) in (int, float) and value > 0 and (key != 'bodyFatPct' or value < 100), record_id + ' 指标数值错误：' + key)
@@ -131,7 +142,35 @@ def verify(root):
         check(bool(row['source']), record_id + ' 缺少来源')
         expected.append([record_id, row['date'], row['time']] + [row[key] for key in keys] +
                         [row['methods'][key] for key in keys] + [row['note'], row['source'], row['updatedAt']])
+        observations = row.get('observations', [])
+        check(isinstance(observations, list), record_id + ' 补充指标应为列表')
+        observation_keys = set()
+        for observation in observations if isinstance(observations, list) else []:
+            check(isinstance(observation, dict), record_id + ' 补充指标应为对象')
+            if not isinstance(observation, dict):
+                continue
+            key = observation.get('key')
+            check(isinstance(key, str), record_id + ' 补充指标键应为文本')
+            if not isinstance(key, str):
+                continue
+            check(key not in observation_keys, record_id + ' 补充指标重复：' + key)
+            observation_keys.add(key)
+            check(key in observation_definitions, record_id + ' 未定义的补充指标：' + key)
+            if key in observation_definitions:
+                check((observation.get('label'), observation.get('unit')) == observation_definitions[key],
+                      record_id + ' 补充指标名称或单位不一致：' + key)
+            value = observation.get('value')
+            check(type(value) in (int, float) and math.isfinite(value) and value > 0 and
+                  (not key.endswith('Pct') or value < 100), record_id + ' 补充指标数值错误：' + key)
+            for field in ['method', 'note']:
+                value_text = observation.get(field)
+                check(value_text is None or isinstance(value_text, str) and bool(value_text.strip()),
+                      record_id + ' 补充指标文本应为非空文本或 null：' + key + '.' + field)
+            expected_observations.append([record_id, key] +
+                                         [observation.get(field) for field in ['label', 'value', 'unit', 'method', 'note']])
     compare(table(metrics_text, '测量历史'), expected, '测量历史', (3, 4, 5, 6))
+    observation_rows = table(metrics_text, '体脂秤补充指标') if '## 体脂秤补充指标\n' in metrics_text else []
+    compare(observation_rows, expected_observations, '体脂秤补充指标', (3,))
     compare(table(metrics_text, '纠错记录'), [[c['date'], c['recordId'], c['field'], c['previous'], c['value'], c['reason']] for c in data['corrections']], '纠错记录')
     for correction in data['corrections']:
         valid_date(correction['date'], '纠错日期', False)
