@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav class="nav" id="nav">
- <a href="#dashboard">🏀 总览</a><a href="#monthCalendar">📅 月历</a><a href="#cycle">🗓 12周周期</a><a href="#readiness">⚡ Ready</a><a href="#today">📋 训练推荐</a><a href="#assessment">📊 能力评估</a><a href="#weakness">🎯 弱项</a><a href="#load">📈 负荷</a><a href="#actionLib">📚 动作库</a><a href="#prehab">🛡️ 防伤</a><a href="#review">🔁 周期复盘</a>
+ <a href="#dashboard">🏀 总览</a><a href="#monthCalendar">📅 月历</a><a href="#cycle">🗓 12周周期</a><a href="#readiness">⚡ Ready</a><a href="#today">📋 训练推荐</a><a href="#assessment">📊 能力评估</a><a href="#weakness">🎯 弱项</a><a href="#load">📈 负荷</a><a href="#actionLib">📚 动作库</a><a href="#prehab">🛡️ 防伤</a><a href="#athlete">👤 个人档案</a><a href="#review">🔁 周期复盘</a>
 </nav>
 <div class="container">
 <header class="header" id="dashboard">
@@ -151,6 +151,28 @@
  <div class="card" style="margin-top:12px"><div class="table-wrap"><table><thead><tr><th>训练日</th><th>必选</th><th>推荐</th><th>补强</th></tr></thead><tbody><tr><td>Lower A</td><td>侧走 + 站姿膝控</td><td>踝背屈 / 侧跨</td><td>分腿蹲、Step-down</td></tr><tr><td>Upper</td><td>侧走</td><td>站姿膝控 / 腘绳肌</td><td>提踵 / 蚌式</td></tr><tr><td>Speed/COD</td><td>侧走 + 踝背屈</td><td>侧跨 + Step-down</td><td>Copenhagen</td></tr><tr><td>Lower B</td><td>侧走 + 站姿膝控</td><td>Copenhagen</td><td>单腿RDL + 提踵</td></tr></tbody></table></div></div>
 </section>
 
+<section class="section" id="athlete" aria-labelledby="athleteTitle">
+ <div class="section-head"><div><h2 id="athleteTitle">👤 个人训练档案</h2><p>身体基础、训练目标与现实条件，为 AI 推荐和计划分析提供个人背景。</p></div><span class="pill" id="athleteStatus">尚未建档</span></div>
+ <div class="card athlete-guide">
+  <p id="athleteIntro">告诉 AI 你的基础资料、目标或测量数据，即可逐步建立个人档案。</p>
+  <details><summary>如何建档与更新</summary><p>例如：“建立个人档案：我每周能练 3 天，每次 60 分钟，主要想提高篮球爆发力。”</p><p>例如：“更新个人数据，今天体重 78.2 公斤，体脂率 18%，家用体脂秤测量。”</p><p>以上仅为对话示例。只提供你知道的内容；修改旧数据时说明原测量日期或记录 ID。</p></details>
+ </div>
+ <div class="athlete-grid">
+  <article class="card"><h3>基础资料</h3><dl class="athlete-facts" id="athleteBasic"></dl></article>
+  <article class="card"><h3>目标优先级</h3><div id="athleteGoals"></div></article>
+  <article class="card"><h3>训练条件与长期限制</h3><dl class="athlete-facts" id="athleteConditions"></dl><div class="athlete-restrictions" id="athleteRestrictions"></div></article>
+  <article class="card athlete-body">
+   <div class="athlete-body-head"><div><h3>身体指标</h3><p class="hint">最新值取完整历史，各项显示自己的测量日期。</p></div><label class="athlete-range" for="athleteRange">历史范围<select class="select" id="athleteRange"><option value="12w">最近 12 周</option><option value="all">全部历史</option></select></label></div>
+   <div class="athlete-metrics" id="athleteLatest"></div>
+   <p class="hint" id="athleteRangeNote" aria-live="polite"></p>
+   <div class="athlete-charts" id="athleteCharts"></div>
+   <p class="hint">体脂按测量方法 / 设备分别展示；方法未记录的点不连线。数值变化不自动视为训练改善。</p>
+   <details class="athlete-history"><summary id="athleteHistoryLabel">查看测量历史</summary><div class="table-wrap"><table><thead><tr><th>日期 / ID</th><th>身高 cm</th><th>体重 kg</th><th>体脂率 %</th><th>腰围 cm</th><th>备注 / 来源</th><th>更新时间</th></tr></thead><tbody id="athleteHistory"></tbody></table></div></details>
+  </article>
+ </div>
+ <div class="athlete-sources hint"><span id="athleteUpdated">档案更新：未记录 · 指标更新：未记录</span><a class="assessment-source" href="athlete-profile.md">查看个人档案</a><a class="assessment-source" href="body-metrics.md">查看测量与纠错记录</a></div>
+</section>
+
 <section class="section" id="review">
  <div class="section-head"><div><h2>🔁 周期复盘</h2><p>W4 / W8 / W12进行复测；用数据决定下一周期重点，不按感觉随意换动作。</p></div><button class="btn primary small" onclick="saveReview()">保存复盘</button></div>
  <div class="card"><div class="grid4"><div class="field"><label>本周期完成率 %</label><input id="reviewRate" class="input" type="number" min="0" max="100" value="0"></div><div class="field"><label>主要进步</label><input id="reviewGain" class="input" placeholder="例如：CMJ +3cm"></div><div class="field"><label>仍未解决</label><input id="reviewGap" class="input" placeholder="例如：减速稳定性"></div><div class="field"><label>下一周期重点</label><input id="reviewNext" class="input" placeholder="例如：Decel + COD"></div></div><div style="margin-top:14px" class="table-wrap"><table><thead><tr><th>阶段</th><th>目标</th><th>降负荷周</th><th>复测</th></tr></thead><tbody><tr><td>W1–4 基础重建</td><td>技术、稳定、基础力量、低冲击爆发</td><td>W4</td><td>Mobility / CMJ / Broad Jump / 10m / 5-10-5</td></tr><tr><td>W5–8 力量→爆发</td><td>最大力量、单腿力量、力量转化</td><td>W8</td><td>力量 / CMJ / Sprint / COD</td></tr><tr><td>W9–12 专项表现</td><td>加速、减速、变向、反应、比赛体能</td><td>W12</td><td>综合测试 + 篮球实战表现</td></tr></tbody></table></div></div>
@@ -171,6 +193,8 @@
 <script src="assets/data/recommend-2026-09.js"></script>
 <script src="assets/data/recommend-2026-10.js"></script>
 <script src="assets/data/recommend-index.js"></script>
+<script src="assets/data/athlete.js"></script>
+<script src="assets/athlete-panel.js"></script>
 <script src="assets/dashboard.js"></script>
 </body>
 </html>

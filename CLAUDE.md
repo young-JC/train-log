@@ -51,12 +51,13 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 - `records/00_摘要.md` 是训练趋势速查索引（每次训练一行），不是事实源；细节以月度记录为准。
 - `weakness-tracking.md` 是 2.0 弱点管理的唯一事实源；Dashboard 完整镜像其弱点项、板块、发现日期、状态、目标和备注。
 - `ability-assessment.md` 是 2.0 能力评估的唯一事实源；只从正式训练记录提取可比较的真实动作结果，首次有效结果建立基线，后续仅由更优结果更新，并保留每项首次日期、最佳结果日期和更新时间。
+- `athlete-profile.md` 是个人基础资料、目标、日常条件与长期限制的唯一事实源；`body-metrics.md` 是身高、体重、体脂、腰围测量历史与纠错的唯一事实源。`assets/data/athlete.js` 的 `ATHLETE_DATA` 是两者的只读镜像，`assets/athlete-panel.js` 负责个人档案展示，不写 localStorage。
 - `records/YYYY-MM.html` 与 Dashboard 是月度记录、弱点管理和能力评估的同步展示层，不是独立数据源。Dashboard 拆为 `dashboard.html` 外壳 + `assets/dashboard.css`、`assets/dashboard.js`、`assets/data/*.js`：外壳只含标记与经典 `<script src>`，数据改动一律落在 `assets/data/`。Dashboard 能力评估保持只读，不使用手工输入或 localStorage。Dashboard 的训练推荐模块数据来自 `assets/data/recommend-YYYY-MM.js`（由 `assets/data/recommend-index.js` 汇总），与正式训练记录相互独立：推荐只由推荐流程写入、正式记录只由 `record-training-2` 写入，两者互不覆盖。
 - `archive/` 存放拆分前原件（`动作库3.0-拆分前原件.md`）与历史版本（`动作库2.0-历史版本.md`），**不是事实源，任何技能都不得读取或引用**。
 
 **`file://` 约束：** 页面用 `explorer.exe` 双击打开，因此只能用 `<link rel="stylesheet">` 与**经典** `<script src>`；**禁止 `fetch()` 与 `<script type="module">`**（两者在 `file://` 下被 CORS 拦截）。新增顶层 `const`/`let`/`function` 必须跨文件唯一——多份经典脚本共享全局词法作用域，重名会让整页失效。
 
-**2.0 读取协议：** 先读 `动作库/00_索引.md` + `records/00_摘要.md` + `weakness-tracking.md`；动作详情按动作名在对应 `X_模块.md` 中检索（A–N 为 `### 动作名`，O/P/Q 为 `#### 动作名`），`12周计划安排.md` 只读当前 4 周区块，`records/YYYY-MM.md` 只按需打开 1–3 天。**不要整读全部 17 本分册，也不要整读 `dashboard.html` 外壳。**
+**2.0 读取协议：** 推荐、记录及计划分析先读 `athlete-profile.md`，涉及身体背景或变化再读 `body-metrics.md`；训练检索先读 `动作库/00_索引.md` + `records/00_摘要.md` + `weakness-tracking.md`；动作详情按动作名在对应 `X_模块.md` 中检索（A–N 为 `### 动作名`，O/P/Q 为 `#### 动作名`），`12周计划安排.md` 只读当前 4 周区块，`records/YYYY-MM.md` 只按需打开 1–3 天。**不要整读全部 17 本分册，也不要整读 `dashboard.html` 外壳。**
 
 旧 `localStorage` 中的 Readiness 和 Session 数据不迁移、不主动清除，也不得用于补齐正式历史。除非用户明确要求迁移，不要在 1.0 和 2.0 之间自动同步数据。
 
@@ -75,6 +76,7 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 
 ## 2.0 推荐与记录工作流
 
+- `update-athlete-profile`（`.claude/skills/update-athlete-profile/skill.md`，Codex 对应 `.codex/skills/update-athlete-profile/SKILL.md`）维护个人档案与测量历史，并同步 `assets/data/athlete.js`；只改用户明确提供的内容，保留历史、去重及纠错审计，不改训练记录、能力成绩或历史推荐。已有个人资料优先用于目标、时间、器材、经历与长期限制分析；当日明确条件覆盖日常默认条件，临时变化不自动落盘。疼痛与恢复权限优先；推荐依据注明实际使用的个人资料更新时间与各项测量日期，不根据身体指标推导训练重量、等级、诊断或能力成绩。仅要求计划分析时不自动写入推荐；区分个人资料与训练表现支持的判断。所有字段可缺失，“未记录限制”不代表“无限制”；体脂方法/设备未知或不同不直接比较。
 - `.claude/skills/recommend-training-2/skill.md` 负责采集睡眠、疲劳、酸痛、疼痛和训练意愿，计算当日 Readiness，并结合当前周期、最近 3 个训练周、恢复间隔、疼痛、`train2.0/weakness-tracking.md` 的现存弱点及四份 2.0 训练文档推荐今日训练。疼痛限制优先于 Readiness 总分；推荐内容不能写成已完成训练。**推荐流程只写 Dashboard 训练推荐模块 `train2.0/assets/data/recommend-YYYY-MM.js`（`meta` / `readiness` / `plans` / `reason` / `skills` 五个分节），不写入也不修改 `train2.0/records/` 下的任何文件或 `assets/data/records.js`。** 推荐独立于训练记录：未再次推荐时 Dashboard 始终显示最近一条推荐，训练推荐模块的日期选择器可查看过往推荐。
 - `.claude/skills/record-training-2/skill.md` 负责解析用户实际完成的训练，按需引导补充总时长、Session RPE、疼痛和 Readiness，并主动维护 `train2.0/weakness-tracking.md` 与 `train2.0/ability-assessment.md`：弱点仅根据明确反馈、动作表现、左右差异或测试数据新增/更新，同义项不得重复；能力评估只接受正式训练中完整、真实且可比较的动作结果，首次有效数据创建条目，之后仅在严格更优时更新最佳值和更新时间。一次最多询问 2–3 项；用户记不清的字段标记为未记录，不得推测。
 - `Session Load = 训练时长（分钟）× Session RPE`。任一输入缺失时不得估算；同日重复记录更新原条目，不重复增加训练天数或负荷。
@@ -108,6 +110,8 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 ```bash
 PYTHONIOENCODING=utf-8 python tools/verify_action_library_split.py   # 动作库分册与索引 1:1、逐字抽样一致
 node --check train2.0/assets/dashboard.js                            # 逐文件语法（assets/data/*.js 同）
+node --check train2.0/assets/athlete-panel.js
+python tools/verify_athlete_profile.py                               # 个人档案、身体指标与 JS 镜像一致
 git diff --check
 ```
 
