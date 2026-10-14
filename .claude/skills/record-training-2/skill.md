@@ -349,6 +349,14 @@ Readiness = round(20 × (
 - 月度 HTML 使用分阶段动作表、负荷疼痛反馈、训练总结和后续关注的完整详情结构，而不是简化正文卡片。
 - 执行 `git diff --check`。
 
+## 记录后的复盘状态与提示
+
+正式记录及其展示同步完成后，运行 `python tools/training_review.py sync`，只刷新来源指纹、复盘索引和 `assets/data/reviews.js`，不改报告结论、正文或生成时间。区间内正式记录补录、纠错、移除后，报告标记待刷新，暂停作为推荐依据；不顺带重跑分析。
+
+再运行 `python tools/training_review.py due --as-of YYYY-MM-DD`，日期使用本次对话实际上海日期，非补录训练日期。有到期项时，完成回复简短提示最新到期周和最新未复盘完整阶段，并给出对应区间口令。不自动调用 review-training-2，不生成报告，不把未结束区间提示为完整复盘。
+
+执行 `python tools/training_review.py verify`。同步失败时报告复盘未同步项，保留已完成的正式训练记录，不为复盘改写数据。
+
 ## 完成后回复格式
 
 ```markdown

@@ -30,9 +30,13 @@ description: 记录 train2.0 今日训练，通过引导补齐必要信息，并
 - 12 周周期开始日期：`2026-09-21`
 - 默认计划：`train2.0/12周计划安排.md` 的 3 日版
 - 唯一训练记录事实源：`train2.0/records/YYYY-MM.md`
+- 训练趋势速查索引：`train2.0/records/00_摘要.md`（每次训练一行，非事实源；以月度记录为准）
 - 弱点管理唯一事实源：`train2.0/weakness-tracking.md`
 - 能力评估唯一事实源：`train2.0/ability-assessment.md`
-- 同步展示：`train2.0/records/YYYY-MM.html`、`train2.0/dashboard.html`
+- 动作唯一事实源：`train2.0/动作库/`（`00_索引.md` 负责筛选路由，17 本模块分册负责动作详情）
+- 同步展示：`train2.0/records/YYYY-MM.html`、`train2.0/dashboard.html`（外壳）+ `train2.0/assets/`（样式与数据）
+- 训练推荐数据层：`train2.0/assets/data/recommend-YYYY-MM.js`（推荐与当日 Readiness 的落盘位置）。本技能只从其中 `readiness` 分节复用当日原始值，**不得修改该文件任何内容**
+- `train2.0/archive/` 是拆分前原件与历史版本，**不是事实源，不得读取或引用**
 - Dashboard 能力评估是只读镜像；不得通过输入框、按钮或 localStorage 手工创建、修改正式能力成绩
 - 不读取、迁移或清理旧 `localStorage` Readiness 与 Session 历史
 - 不自动读取或修改 `train1.0/`；用户明确要求完成的弱点初始迁移除外，后续以 2.0 弱点文件独立维护，不再自动同步 1.0
@@ -81,7 +85,7 @@ description: 记录 train2.0 今日训练，通过引导补齐必要信息，并
 - 当前训练意愿：1–5
 - Readiness 得分和绿/黄/红等级
 
-如果当天已通过 `recommend-training-2` 写入 Readiness，读取并复用该日原始值；不得重新推断。用户明确表示状态发生变化时，记录训练前最终值，并在备注中说明更新。
+如果当天已运行 `recommend-training-2`，读取 `train2.0/assets/data/recommend-YYYY-MM.js` 中该日 `readiness` 分节的五项原始值并复用；不得重新推断。该日的训练推荐内容（`meta` / `readiness` / `plans` / `reason` / `skills`）保留不动，本技能不得改写。用户明确表示状态发生变化时，记录训练前最终值，并在备注中说明更新。
 
 ## Step 3：检查必要信息并引导补充
 
@@ -93,7 +97,7 @@ description: 记录 train2.0 今日训练，通过引导补齐必要信息，并
 4. 训练总时长（分钟）。
 5. Session RPE（0–10）。
 6. 训练前和训练后疼痛（0–10）；疼痛大于 0 时补充部位，能回忆时补充性质。
-7. 当日五项 Readiness；若当天已有正式条目则不重复询问。
+7. 当日五项 Readiness；若当天已有正式条目则不重复询问；若推荐模块已有该日 `readiness` 分节，直接复用，不重新询问。
 
 引导规则：
 
@@ -148,15 +152,14 @@ Readiness = round(20 × (
 
 更新前读取：
 
-1. `train2.0/records/YYYY-MM.md` 当前月份记录。
-2. `train2.0/records/` 最近 3 个训练周的月度 Markdown。
-3. `train2.0/12周计划安排.md`。
-4. `train2.0/训练周期安排建议.md`。
-5. `train2.0/篮球运动训练理念.md`。
-6. `train2.0/动作库/`（`00_索引.md` 负责筛选路由与索引表，`A_活动度.md` … `Q_训练后整理与拉伸.md` 共 17 本分册负责动作详情）。
-7. `train2.0/weakness-tracking.md`，用于核对已有弱点、避免重复项并维护状态。
-8. `train2.0/ability-assessment.md`，用于核对已有动作、比较口径、当前最佳结果和更新时间。
-9. `train2.0/dashboard.html` 和当月 HTML，用于同步现有结构。
+1. `train2.0/records/00_摘要.md`：最近 3 个训练周的逐次摘要，用于负荷、疼痛与恢复间隔判断。
+2. `train2.0/records/YYYY-MM.md` 当前月份记录；只打开摘要不足以判断的 1–3 天完整条目。
+3. `train2.0/12周计划安排.md`（只读当前 4 周区块）；需要核对周期原则时再按需读 `train2.0/训练周期安排建议.md` 或 `train2.0/篮球运动训练理念.md`。
+4. `train2.0/动作库/00_索引.md`；需要动作详情时按动作名检索 `train2.0/动作库/X_模块.md`（A–N 用 `### 动作名`，O/P/Q 用 `#### 动作名`），**不整读分册**。
+5. `train2.0/weakness-tracking.md`，用于核对已有弱点、避免重复项并维护状态。
+6. `train2.0/ability-assessment.md`，用于核对已有动作、比较口径、当前最佳结果和更新时间。
+7. `train2.0/records/YYYY-MM.html` 与 `train2.0/assets/data/`（`records.js`、`reference.js`），用于同步现有结构。**不要读或改 `dashboard.html` 外壳。**
+8. `train2.0/assets/data/recommend-YYYY-MM.js`（若存在）：只读取该日 `readiness` 分节用于复用；**只读，不得写入或改写推荐内容的任何分节**。
 
 总结只可基于：
 
@@ -200,7 +203,7 @@ Readiness = round(20 × (
 ### 日历条目
 
 - 找到对应日期行，填入训练类型并链接 `#训练详情-YYYY-MM-DD`。
-- 若只有 Readiness 尚未训练，标记“Readiness 已记录”，不得显示为已完成训练。
+- 若只有 Readiness 尚未训练，标记“Readiness 已记录”，训练状态写“未训练（取消或休息）”，不得显示为已完成训练，也不创建训练结果或 Session Load。
 - 同日已有记录时原位更新，不新增重复日期。
 - 休息日使用 `🧘`，不计入训练天数或负荷。
 
@@ -211,7 +214,7 @@ Readiness = round(20 × (
 
 **周期位置**：第 N 周 · 阶段名称 · 3 日版槽位
 **训练板块**：按实际内容
-**训练状态**：已完成 / 部分完成 / 恢复日
+**训练状态**：已完成 / 部分完成 / 恢复日 / 未训练（取消或休息，不创建训练结果）
 
 #### 当日 Readiness
 
@@ -288,20 +291,33 @@ Readiness = round(20 × (
 
 如果 HTML 模板尚不存在，先完成 Markdown 更新并明确报告“月度 HTML 尚未初始化，未完成展示同步”；不得复制 1.0 页面后悄悄形成未批准结构。
 
-## Step 8：同步 Dashboard
+## Step 8：同步训练摘要索引
 
-目标：`train2.0/dashboard.html`。
+目标：`train2.0/records/00_摘要.md`。
 
-按页面已经实现的正式数据结构同步：
+在摘要表末尾按日期顺序追加或原位更新本次训练的一行：
 
-1. 当月训练天数和 Session Load 汇总。
-2. 最近训练摘要。
-3. 训练负荷与疼痛管理模块。
-4. 当日 Readiness 五项、得分和等级。
-5. 月历对应日期及 `records/YYYY-MM.html#detail-YYYY-MM-DD` 链接。
-6. 疼痛趋势和需要继续观察的客观事项。
-7. 弱点管理模块：完整镜像 `train2.0/weakness-tracking.md` 的弱点项、板块、发现日期、当前状态、目标和备注。
-8. 能力评估模块：完整只读镜像 `train2.0/ability-assessment.md` 的真实动作成绩、比较规则、首次记录日期、最佳结果日期、更新时间和来源记录。
+| 日期 | 周/日 | 槽位 / 类型 | 时长 | SRPE | Session Load | 训练中最高疼痛 | 主要负荷与内容 | 状态 |
+
+- 字段必须与月度 Markdown 完全一致；缺项写「未记录」，不得推算；
+- 同日重复记录更新原行，不新增第二行；
+- 最后同步更新文末「速览」中的训练天数、Session Load、疼痛趋势与恢复间隔。
+
+## Step 9：同步 Dashboard
+
+目标：`train2.0/dashboard.html` 的**数据层** `train2.0/assets/data/`。
+
+**不要改动 `dashboard.html` 外壳**（它只含标记与 `<script src>`）；仅在挂载结构本身需要变化时才动外壳。按已实现的数据结构同步：
+
+1. 当月训练天数和 Session Load 汇总 → `assets/data/records.js`（`FORMAL_RECORDS`）。
+2. 最近训练摘要 → `assets/data/records.js`。
+3. 训练负荷与疼痛管理模块 → `assets/data/records.js`。
+4. 当日 Readiness 五项、得分和等级 → `assets/data/records.js`（`FORMAL_TODAY_READINESS`）。
+5. 月历对应日期及 `records/YYYY-MM.html#detail-YYYY-MM-DD` 链接 → `assets/data/records.js`。
+6. 疼痛趋势和需要继续观察的客观事项 → `assets/data/records.js`。
+7. 弱点管理模块：完整镜像 `train2.0/weakness-tracking.md` 的弱点项、板块、发现日期、当前状态、目标和备注 → `assets/data/reference.js`（`WEAKNESSES`）。
+8. 能力评估模块：完整只读镜像 `train2.0/ability-assessment.md` 的真实动作成绩、比较规则、首次记录日期、最佳结果日期、更新时间和来源记录 → `assets/data/reference.js`（`ABILITY_ASSESSMENTS`）。
+9. 当日推荐来自 `assets/data/recommend-YYYY-MM.js`，与正式记录相互独立；**正式结果不得改写该文件的任何分节（`meta` / `readiness` / `plans` / `reason` / `skills`）**，也不得用实际完成内容替换推荐内容。推荐模块保持原样，只在下次运行 `recommend-training-2` 时更新。
 
 规则：
 
@@ -310,7 +326,7 @@ Readiness = round(20 × (
 - 当 Dashboard 对应模块尚未完成实施时，报告未同步项，不创建临时的第二套结构。
 - 同一天重复更新时替换原值，不重复增加训练天数或 Session Load。
 
-## Step 9：一致性核对
+## Step 10：一致性核对
 
 完成前逐项核对：
 
@@ -326,9 +342,20 @@ Readiness = round(20 × (
 - `weakness-tracking.md` 与 Dashboard 弱点管理模块六个字段逐项一致。
 - 本次具备真实、完整且可比较结果的动作已进入能力评估候选；缺少测量结果或条件不一致的动作未被强行比较。
 - `ability-assessment.md` 与 Dashboard 能力评估逐项一致，首次日期、最佳结果日期、更新时间和来源完整，且无手工输入或 localStorage 依赖。
+- `records/00_摘要.md` 新增或更新的一行与月度记录逐字段一致，同日没有重复行，「速览」数字同步更新。
+- Dashboard 改动只落在 `assets/data/` 下的数据文件，没有把内容写回 `dashboard.html` 外壳，也没有引入跨文件重名的顶层声明。
+- `assets/data/recommend-YYYY-MM.js` 未被修改：推荐内容与当日 Readiness 保持原样，没有用实际完成内容覆盖推荐。
 - 未超过既有最佳值的动作没有覆盖最佳表现或刷新更新时间。
 - 月度 HTML 使用分阶段动作表、负荷疼痛反馈、训练总结和后续关注的完整详情结构，而不是简化正文卡片。
 - 执行 `git diff --check`。
+
+## 记录后的复盘状态与提示
+
+正式记录及其展示同步完成后，运行 `python tools/training_review.py sync`，只刷新来源指纹、复盘索引和 `assets/data/reviews.js`，不改报告结论、正文或生成时间。区间内正式记录补录、纠错、移除后，报告标记待刷新，暂停作为推荐依据；不顺带重跑分析。
+
+再运行 `python tools/training_review.py due --as-of YYYY-MM-DD`，日期使用本次对话实际上海日期，非补录训练日期。有到期项时，完成回复简短提示最新到期周和最新未复盘完整阶段，并给出对应区间口令。不自动调用 review-training-2，不生成报告，不把未结束区间提示为完整复盘。
+
+执行 `python tools/training_review.py verify`。同步失败时报告复盘未同步项，保留已完成的正式训练记录，不为复盘改写数据。
 
 ## 完成后回复格式
 
@@ -360,3 +387,4 @@ Readiness = round(20 × (
 9. 禁止把只有计划组次、定性反馈或缺少测量值的动作伪造成能力成绩。
 10. 禁止用不可比条件覆盖最佳表现，或在成绩未提高时刷新能力评估更新时间。
 11. 禁止从输入框、按钮、旧 localStorage、推荐计划或未完成动作创建正式能力评估。
+12. 禁止修改或覆盖 `assets/data/recommend-YYYY-MM.js`，或用正式训练结果替换该日的推荐内容。

@@ -174,8 +174,10 @@
 </section>
 
 <section class="section" id="review">
- <div class="section-head"><div><h2>🔁 周期复盘</h2><p>W4 / W8 / W12进行复测；用数据决定下一周期重点，不按感觉随意换动作。</p></div><button class="btn primary small" onclick="saveReview()">保存复盘</button></div>
- <div class="card"><div class="grid4"><div class="field"><label>本周期完成率 %</label><input id="reviewRate" class="input" type="number" min="0" max="100" value="0"></div><div class="field"><label>主要进步</label><input id="reviewGain" class="input" placeholder="例如：CMJ +3cm"></div><div class="field"><label>仍未解决</label><input id="reviewGap" class="input" placeholder="例如：减速稳定性"></div><div class="field"><label>下一周期重点</label><input id="reviewNext" class="input" placeholder="例如：Decel + COD"></div></div><div style="margin-top:14px" class="table-wrap"><table><thead><tr><th>阶段</th><th>目标</th><th>降负荷周</th><th>复测</th></tr></thead><tbody><tr><td>W1–4 基础重建</td><td>技术、稳定、基础力量、低冲击爆发</td><td>W4</td><td>Mobility / CMJ / Broad Jump / 10m / 5-10-5</td></tr><tr><td>W5–8 力量→爆发</td><td>最大力量、单腿力量、力量转化</td><td>W8</td><td>力量 / CMJ / Sprint / COD</td></tr><tr><td>W9–12 专项表现</td><td>加速、减速、变向、反应、比赛体能</td><td>W12</td><td>综合测试 + 篮球实战表现</td></tr></tbody></table></div></div>
+ <div class="section-head"><div><h2>🔁 周期复盘</h2><p>每周检查执行与恢复，W4 / W8 / W12总结阶段进展；AI报告自动供适用日期的推荐参考。</p></div><a class="btn small" href="reviews/00_索引.md">复盘索引</a></div>
+ <div class="card review-due" id="reviewDue" aria-live="polite"></div>
+ <div class="card review-history"><label for="reviewSelect">历史复盘</label><select class="select" id="reviewSelect" aria-label="选择复盘报告"></select></div>
+ <div class="card" id="reviewReport" aria-live="polite"></div>
 </section>
 
 <div class="modal" id="actionModal" role="dialog" aria-modal="true" aria-labelledby="actionModalTitle" hidden>
@@ -195,6 +197,8 @@
 <script src="assets/data/recommend-index.js"></script>
 <script src="assets/data/athlete.js"></script>
 <script src="assets/athlete-panel.js"></script>
+<script src="assets/data/reviews.js"></script>
+<script src="assets/review-panel.js"></script>
 <script src="assets/dashboard.js"></script>
 </body>
 </html>

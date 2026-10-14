@@ -53,6 +53,7 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 - `ability-assessment.md` 是 2.0 能力评估的唯一事实源；只从正式训练记录提取可比较的真实动作结果，首次有效结果建立基线，后续仅由更优结果更新，并保留每项首次日期、最佳结果日期和更新时间。
 - `athlete-profile.md` 是个人基础资料、目标、日常条件与长期限制的唯一事实源；`body-metrics.md` 是身高、体重、体脂、腰围测量历史与纠错的唯一事实源。`assets/data/athlete.js` 的 `ATHLETE_DATA` 是两者的只读镜像，`assets/athlete-panel.js` 负责个人档案展示，不写 localStorage。
 - `records/YYYY-MM.html` 与 Dashboard 是月度记录、弱点管理和能力评估的同步展示层，不是独立数据源。Dashboard 拆为 `dashboard.html` 外壳 + `assets/dashboard.css`、`assets/dashboard.js`、`assets/data/*.js`：外壳只含标记与经典 `<script src>`，数据改动一律落在 `assets/data/`。Dashboard 能力评估保持只读，不使用手工输入或 localStorage。Dashboard 的训练推荐模块数据来自 `assets/data/recommend-YYYY-MM.js`（由 `assets/data/recommend-index.js` 汇总），与正式训练记录相互独立：推荐只由推荐流程写入、正式记录只由 `record-training-2` 写入，两者互不覆盖。
+- `reviews/*.md` 是 AI 周/阶段复盘结论的事实源，训练事实仍以月度记录为准；`reviews/00_索引.md` 与 `assets/data/reviews.js` 是工具生成镜像。`assets/review-panel.js` 只读展示报告、到期与待刷新提示，不读取旧 localStorage。
 - `archive/` 存放拆分前原件（`动作库3.0-拆分前原件.md`）与历史版本（`动作库2.0-历史版本.md`），**不是事实源，任何技能都不得读取或引用**。
 
 **`file://` 约束：** 页面用 `explorer.exe` 双击打开，因此只能用 `<link rel="stylesheet">` 与**经典** `<script src>`；**禁止 `fetch()` 与 `<script type="module">`**（两者在 `file://` 下被 CORS 拦截）。新增顶层 `const`/`let`/`function` 必须跨文件唯一——多份经典脚本共享全局词法作用域，重名会让整页失效。
@@ -91,6 +92,16 @@ explorer.exe "$(cygpath -w "$PWD/train2.0/dashboard.html")"
 6. `train2.0/assets/data/records.js` 与 `reference.js`（Dashboard 数据层；**不写 `dashboard.html` 外壳**）
 
 若月度模板或 Dashboard 对应模块尚未建立，应报告未同步项并停止，不得发明临时数据结构。训练记录只在运行 `record-training-2` 后写入：月度 Markdown、月度 HTML 与 `records.js` 都不得由推荐流程更新；当日 Readiness 由推荐模块的 `readiness` 分节提供原始值，训练时复用后写入正式记录。取消或未训练的日子可以只记录 Readiness 与原因，训练状态写「未训练」，不创建虚假的已完成训练，也不计入训练天数或 Session Load。
+
+## 2.0 周期复盘工作流
+
+- `review-training-2` 提供 `.codex/skills/review-training-2/SKILL.md` 和 `.claude/skills/review-training-2/skill.md` 两套入口，共用 Codex 目录下报告格式参考。用户主动要求后复盘每周或 W4/W8/W12，默认保存；只要求分析时不落盘。初次上线不自动补造历史，无后台定时任务。
+- 先读个人档案、摘要、弱点、能力和动作库索引，再分批读取目标区间完整月度详情、当前四周计划及必要基线。周期分析例外允许超过日常 1–3 天读取上限；仍不得全读动作库或 archive。身体指标按需读取并标注测量日期。
+- 按正式起点 2026-09-21、3 日版核对槽位。完整/部分/无记录分别展示，恢复与额外实战单列，完整完成率只计确认完整的槽位。缺失不按零处理；历史最佳不能替代近期状态，条件不同不强行比较。复盘不维护训练记录、能力、弱点、个人档案或历史推荐。
+- `python tools/training_review.py draft --type weekly --start YYYY-MM-DD --end YYYY-MM-DD` 只读生成待核对 JSON，阶段用 stage；AI 补齐后 `save --input <JSON文件>` 保存可读 Markdown 和隐藏结构数据，同步索引/JS。固定区间标识，重跑保留首次生成时间；不手改正文或镜像。
+- 区间结束次日起生成完整报告，此前为进展且不影响推荐。完整周/阶段分别在下一周/下一阶段适用；W12 不自动启动新周期。推荐技能用 `applicable --date YYYY-MM-DD` 选择当时适用报告，排除未来生成/更新、待刷新、进展及过期版本；当前疼痛、恢复、条件、限制和周期规则优先。
+- 正式记录更新后，记录技能运行 `sync` 更新来源指纹和索引/JS，不改报告；区间内来源新增、纠错或移除时显示待刷新。`due --as-of YYYY-MM-DD` 只读检查到期项，记录后只提示主动复盘。
+- 报告保存或训练补录后运行 `python tools/training_review.py verify`。结构改动另运行 `python -m unittest discover -s tools -p "test_training_review.py"`、`node tools/test_training_review_panel.js`、JS 语法、浏览器 file:// 验证和 `git diff --check`，检查历史切换、证据链接与状态提示，确保原训练天数、负荷与推荐历史未改变。
 
 ## 训练领域约定
 
