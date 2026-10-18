@@ -70,6 +70,7 @@ const PLAN4={
  ]
 };
 const ABILITY_ASSESSMENTS=[
+ {"category":"篮球技巧","action":"五点三分投篮","metric":"定量命中用时（有人捡球）","best":"9 分钟完成五点各命中5个（共25个）· 有人帮忙捡球","comparison":"仅比较相同五点、同一三分线、每点命中5个且有人捡球的任务，用时更短为更好；首次具体点位、场地三分线与捡球协助方式未完整说明，后续须确认条件一致；不以命中数计算命中率","firstDate":"2026-10-18","bestDate":"2026-10-18","updatedAt":"2026-10-18","source":"records/2026-10.html#detail-2026-10-18"},
  {category:'活动度',action:'膝盖靠墙踝背屈',metric:'左右脚距墙距离及差值（cm）',best:'左 7 cm · 右 10.5 cm · 左侧比右侧少 3.5 cm（首次自测基线）',comparison:'测量条件一致且可确认时才比较；双侧距离均不下降且至少一侧增加可更新最佳值，差值单独观察；本次脚跟贴地、膝盖方向、是否最大距离、热身、鞋袜及疼痛情况未记录',firstDate:'2026-10-09',bestDate:'2026-10-09',updatedAt:'2026-10-10',source:'records/2026-10.html#detail-2026-10-09'},
  {category:'力量',action:'六角杠铃深蹲',metric:'同动作标准下的负重表现',best:'单侧 35kg · 3×7 · RPE 6',comparison:'负荷和完成量均不下降且至少一项提高；负荷与完成量相同时 RPE 更低',firstDate:'2026-09-21',bestDate:'2026-09-28',updatedAt:'2026-09-28',source:'records/2026-09.html#detail-2026-09-28'},
  {category:'力量',action:'高杠后蹲',metric:'同动作标准下的负重表现',best:'30kg · 4×5 · RPE 7–8',comparison:'负荷和完成量均不下降且至少一项提高；负荷与完成量相同时 RPE 更低',firstDate:'2026-10-08',bestDate:'2026-10-08',updatedAt:'2026-10-08',source:'records/2026-10.html#detail-2026-10-08'},
