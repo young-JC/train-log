@@ -1,7 +1,7 @@
 // 本文件由 train2.0/dashboard.html 拆分而来，属于**只读展示层**；正式训练事实源见 CLAUDE.md。
 // 正式训练记录镜像（数据源：train2.0/records/YYYY-MM.md）。
 const FORMAL_MONTH={year:2026,month:'10',days:31,startOffset:3};
-const FORMAL_TODAY_READINESS={"date":"2026-10-18","sleep":4,"fatigue":1,"soreness":1,"pain":0,"motivation":4,"score":92,"level":"绿色","painNote":"训练前 0/10；台阶下蹲时双膝内侧 2/10；篮球变向右脚蹬地时膝内侧 2/10（膝盖侧别未明确）；训练后正常走动 0/10，下蹲 1/10（部位未进一步说明）；次日疼痛待补充"};
+const FORMAL_TODAY_READINESS={"date":"2026-10-18","sleep":4,"fatigue":1,"soreness":1,"pain":0,"motivation":4,"score":92,"level":"绿色","painNote":"训练前 0/10；台阶下蹲时双膝内侧 2/10；篮球变向右脚蹬地时膝内侧 2/10（膝盖侧别未明确）；训练后正常走动 0/10，下蹲 1/10（部位未进一步说明）；次日（2026-10-19）走动、下蹲均正常无痛（0/10）"};
 const FORMAL_RECORDS={
  '2026-10-09':{status:'assessment',label:'踝背屈自测 · 左 7 / 右 10.5 cm（仅测试）',sessionLoad:null},
  '2026-09-21':{status:'training',label:'训练 · Ready 92 · 700 AU',sessionLoad:700,readiness:{sleep:3,fatigue:1,soreness:1,pain:0,painNote:'训练前无疼痛；训练中膝盖左2/10、右3/10；训练后无疼痛',motivation:5,score:92,level:'绿色'}},
@@ -21,6 +21,6 @@ const FORMAL_RECORDS={
  '2026-10-12':{status:'training',label:'半场实战 · Ready 88 · 720 AU',sessionLoad:720,maxPain:1,readiness:{sleep:3,fatigue:2,soreness:1,pain:0,motivation:5,score:88,level:'绿色',painNote:'训练前 0/10；半场实战中右膝内侧最高疼痛 1/10，触发动作及性质未记录；训练后 0/10；次日疼痛待补充'}},
  "2026-10-14":{"status":"training","label":"D1 减量 · Ready 88 · 468 AU","sessionLoad":468,"maxPain":0.5,"readiness":{"sleep":3,"fatigue":1,"soreness":1,"pain":0,"motivation":4,"score":88,"level":"绿色","painNote":"训练前 0/10（复用当天推荐）；已报告训练中疼痛为六角杠铃深蹲最后一组右膝内侧 0.5/10，自重分腿蹲无痛，其他动作疼痛未单独报告；训练后及次日（10-15）双膝均 0/10。"}},
  '2026-10-15':{status:'training',label:'D2 部分 · Ready 88 · 180 AU',sessionLoad:180,maxPain:0,readiness:{sleep:3,fatigue:1,soreness:1,pain:0,motivation:4,score:88,level:'绿色',painNote:'训练前、中、后均为 0/10；次日疼痛待补充'}},
- "2026-10-18":{"status":"training","label":"D3 · Ready 92 · 505 AU","sessionLoad":505,"maxPain":2,"readiness":{"sleep":4,"fatigue":1,"soreness":1,"pain":0,"motivation":4,"score":92,"level":"绿色","painNote":"训练前 0/10；台阶下蹲时双膝内侧 2/10；篮球变向右脚蹬地时膝内侧 2/10（膝盖侧别未明确）；训练后正常走动 0/10，下蹲 1/10（部位未进一步说明）；次日疼痛待补充"}}
+ "2026-10-18":{"status":"training","label":"D3 · Ready 92 · 505 AU","sessionLoad":505,"maxPain":2,"readiness":{"sleep":4,"fatigue":1,"soreness":1,"pain":0,"motivation":4,"score":92,"level":"绿色","painNote":"训练前 0/10；台阶下蹲时双膝内侧 2/10；篮球变向右脚蹬地时膝内侧 2/10（膝盖侧别未明确）；训练后正常走动 0/10，下蹲 1/10（部位未进一步说明）；次日（2026-10-19）走动、下蹲均正常无痛（0/10）"}}
 };
 const FORMAL_REST_DAYS=[];
