@@ -1,131 +1,94 @@
 # -*- coding: utf-8 -*-
-"""校验动作库拆分是否无损。
-
-检查项：
-1. 索引表 170 行，与原文索引表逐行一致（动作名集合相同）；
-2. 每个索引动作在且仅在一个模块分册中有一条 `### 动作名` 详情；
-3. 原文详情区的动作标题集合 == 分册动作标题集合（无丢失、无新增）；
-4. 抽取若干动作块，逐字比对原文与分册内容；
-5. 报错即退出码 2。
-
-用法：
-    PYTHONIOENCODING=utf-8 python tools/verify_action_library_split.py
-"""
-
+"""校验当前动作库索引、分册与新增标准镜像；保留旧命令入口，不读取archive。"""
+import json
 from pathlib import Path
 import re
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "train2.0" / "archive" / "动作库3.0-拆分前原件.md"
-LIB = ROOT / "train2.0" / "动作库"
-
-failures = []
-
-
-def check(cond, msg):
-    if not cond:
-        failures.append(msg)
-
-
-def headings(lines, lo, hi, levels):
-    out = {}
-    for i in range(lo, min(hi, len(lines))):
-        m = re.match(r"^(#{%d}) (.*)$" % levels, lines[i])
-        if m:
-            out.setdefault(m.group(2).strip(), []).append(i)
-    return out
+LIB = ROOT / 'train2.0' / '动作库'
 
 
 def main():
-    src = SRC.read_text(encoding="utf-8").splitlines()
+    failures = []
 
-    # --- 原文索引表 ---
-    start = next(i for i, l in enumerate(src) if l.startswith("| 动作 | 训练模块 | 动作模式 |"))
-    i, src_rows = start + 2, []
-    while i < len(src) and src[i].startswith("|"):
-        src_rows.append(src[i])
-        i += 1
-    orig_names = [r.strip().strip("|").split("|")[0].strip() for r in src_rows]
-    check(len(orig_names) == 170, f"原文索引表行数应为 170，实际 {len(orig_names)}")
-    check(len(set(orig_names)) == len(orig_names), "原文索引表存在重名动作")
+    def check(condition, message):
+        if not condition:
+            failures.append(message)
 
-    # --- 分册动作标题与索引名 ---
-    module_files = sorted(f for f in LIB.glob("[A-Q]_*.md"))
-    check(len(module_files) == 17, f"应有 17 个模块分册，实际 {len(module_files)}")
-
-    file_titles = {}
-    for f in module_files:
-        letters = set(re.findall(r"^# ([A-Q])\. ", f.read_text(encoding="utf-8"), flags=re.M))
-        check(len(letters) == 1, f"{f.name} 应恰好声明 1 个模块字母，实际 {letters}")
-        hs = headings(f.read_text(encoding="utf-8").splitlines(), 0, 10**9, 3)
-        hs.update(headings(f.read_text(encoding="utf-8").splitlines(), 0, 10**9, 4))
-        for title in hs:
-            file_titles.setdefault(title, []).append(f.name)
-
-    missing = [n for n in orig_names if n not in file_titles]
-    check(not missing, "有索引动作找不到详情分册：" + ", ".join(missing[:10]))
-
-    dupes = {t: v for t, v in file_titles.items() if len(v) > 1 and t in orig_names}
-    check(not dupes, f"同一动作出现在多个分册：{dupes}")
-
-    # --- 原文详情区动作标题集合（只针对索引中的 170 个动作）---
-    detail_lo, detail_hi = 1302, 4660
-    orig_detail = set(headings(src, detail_lo, detail_hi, 3)) | set(headings(src, detail_lo, detail_hi, 4))
-    orig_actions = set(orig_names)
-    lost = (orig_detail & orig_actions) - set(file_titles)
-    check(not lost, "原文详情标题未进入分册：" + ", ".join(sorted(lost)[:10]))
-    added = set(file_titles) - orig_detail - {t for t in file_titles if t in orig_actions}
-    check(not (added & orig_actions), "分册出现原文详情区没有的动作标题：" + ", ".join(sorted(added & orig_actions)[:10]))
-
-    # --- 结构性标题必须落在索引、附录或分册中，不能丢失 ---
-    struct_titles = [t for t in orig_detail if t not in orig_actions]
-    all_new = "\n".join(f.read_text(encoding="utf-8") for f in module_files) \
-        + (LIB / "00_索引.md").read_text(encoding="utf-8") \
-        + (LIB / "00_附录_等级体系与动作树.md").read_text(encoding="utf-8")
-    struct_lost = [t for t in struct_titles if t not in all_new]
-    check(not struct_lost, "结构性标题未保留：" + ", ".join(sorted(struct_lost)))
-
-    # --- 逐字比对抽样 ---
-    def block(lines, title):
-        for i, l in enumerate(lines):
-            if l.strip() in (f"### {title}", f"#### {title}"):
-                j = i + 1
-                while j < len(lines) and not re.match(r"^#{3,4} ", lines[j]):
-                    j += 1
-                return "\n".join(lines[i:j]).strip()
-        return None
-
-    for title in ["六角杠深蹲（Trap-Bar Squat）", "快速下落定住（Snap Down）",
-                  "帕洛夫抗旋推（Pallof Press）", "站姿腓肠肌拉伸（Standing Gastrocnemius Stretch）",
-                  "单臂哑铃抓举（Single-Arm Dumbbell Snatch）"]:
-        src_block = block(src, title)
-        check(src_block is not None, f"原文缺少动作块：{title}")
-        hits = [f for f in module_files if f"### {title}" in f.read_text(encoding="utf-8")
-                or f"#### {title}" in f.read_text(encoding="utf-8")]
-        check(len(hits) == 1, f"{title} 应在恰好 1 个分册中，实际 {[h.name for h in hits]}")
-        if hits and src_block:
-            new_lines = hits[0].read_text(encoding="utf-8").splitlines()
-            check(block(new_lines, title) == src_block, f"{title} 分册内容与原文不一致")
-
-    # --- 体积报告 ---
-    idx = LIB / "00_索引.md"
-    idx_text = idx.read_text(encoding="utf-8")
-    table = [l for l in idx_text.splitlines() if l.startswith("| ") and l.count("|") == 8]
-    print(f"分册数: {len(module_files)}")
-    print(f"索引动作数: {len(orig_names)}")
-    print(f"00_索引.md: {idx.stat().st_size} 字节（其中表体 {sum(len(l.encode()) + 1 for l in table)} 字节 / {len(table)} 行）")
-    print(f"原文索引表: {sum(len(l.encode()) + 1 for l in src_rows)} 字节")
-    print(f"分册合计: {sum(f.stat().st_size for f in module_files)} 字节")
-
+    index = (LIB / '00_索引.md').read_text(encoding='utf-8')
+    table = index.split('## 动作索引表', 1)[1].split('\n## ', 1)[0]
+    rows = []
+    for line in table.splitlines():
+        cells = [c.strip() for c in line.strip().strip('|').split('|')]
+        if line.startswith('| ') and len(cells) == 7 and cells[1] in list('ABCDEFGHIJKLMNOPQ'):
+            rows.append(cells)
+    lookup = {row[0]: row for row in rows}
+    check(bool(rows) and len(rows) == len(lookup), '索引为空或有重名动作')
+    declared = re.search(r'## 动作索引表（(\d+) 个动作）', index)
+    check(declared is not None and int(declared[1]) == len(rows), '索引动作总数标注不一致')
+    modules = sorted(LIB.glob('[A-Q]_*.md'))
+    check(len(modules) == 17, '应有17个模块分册')
+    blocks = {}
+    for path in modules:
+        text = path.read_text(encoding='utf-8')
+        headings = list(re.finditer(r'^#{3,4} (.+)$', text, re.M))
+        for i, heading in enumerate(headings):
+            title = heading[1].strip()
+            end = headings[i + 1].start() if i + 1 < len(headings) else len(text)
+            body = text[heading.end():end]
+            if title in lookup:
+                blocks.setdefault(title, []).append((path.stem[0], body))
+            elif '**AI动作元数据**' in body:
+                check(False, f'分册动作未进入索引：{title}')
+        count = sum(row[1] == path.stem[0] for row in rows)
+        declared = re.search(r'本模块共 (\d+) 个动作', text)
+        check(declared is not None and int(declared[1]) == count, f'{path.name} 动作数标注不一致')
+        module_row = re.search(r'\| ' + path.stem[0] + r'｜[^\n]+`' + re.escape(path.name) + r'` \| (\d+) \|', index)
+        check(module_row is not None and int(module_row[1]) == count, f'{path.name} 模块一览计数不一致')
+    for title, module, pattern, ability, level, impact, period in rows:
+        hits = blocks.get(title, [])
+        check(len(hits) == 1, f'{title} 应恰好有一条分册详情，实际{len(hits)}')
+        if len(hits) != 1:
+            continue
+        check(hits[0][0] == module, f'{title} 模块不一致')
+        if module <= 'N':
+            body = hits[0][1]
+            for label in ['训练模块', '动作模式', '主要能力', '等级', '机械冲击', '周期适用', '推荐剂量', '前置条件', '退阶', '进阶', 'Quality Stop', '疼痛限制']:
+                check(f'**{label}：**' in body, f'{title} 缺少{label}')
+            for label, expected in [('主要能力', ability), ('等级', level), ('机械冲击', impact), ('周期适用', period)]:
+                match = re.search(r'\*\*' + label + r'：\*\* ([^\n]+)', body)
+                actual = match[1].split(' ｜ ')[0].strip() if match else None
+                check(actual == expected, f'{title} 的{label}与索引不一致')
+            check('**标准动作描述：**' in body, f'{title} 缺少标准动作描述')
+    # 旧展示层保留历史别名；新增libraryTitle条目校验到当前Markdown。
+    script = "const fs=require('fs'),vm=require('vm');process.stdout.write(vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8')+';JSON.stringify(ACTIONS.filter(a=>a.libraryTitle))'));"
+    result = subprocess.run(['node', '-e', script, str(ROOT / 'train2.0/assets/data/actions.js')], capture_output=True, encoding='utf-8', check=True)
+    mirrored = json.loads(result.stdout)
+    check(len({a['libraryTitle'] for a in mirrored}) == len(mirrored), 'Dashboard标准镜像重名')
+    for action in mirrored:
+        title = action['libraryTitle']
+        check(title in lookup, f'Dashboard动作缺少事实源：{title}')
+        if title not in lookup or len(blocks.get(title, [])) != 1:
+            continue
+        row = lookup[title]
+        check(action['name'] + '（' + action['en'] + '）' == title, f'{title} 镜像名称不一致')
+        check([action['ability'], action['level'], action['impact']] == [row[3], row[4], row[5]], f'{title} 镜像元数据不一致')
+        body = blocks[title][0][1]
+        description = re.search(r'\*\*标准动作描述：\*\* (.+)', body)
+        check(description is not None and action['desc'].startswith(description[1].strip()), f'{title} 镜像描述不一致')
+        for label, display in [('推荐剂量', '剂量'), ('前置条件', '准入'), ('退阶', '退阶'), ('进阶', '进阶'), ('Quality Stop', '质量停止'), ('周期适用', '周期')]:
+            value = re.search(r'\*\*' + label + r'：\*\* (.+)', body)
+            check(value is not None and display + '：' + value[1].strip() in action['desc'], f'{title} 镜像{label}不一致')
+    print(f'分册数：{len(modules)}；索引动作：{len(rows)}；标准镜像：{len(mirrored)}')
     if failures:
-        print("\n校验失败:")
-        for f in failures:
-            print("  -", f)
+        for failure in failures:
+            print('  - ' + failure)
         return 2
-    print("\n全部校验通过：170 个动作 1:1 映射，抽样逐字一致。")
+    print('全部校验通过：当前索引与分册1:1，标准镜像一致；未读取archive。')
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sys.exit(main())
