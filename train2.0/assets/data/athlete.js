@@ -78,7 +78,7 @@ const ATHLETE_DATA = {
       source: "用户对话（2026-10-19）"
     }]
   },
-  metricsUpdatedAt: "2026-10-10",
+  metricsUpdatedAt: "2026-10-20",
   measurements: [{
     id: "BM-20261010-01",
     date: "2026-10-10",
@@ -163,6 +163,81 @@ const ATHLETE_DATA = {
     note: "用户确认裸足身高于 2026-10-10 测量；具体时间未记录，与同日体脂秤测量的先后关系未确认。",
     source: "用户对话（2026-10-10）",
     updatedAt: "2026-10-10"
+  }, {
+    "id": "BM-20261020-01",
+    "date": "2026-10-20",
+    "time": "08:00",
+    "heightCm": null,
+    "weightKg": 71.6,
+    "bodyFatPct": 18.7,
+    "waistCm": null,
+    "observations": [
+      {
+        "key": "muscleMassKg",
+        "label": "肌肉量",
+        "value": 55.4,
+        "unit": "kg",
+        "method": "家用体脂秤（品牌/型号未记录）",
+        "note": "保留应用报告的肌肉量名称，不改称骨骼肌量。"
+      },
+      {
+        "key": "leanBodyMassKg",
+        "label": "去脂体重",
+        "value": 58.3,
+        "unit": "kg",
+        "method": "家用体脂秤（品牌/型号未记录）",
+        "note": "保留应用报告值，不由体重与体脂率反算。"
+      },
+      {
+        "key": "subcutaneousFatPct",
+        "label": "皮下脂肪率",
+        "value": 12.5,
+        "unit": "%",
+        "method": "家用体脂秤（品牌/型号未记录）",
+        "note": "设备报告值，作为补充观察项。"
+      },
+      {
+        "key": "visceralFat",
+        "label": "内脏脂肪",
+        "value": 9.0,
+        "unit": null,
+        "method": "家用体脂秤（品牌/型号未记录）",
+        "note": "截图未注明单位或分级口径。"
+      },
+      {
+        "key": "bodyWaterPct",
+        "label": "体水分率",
+        "value": 55.8,
+        "unit": "%",
+        "method": "家用体脂秤（品牌/型号未记录）",
+        "note": "设备报告值，保留测量背景。"
+      },
+      {
+        "key": "basalMetabolismKcal",
+        "label": "基础代谢",
+        "value": 1547.0,
+        "unit": "kcal",
+        "method": "家用体脂秤（品牌/型号未记录）",
+        "note": "应用标注偏低；仅保留设备估算背景，不作为每日热量摄入目标。"
+      },
+      {
+        "key": "bmi",
+        "label": "BMI",
+        "value": 22.3,
+        "unit": null,
+        "method": "家用体脂秤（品牌/型号未记录）",
+        "note": "应用报告值，不用已有身高重算或覆盖。"
+      }
+    ],
+    "methods": {
+      "heightCm": null,
+      "weightKg": "家用体脂秤（品牌/型号未记录）",
+      "bodyFatPct": "家用体脂秤（品牌/型号未记录）",
+      "waistCm": null
+    },
+    "note": "用户确认测量日期为 2026-10-20；截图状态栏 17:48、17:49 不作为测量时间，两张截图的重叠指标仅记录一次。应用显示：基础代谢 1547.0 kcal（偏低）、蛋白质 15.0%（偏低）、肌肉量 55.4 kg、BMI 22.3、骨量 2.9 kg、肥胖等级 22.3（正常）、皮下脂肪率 12.5%、内脏脂肪 9（未显示单位）、体水分率 55.8%、身体类型「标准型」、身体得分 93、去脂体重 58.30 kg、身体年龄 30 岁、标准体重 70.40 kg。以上为应用报告值及标注；身体年龄不作为实际年龄，标准体重不作为个人目标，未据 BMI 推算身高。用户补充确认本次于早晨 08:00 空腹使用家用体脂秤测量，品牌/型号未记录；未确认与此前测量为同一设备。",
+    "source": "用户提供的两张数据分析截图及对话补充（2026-10-20）",
+    "updatedAt": "2026-10-20"
   }],
   corrections: []
 };
