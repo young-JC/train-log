@@ -1,8 +1,10 @@
 // 本文件由 train2.0/dashboard.html 拆分而来，属于**只读展示层**；正式训练事实源见 CLAUDE.md。
 // 正式训练记录镜像（数据源：train2.0/records/YYYY-MM.md）。
 const FORMAL_MONTH={year:2026,month:'10',days:31,startOffset:3};
-const FORMAL_TODAY_READINESS={"date": "2026-10-20", "sleep": 4, "fatigue": 1, "soreness": 1, "pain": 0, "motivation": 5, "score": 96, "level": "绿色", "painNote": "训练前0/10（复用当天推荐）；用户补充本次整体无痛，训练中及训练后0/10；次日（10-21）疼痛待补充"};
+const FORMAL_TODAY_READINESS={"date": "2026-10-25", "sleep": 3, "fatigue": 1, "soreness": 1, "pain": 0, "motivation": 5, "score": 92, "level": "绿色", "painNote": "训练前0/10；半场实战中右膝内侧短暂1/10，触发动作及性质未记录；训练后0/10；次日（10-26）疼痛待补充"};
 const FORMAL_RECORDS={
+ "2026-10-25":{"status": "training", "label": "半场实战 · Ready 92 · 420 AU", "sessionLoad": 420, "maxPain": 1, "readiness": {"date": "2026-10-25", "sleep": 3, "fatigue": 1, "soreness": 1, "pain": 0, "motivation": 5, "score": 92, "level": "绿色", "painNote": "训练前0/10；半场实战中右膝内侧短暂1/10，触发动作及性质未记录；训练后0/10；次日（10-26）疼痛待补充"}},
+ "2026-10-24":{"status": "training", "label": "D2 健身房部分 · Ready 92 · 480 AU", "sessionLoad": 480, "maxPain": 0, "readiness": {"date": "2026-10-24", "sleep": 3, "fatigue": 1, "soreness": 1, "pain": 0, "motivation": 5, "score": 92, "level": "绿色", "painNote": "训练前0/10（复用当天推荐）；训练中及训练后0/10（用户确认无痛）；次日（10-25）无痛（0/10，用户补充）"}},
  "2026-10-20":{"status": "training", "label": "D1 · Ready 96 · 602 AU", "sessionLoad": 602, "maxPain": 0, "readiness": {"date": "2026-10-20", "sleep": 4, "fatigue": 1, "soreness": 1, "pain": 0, "motivation": 5, "score": 96, "level": "绿色", "painNote": "训练前0/10（复用当天推荐）；用户补充本次整体无痛，训练中及训练后0/10；次日（10-21）疼痛待补充"}},
  '2026-10-09':{status:'assessment',label:'踝背屈自测 · 左 7 / 右 10.5 cm（仅测试）',sessionLoad:null},
  '2026-09-21':{status:'training',label:'训练 · Ready 92 · 700 AU',sessionLoad:700,readiness:{sleep:3,fatigue:1,soreness:1,pain:0,painNote:'训练前无疼痛；训练中膝盖左2/10、右3/10；训练后无疼痛',motivation:5,score:92,level:'绿色'}},

@@ -21,9 +21,462 @@ const TRAINING_REVIEWS = {
     "2026-10-14": "ee29264eac9107519f5e43a325e179d65d10575524d8dfab4eaeaf23f5003235",
     "2026-10-15": "05a18cfbaff85013ab4f896fd7240f7ca230d44cdb01da97960d3ad6d1fb549f",
     "2026-10-18": "2cf8f5bc872385757b8c115149cb92d8b39def4d42f6140de7753102963c5b73",
-    "2026-10-20": "8647e622816c783d6da4eff5a38355ab189d8fd160cfa682024d467bd55bde68"
+    "2026-10-20": "8647e622816c783d6da4eff5a38355ab189d8fd160cfa682024d467bd55bde68",
+    "2026-10-24": "982aa3a409f435a4c338de183871e718fdc776b6e9e2ab54e91b5f3f4521a458",
+    "2026-10-25": "b6cd1fe9909870d3a84bbc73f692d67e97652f8c7e60d8af7e1b533ba79b8b83"
   },
   "reports": [
+    {
+      "cycleStart": "2026-09-21",
+      "type": "weekly",
+      "start": "2026-10-05",
+      "end": "2026-10-11",
+      "dataThrough": "2026-10-11",
+      "generatedAt": "2026-10-13T15:37:34+08:00",
+      "updatedAt": "2026-10-25T22:55:20+08:00",
+      "status": "complete",
+      "profileUpdatedAt": "2026-10-25",
+      "summary": "W3（10-05至10-11）有4次正式训练，已记录时长合计约277分钟、Session Load合计1891 AU；10-08约72分钟不含回家提踵与拉伸的未知时长，不能当作全部活动精确总量。按周模板的完整性保守核对，D1明确完成、D2与D3部分完成，严格完整完成率1/3（33.3%），不等于出勤率。RDL有同完成量加重且RPE降低的进展证据，引体完成量增加；膝内侧疼痛在突破、深蹲与制动中反复出现，恢复结论仍待观察。终结稳定性及疲劳下投篮缺少数据，无法判断。使用2026-10-25更新的个人档案，但不将10-19/10-25新增偏好追溯为W3执行要求；10-25体能反馈及10-20动作改善不计入W3结果。下一周的历史重点为W4减量与合条件复测；适用区间10-12至10-18现已结束，本报告不作为10-25当前周的直接训练处方。",
+      "execution": [
+        {
+          "week": 3,
+          "slot": "D1",
+          "status": "complete",
+          "dates": [
+            "2026-10-08"
+          ],
+          "note": "正式记录明确完成D1并回家完成提踵与拉伸；主项因器械限制由六角杠替换为高杠后蹲，Drop Landing实际用Snap Down。保加利亚与居家项目剂量缺失保留未知，不因已确认的适配判定缺勤。"
+        },
+        {
+          "week": 3,
+          "slot": "D2",
+          "status": "partial",
+          "dates": [
+            "2026-10-10"
+          ],
+          "note": "上肢爆发、推拉、肩部与核心已完成，药球受墙面限制改为向地面传球，核心改为侧桥；篮球技术未记录。10-06独立篮球没有明确补做归属，不能抵扣。"
+        },
+        {
+          "week": 3,
+          "slot": "D3",
+          "status": "partial",
+          "dates": [
+            "2026-10-11"
+          ],
+          "note": "按实际内容已完成速度、踝弹性、单腿制动、哥本哈根及30分钟篮球；周模板的跑动急停、5-10-5及侧向跨跳无完成证据，整理未报告，故按完整模板记部分。安全适配不等于应补做原模板全部内容，未记录不等于未训练。"
+        }
+      ],
+      "extraSessions": [
+        {
+          "text": "额外专项篮球：10-06运球30分钟＋半场实战30分钟，共60分钟、300 AU，纳入真实负荷，不抵扣D2。另10-11有30分钟篮球，区间内篮球活动已知合计90分钟；实战仅明确10-06的30分钟，不能把全部90分钟视为实战或体能训练。无独立恢复日正式记录不等于没有恢复活动。",
+          "dates": [
+            "2026-10-06",
+            "2026-10-11"
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "text": "目标1·后链力量有进展证据：10-08 RDL单侧20kg、3×8、RPE5，对照records/2026-09.md#训练详情-2026-09-28的单侧18kg、3×8、RPE6（单侧口径在该日总结明确），负重提高、完成量不变、RPE降低。此结论只针对RDL；高杠后蹲30kg 4×5与六角杠单侧35kg 3×7的动作/器械口径不同，不能判断蹲类力量整体提高。",
+          "dates": [
+            "2026-10-08"
+          ]
+        },
+        {
+          "text": "目标1·疼痛与侧差待观察：10-06右腿蹬地右膝内侧2/10；10-08高杠后蹲双膝内侧2/10、保加利亚右膝内侧2/10；10-11全力冲刺0.5/10、台阶下蹲1/10。4次训练后均0/10，但前三次缺独立次日反馈。10-11次日原文为10-12训练前0/10、实战中1/10、后0/10，脚本painNext取1不能解读为全天疼痛1，也不能解读为全天无痛。10-08保加利亚左RPE7、右6，对照09-28左8、右7方向相同；负荷下降且组次缺失，不能认定差距缩小。",
+          "dates": [
+            "2026-10-06",
+            "2026-10-08",
+            "2026-10-10",
+            "2026-10-11"
+          ]
+        },
+        {
+          "text": "上肢有完成量证据而非全面力量结论：10-10自重引体4×5共20次，较records/2026-09.md#训练详情-2026-09-23的3×6共18次增加，符合既有总完成量比较规则，但本次RPE8–9，不能证明更轻松。面拉由09-23的42.2lb 2×15 RPE5至44lb 3×15 RPE5，正式记录已采纳为更优，后续仍须核对同器械设定。卧推每手26kg 4×6较基线每手20kg 3×12重量高、总次数低，不判定严格更优；划船lb/kg不换算；侧桥RPE8，不能以时长增加证明更优。",
+          "dates": [
+            "2026-10-10"
+          ]
+        },
+        {
+          "text": "执行与刺激控制：Readiness4/4次有值，平均89、范围88–92，睡眠平均3.75/5、疲劳均1/5，仅代表记录训练日。10-08高杠末次蹲起速度明显变慢；10-10引体RPE8–9且休息45秒；10-11临时增加25米极限冲刺2组，哥本哈根改长杠杆3×25秒RPE7，均需单列实际刺激。10-10 20:13至10-11 11:03仅14小时50分钟（不同主要内容，仍需核对综合疲劳），不能以绿色分数代替恢复判断。W2的10-04缺时长，不计算真实周负荷增幅。",
+          "dates": [
+            "2026-10-08",
+            "2026-10-10",
+            "2026-10-11"
+          ]
+        },
+        {
+          "text": "目标2与3·无法判断：已知90分钟篮球未提供终结命中/出手、疲劳前后投篮、持续输出或标准化体能成绩，不能判断终结稳定性或专项体能改善。25米末组2.9秒缺距离测量、起跑和计时方法，不建立速度结论；CMJ只有3×3，没有跳高或质量复测，不能判为爆发力提升。当前弱点文件的10-20动作改善、10-25体能自述均在区间外，不倒填成W3证据。",
+          "dates": [
+            "2026-10-06",
+            "2026-10-08",
+            "2026-10-11"
+          ]
+        },
+        {
+          "text": "个人资料及计划匹配：使用athlete-profile.md的2026-10-25版本，4个训练日、2个篮球活动日符合日常3–4次训练及2–3次篮球频率范围，但不证明恢复充分。单次可用时间缺失，不能评价时长匹配；器材与墙面约束有明确替代。10-19减少纯上肢投入和10-25篮球由用户自排属于较晚偏好，不用来追溯扣减W3完成度。膝部情况及避免极限重量、快速腹内压/眼压升高的明确限制继续参与解释，未使用身体测量数据，也不将身体背景推成能力分级。",
+          "dates": [
+            "2026-10-06",
+            "2026-10-08",
+            "2026-10-10",
+            "2026-10-11"
+          ]
+        }
+      ],
+      "decisions": [
+        {
+          "text": "保留：以W4（10-12至10-18）为原适用期，保留准备/防伤、落地质量与单腿控制，按W4模板减量；RDL进展不自动触发继续加重。验证指标为同动作、同器械的实际组次、负荷、RPE、动作质量和前中后及次日疼痛。该区间现已结束，仅保存历史复盘重点，不顺延成当前加量指令。",
+          "dates": [
+            "2026-10-08",
+            "2026-10-11"
+          ]
+        },
+        {
+          "text": "调整：W4原计划容量下降约30%–40%，按动作组次调整，不把1891 AU机械乘比例当精确周目标；将额外篮球并入总刺激，不集中补齐缺项。优先补充可回忆的次日疼痛、单侧组次与器械口径，记不清保留未知；核对连续训练间隔和动作末段速度。",
+          "dates": [
+            "2026-10-06",
+            "2026-10-08",
+            "2026-10-10",
+            "2026-10-11"
+          ]
+        },
+        {
+          "text": "暂缓：不凭25米2.9秒升级速度任务，不为W4测试清单追加全力冲刺、跳跃量或长杠杆进阶；继续沿用动作库质量停止条件和个人限制。复测先确认距离、计时、变式、器械与疼痛状态；速度明显下降、控制丢失或疼痛增加时按既有规则停止或退阶，不将绿色Readiness视作必须测试。",
+          "dates": [
+            "2026-10-08",
+            "2026-10-10",
+            "2026-10-11"
+          ]
+        },
+        {
+          "text": "调整：为今后的目标核验保留少量可比较数据，由用户自主篮球安排中记录既有训练的终结/投篮命中与出手、任务条件及疲劳状态，不额外做疲劳测试来填表。W3没有这些数据，不能用10-25“体能短板”反向证明当周能力下降；当前运动能力安排应依据当日状态和适用阶段复盘重新判断。",
+          "dates": [
+            "2026-10-06",
+            "2026-10-10",
+            "2026-10-11"
+          ]
+        }
+      ],
+      "gaps": [
+        "10-06、10-08、10-10次日疼痛未记录，覆盖率仅1/4；10-11次日文本混合训练前、中、后时点，需保留原文解释。",
+        "已知约277分钟和1891 AU含10-08近似时长；回家提踵与拉伸时长未知，因此并非全部活动精确总量。",
+        "D2篮球未记录；D3原周模板若干项目和整理未确认，完整完成率33.3%不是出勤率，也不是安全适配失败率。",
+        "10-08保加利亚、提踵、拉伸剂量缺失；10-11台阶高度、侧别与哥本哈根侧别/休息条件不完整，不能强行比较。",
+        "25米2.9秒的距离与计时条件未知；CMJ跳高、规范质量复测、终结及疲劳下命中率均缺失，不创建相应进展结论。",
+        "ability-assessment.md有10-09踝背屈自测条目，但当前月度事实源没有10-09正式详情，本报告不作为有效测试纳入；如需补齐，应另用正式记录流程核实，不在复盘中改源。",
+        "未记录日状态、单次可用时间、篮球实际密度未知；区间外W2负荷也不完整，无法计算可靠的周负荷增幅。"
+      ],
+      "stats": {
+        "start": "2026-10-05",
+        "end": "2026-10-11",
+        "dataThrough": "2026-10-11",
+        "recordDays": 4,
+        "trainingDays": 4,
+        "metrics": {
+          "duration": {
+            "known": 4,
+            "total": 4,
+            "sum": 277,
+            "mean": 69.25,
+            "max": 92,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": [
+              "2026-10-08"
+            ]
+          },
+          "srpe": {
+            "known": 4,
+            "total": 4,
+            "sum": 27,
+            "mean": 6.75,
+            "max": 8,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": []
+          },
+          "load": {
+            "known": 4,
+            "total": 4,
+            "sum": 1891,
+            "mean": 472.75,
+            "max": 644,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": [
+              "2026-10-08"
+            ]
+          },
+          "readiness": {
+            "known": 4,
+            "total": 4,
+            "sum": 356,
+            "mean": 89.0,
+            "max": 92,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": []
+          },
+          "sleep": {
+            "known": 4,
+            "total": 4,
+            "sum": 15,
+            "mean": 3.75,
+            "max": 4,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": []
+          },
+          "fatigue": {
+            "known": 4,
+            "total": 4,
+            "sum": 4,
+            "mean": 1.0,
+            "max": 1,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": []
+          },
+          "soreness": {
+            "known": 4,
+            "total": 4,
+            "sum": 5,
+            "mean": 1.25,
+            "max": 2,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": []
+          },
+          "readinessPain": {
+            "known": 4,
+            "total": 4,
+            "sum": 0,
+            "mean": 0.0,
+            "max": 0,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": []
+          },
+          "motivation": {
+            "known": 4,
+            "total": 4,
+            "sum": 15,
+            "mean": 3.75,
+            "max": 4,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": []
+          },
+          "painBefore": {
+            "known": 4,
+            "total": 4,
+            "sum": 0.0,
+            "mean": 0.0,
+            "max": 0.0,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": []
+          },
+          "painDuring": {
+            "known": 4,
+            "total": 4,
+            "sum": 5.0,
+            "mean": 1.25,
+            "max": 2.0,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": []
+          },
+          "painAfter": {
+            "known": 4,
+            "total": 4,
+            "sum": 0.0,
+            "mean": 0.0,
+            "max": 0.0,
+            "complete": true,
+            "missingDates": [],
+            "approximateDates": []
+          },
+          "painNext": {
+            "known": 1,
+            "total": 4,
+            "sum": 1.0,
+            "mean": 1.0,
+            "max": 1.0,
+            "complete": false,
+            "missingDates": [
+              "2026-10-06",
+              "2026-10-08",
+              "2026-10-10"
+            ],
+            "approximateDates": []
+          }
+        },
+        "records": [
+          {
+            "date": "2026-10-06",
+            "status": "已完成",
+            "training": true,
+            "duration": 60,
+            "durationApproximate": false,
+            "srpe": 5,
+            "load": 300,
+            "raw": {
+              "duration": "60 分钟（原地运球 10 分钟 + 行进间运球 20 分钟 + 半场实战 30 分钟）",
+              "srpe": "5/10",
+              "load": "300 AU",
+              "painBefore": "0/10 · 无疼痛",
+              "painDuring": "2/10 · 右膝内侧；左侧突破时右腿蹬地发力触发",
+              "painAfter": "0/10 · 无疼痛",
+              "painNext": "待补充",
+              "sleep": "4/5",
+              "fatigue": "1/5",
+              "soreness": "1/5",
+              "readinessPain": "0/10",
+              "motivation": "4/5",
+              "readiness": "92/100"
+            },
+            "warnings": [],
+            "sleep": 4,
+            "fatigue": 1,
+            "soreness": 1,
+            "readinessPain": 0,
+            "motivation": 4,
+            "readiness": 92,
+            "source": "records/2026-10.html#detail-2026-10-06",
+            "painBefore": 0.0,
+            "painDuring": 2.0,
+            "painAfter": 0.0,
+            "painNext": null
+          },
+          {
+            "date": "2026-10-08",
+            "status": "已完成",
+            "training": true,
+            "duration": 72,
+            "durationApproximate": true,
+            "srpe": 8,
+            "load": 576,
+            "raw": {
+              "duration": "约 72 分钟（健身房约 20:10–21:22；回家提踵与拉伸时长未记录）",
+              "srpe": "8/10",
+              "load": "576 AU",
+              "painBefore": "0/10 · 无疼痛",
+              "painDuring": "2/10 · 高杠后蹲双膝内侧、保加利亚单腿蹲右膝内侧",
+              "painAfter": "0/10 · 无疼痛",
+              "painNext": "待补充",
+              "sleep": "4/5",
+              "fatigue": "1/5",
+              "soreness": "1/5",
+              "readinessPain": "0/10",
+              "motivation": "3/5",
+              "readiness": "88/100"
+            },
+            "warnings": [],
+            "sleep": 4,
+            "fatigue": 1,
+            "soreness": 1,
+            "readinessPain": 0,
+            "motivation": 3,
+            "readiness": 88,
+            "source": "records/2026-10.html#detail-2026-10-08",
+            "painBefore": 0.0,
+            "painDuring": 2.0,
+            "painAfter": 0.0,
+            "painNext": null
+          },
+          {
+            "date": "2026-10-10",
+            "status": "部分完成（D2 上肢与核心已完成；篮球技术未记录）",
+            "training": true,
+            "duration": 53,
+            "durationApproximate": false,
+            "srpe": 7,
+            "load": 371,
+            "raw": {
+              "duration": "53 分钟",
+              "srpe": "7/10",
+              "load": "371 AU",
+              "painBefore": "0/10 · 无疼痛",
+              "painDuring": "0/10 · 无疼痛",
+              "painAfter": "0/10 · 无疼痛",
+              "painNext": "待补充",
+              "sleep": "4/5",
+              "fatigue": "1/5",
+              "soreness": "2/5",
+              "readinessPain": "0/10",
+              "motivation": "4/5",
+              "readiness": "88/100"
+            },
+            "warnings": [],
+            "sleep": 4,
+            "fatigue": 1,
+            "soreness": 2,
+            "readinessPain": 0,
+            "motivation": 4,
+            "readiness": 88,
+            "source": "records/2026-10.html#detail-2026-10-10",
+            "painBefore": 0.0,
+            "painDuring": 0.0,
+            "painAfter": 0.0,
+            "painNext": null
+          },
+          {
+            "date": "2026-10-11",
+            "status": "已完成（按实际内容记录）",
+            "training": true,
+            "duration": 92,
+            "durationApproximate": false,
+            "srpe": 7,
+            "load": 644,
+            "raw": {
+              "duration": "92 分钟",
+              "srpe": "7/10",
+              "load": "644 AU",
+              "painBefore": "0/10 · 复用当天推荐 Readiness",
+              "painDuring": "1/10 · 右膝内侧；单腿台阶下蹲触发，篮球时未超过",
+              "painAfter": "0/10",
+              "painNext": "10-12 训练前 0/10；当日实战中 1/10、训练后 0/10",
+              "sleep": "3/5",
+              "fatigue": "1/5",
+              "soreness": "1/5",
+              "readinessPain": "0/10",
+              "motivation": "4/5",
+              "readiness": "88/100"
+            },
+            "warnings": [],
+            "sleep": 3,
+            "fatigue": 1,
+            "soreness": 1,
+            "readinessPain": 0,
+            "motivation": 4,
+            "readiness": 88,
+            "source": "records/2026-10.html#detail-2026-10-11",
+            "painBefore": 0.0,
+            "painDuring": 1.0,
+            "painAfter": 0.0,
+            "painNext": 1.0
+          }
+        ],
+        "sources": {
+          "2026-10-06": "601a045ede8337068ffbd74e177365ab0ad70a1c43b3a6c007c08106bceb62dc",
+          "2026-10-08": "465e0234075c4ac98240c7032cc07ed503641c998f72aefaad38ad4f5e7984c2",
+          "2026-10-10": "74ffa2bca75fcc37b4e4d1b2560f391612e2d226e2f033c9904dc053d1d6a890",
+          "2026-10-11": "02e6f88b5d3316e4882f163d6fe9811912120a507ff94efaf1d6780181ca7357"
+        }
+      },
+      "sources": {
+        "2026-10-06": "601a045ede8337068ffbd74e177365ab0ad70a1c43b3a6c007c08106bceb62dc",
+        "2026-10-08": "465e0234075c4ac98240c7032cc07ed503641c998f72aefaad38ad4f5e7984c2",
+        "2026-10-10": "74ffa2bca75fcc37b4e4d1b2560f391612e2d226e2f033c9904dc053d1d6a890",
+        "2026-10-11": "02e6f88b5d3316e4882f163d6fe9811912120a507ff94efaf1d6780181ca7357"
+      },
+      "applicability": {
+        "start": "2026-10-12",
+        "end": "2026-10-18"
+      },
+      "id": "2026-09-21-weekly-2026-10-05-2026-10-11"
+    },
     {
       "cycleStart": "2026-09-21",
       "type": "weekly",
@@ -1614,451 +2067,6 @@ const TRAINING_REVIEWS = {
         "end": "2026-11-15"
       },
       "id": "2026-09-21-stage-2026-09-21-2026-10-18"
-    },
-    {
-      "cycleStart": "2026-09-21",
-      "type": "weekly",
-      "start": "2026-10-05",
-      "end": "2026-10-11",
-      "dataThrough": "2026-10-11",
-      "generatedAt": "2026-10-13T15:37:34+08:00",
-      "updatedAt": "2026-10-13T15:37:34+08:00",
-      "status": "complete",
-      "profileUpdatedAt": "2026-10-13",
-      "summary": "W3（2026-10-05至10-11）有4个正式训练日，记录时长合计约277分钟、Session Load合计1891 AU；其中10-08采用约72分钟，回家提踵与拉伸时长未记录，因此这些是现有记录口径的统计，不是全部活动的精确总量。D1明确完成，D2上肢与核心完成但篮球技术未记录，D3主体训练完成但整理及部分计划内容未确认；按完整槽位的保守口径为1/3（33.3%），不代表只训练了三分之一。RDL出现同完成量下加重且RPE降低的进展证据；右膝疼痛仍在突破、深蹲和单腿制动中出现，不能判为持续改善。篮球终结稳定性与疲劳下投篮目标缺少成绩，无法判断进展。下一周是W4减量与复测周，重点是控制刺激、补齐次日反应和建立可比较记录，而非继续追求峰值。复盘使用2026-10-13更新的个人档案，未使用身体测量数据，也不改写历史推荐。",
-      "execution": [
-        {
-          "week": 3,
-          "slot": "D1",
-          "status": "complete",
-          "dates": [
-            "2026-10-08"
-          ],
-          "note": "正式记录明确完成D1及回家提踵、拉伸；六角杠铃不可用，主项适配为高杠后蹲。部分动作剂量缺失不补写，器械替换不作为缺勤或力量退步。"
-        },
-        {
-          "week": 3,
-          "slot": "D2",
-          "status": "partial",
-          "dates": [
-            "2026-10-10"
-          ],
-          "note": "完成上肢爆发、推拉、肩部健康与核心，篮球技术未记录；10-06独立篮球训练没有明确补做D2的归属，不能自动抵扣。"
-        },
-        {
-          "week": 3,
-          "slot": "D3",
-          "status": "partial",
-          "dates": [
-            "2026-10-11"
-          ],
-          "note": "正式记录状态为按实际内容已完成，速度、单腿制动、核心和30分钟篮球主体均有记录；本复盘另按计划完整性核对：训练后整理未报告，原周计划的跑动急停、5-10-5、侧向跨跳未有完成证据。安全适配不等于应补做全部原计划，本项仅记已确认部分，不断言未记录项目实际没做。"
-        }
-      ],
-      "extraSessions": [
-        {
-          "text": "额外篮球：10-06独立训练60分钟、300 AU，含运球30分钟与半场实战30分钟；计入实际训练与负荷，不自动替代D2槽位。上周可确认的篮球活动合计90分钟（10-06的60分钟＋10-11的30分钟），不推算未记录的专项内容；没有独立恢复日正式记录不等于没有休息或恢复活动。",
-          "dates": [
-            "2026-10-06",
-            "2026-10-11"
-          ]
-        }
-      ],
-      "findings": [
-        {
-          "text": "目标1·下肢力量有局部进展证据：10-08 RDL单侧20kg、3×8、RPE5；对照records/2026-09.md#训练详情-2026-09-28的同动作单侧18kg、3×8、RPE6（单侧口径在该日训练总结中明确），完成量不降而负重提高、RPE降低。此结论只针对RDL；高杠后蹲与六角杠铃深蹲器械、动作不同，不作直接优劣比较，也不能据此推断膝痛已经改善。",
-          "dates": [
-            "2026-10-08"
-          ]
-        },
-        {
-          "text": "目标1·疼痛与左右差仍待观察：10-06左侧突破右腿蹬地、10-08深蹲与保加利亚均出现最高2/10疼痛，10-11台阶下蹲最高1/10；4次训练后均记录0/10，但10-06、10-08、10-10缺少次日反应。10-11的次日记录是10-12训练前0/10、实战中1/10、训练后0/10，不能概括为全天无痛。10-08保加利亚左RPE7、右6，与09-28左侧更费力的方向一致；本次负荷降低且组次缺失，不能判定左右差缩小。",
-          "dates": [
-            "2026-10-06",
-            "2026-10-08",
-            "2026-10-10",
-            "2026-10-11"
-          ]
-        },
-        {
-          "text": "执行与用力：训练日Readiness平均89（4次，88–92），疲劳评分均为1/5，不能代表未记录日状态或证明恢复完全。10-08主项末次蹲起明显变慢，10-10引体RPE8–9，10-11临时增加25米全力冲刺并将哥本哈根由短杠杆改成长杠杆；计划外刺激需要控制。引体总次数从09-23的18次到本次20次是完成量增加，不能等同最大力量或恢复改善。W2负荷只知1712 AU且10-04缺时长，不能据此计算本周真实负荷增幅；W3更少训练天也不能直接解释为训练量下降。",
-          "dates": [
-            "2026-10-08",
-            "2026-10-10",
-            "2026-10-11"
-          ]
-        },
-        {
-          "text": "目标2与3·无法判断篮球终结稳定性和疲劳下命中率进展：10-06主要记录运球与实战时长，10-11仅确认30分钟篮球，无终结命中/出手、疲劳前后投篮或持续输出测试。25米2.9秒的距离测量、起跑和计时条件未知，不能作为有效速度基线；CMJ只有组次，没有跳高或规范质量复测，既有落地控制弱点不能因本周未提及失稳而判为解决。",
-          "dates": [
-            "2026-10-06",
-            "2026-10-08",
-            "2026-10-11"
-          ]
-        },
-        {
-          "text": "资料与条件匹配：按2026-10-13版athlete-profile.md分析，4个训练日符合日常每周3–4天的范围，2个篮球活动日符合每周2–3次的默认条件；这不自动证明负荷可恢复。缺少单次可用时间，无法评价时长匹配。记录反映器材/墙面限制已做替代，继续保留用户明确的膝部情况及避免极限重量、腹内压/眼压快速升高训练限制；本复盘不作医学判断，也不追溯改变原训练当时依据。",
-          "dates": [
-            "2026-10-06",
-            "2026-10-08",
-            "2026-10-10",
-            "2026-10-11"
-          ]
-        }
-      ],
-      "decisions": [
-        {
-          "text": "保留：W4保留准备/Level2防伤、落地质量与单腿控制等既有重点，按12周计划W4模板减少训练量，不把RDL进步直接转为继续加重的理由。以动作稳定、速度、当次及次日疼痛记录核对执行质量；具体当天动作和剂量仍由推荐技能结合当日状态确定。",
-          "dates": [
-            "2026-10-08",
-            "2026-10-11"
-          ]
-        },
-        {
-          "text": "调整：本周执行W4减量与复测安排；原计划训练量下降约30–40%指计划容量调整，不将1891 AU机械乘比例作为精确周负荷目标。额外篮球也纳入刺激与恢复核对，不为补齐D2或原周计划而集中追加内容。优先补齐10-06、10-08、10-10次日反应及今后训练后的反馈，记不清则继续保留缺失。",
-          "dates": [
-            "2026-10-06",
-            "2026-10-08",
-            "2026-10-10",
-            "2026-10-11"
-          ]
-        },
-        {
-          "text": "暂缓：不自动追加全力冲刺、跳跃接触量或哥本哈根进阶，不把10-11的自测成绩作为升级依据。继续遵守档案中的明确限制与既有Quality Stop；出现速度明显下降、落地失控或症状增加时按既有规则停止或退阶。W4测试需满足个人限制、当日权限和可比较条件，不强求完成全部测试清单。",
-          "dates": [
-            "2026-10-08",
-            "2026-10-10",
-            "2026-10-11"
-          ]
-        },
-        {
-          "text": "调整：为篮球目标留出可完成且可记录的专项部分，固定点位/时长与左右侧条件，记录终结和投篮的命中数、出手数及当时疲劳状态；条件不同分开记录。先建立可比较基线，不额外安排高强度疲劳测试来填数据。同步确认D3整理环节及实际适配范围，再复核完整完成率；所有新结果经正式记录流程落盘后才进入能力或弱点评估。",
-          "dates": [
-            "2026-10-06",
-            "2026-10-10",
-            "2026-10-11"
-          ]
-        }
-      ],
-      "gaps": [
-        "10-06、10-08、10-10次日疼痛/恢复未记录，覆盖率仅1/4；10-11的次日数据包含不同活动时点，不代表全天无痛。",
-        "10-08总时长为约72分钟，回家提踵与拉伸时长缺失；277分钟与1891 AU含近似记录，虽4次均有数值也不能视为完整活动的精确总量。",
-        "D2篮球未记录；D3整理、篮球具体内容和原周计划若干项目缺少确认。33.3%只表示严格确认完整的槽位比例，不是出勤率，也不把安全适配判为失败。",
-        "保加利亚组次、10-11哥本哈根和台阶下蹲侧别等缺失；不从推荐补齐剂量，不强行比较单双侧或杠杆条件。",
-        "缺少CMJ跳高/规范落地质量复测、标准化冲刺条件，以及终结和疲劳下投篮命中/出手数据。",
-        "能力评估引用10-09踝背屈自测，但当前records/2026-10.md未找到对应正式详情，本次不将它作为本周有效测试证据；如需纳入，应通过正式记录流程核实并补齐条件。",
-        "未记录日的睡眠、疲劳、活动及单次可用时间未知；W2的10-04负荷缺失，不能精确比较周总负荷变化。"
-      ],
-      "stats": {
-        "start": "2026-10-05",
-        "end": "2026-10-11",
-        "dataThrough": "2026-10-11",
-        "recordDays": 4,
-        "trainingDays": 4,
-        "metrics": {
-          "duration": {
-            "known": 4,
-            "total": 4,
-            "sum": 277,
-            "mean": 69.25,
-            "max": 92,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": [
-              "2026-10-08"
-            ]
-          },
-          "srpe": {
-            "known": 4,
-            "total": 4,
-            "sum": 27,
-            "mean": 6.75,
-            "max": 8,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": []
-          },
-          "load": {
-            "known": 4,
-            "total": 4,
-            "sum": 1891,
-            "mean": 472.75,
-            "max": 644,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": [
-              "2026-10-08"
-            ]
-          },
-          "readiness": {
-            "known": 4,
-            "total": 4,
-            "sum": 356,
-            "mean": 89.0,
-            "max": 92,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": []
-          },
-          "sleep": {
-            "known": 4,
-            "total": 4,
-            "sum": 15,
-            "mean": 3.75,
-            "max": 4,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": []
-          },
-          "fatigue": {
-            "known": 4,
-            "total": 4,
-            "sum": 4,
-            "mean": 1.0,
-            "max": 1,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": []
-          },
-          "soreness": {
-            "known": 4,
-            "total": 4,
-            "sum": 5,
-            "mean": 1.25,
-            "max": 2,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": []
-          },
-          "readinessPain": {
-            "known": 4,
-            "total": 4,
-            "sum": 0,
-            "mean": 0.0,
-            "max": 0,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": []
-          },
-          "motivation": {
-            "known": 4,
-            "total": 4,
-            "sum": 15,
-            "mean": 3.75,
-            "max": 4,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": []
-          },
-          "painBefore": {
-            "known": 4,
-            "total": 4,
-            "sum": 0.0,
-            "mean": 0.0,
-            "max": 0.0,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": []
-          },
-          "painDuring": {
-            "known": 4,
-            "total": 4,
-            "sum": 5.0,
-            "mean": 1.25,
-            "max": 2.0,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": []
-          },
-          "painAfter": {
-            "known": 4,
-            "total": 4,
-            "sum": 0.0,
-            "mean": 0.0,
-            "max": 0.0,
-            "complete": true,
-            "missingDates": [],
-            "approximateDates": []
-          },
-          "painNext": {
-            "known": 1,
-            "total": 4,
-            "sum": 1.0,
-            "mean": 1.0,
-            "max": 1.0,
-            "complete": false,
-            "missingDates": [
-              "2026-10-06",
-              "2026-10-08",
-              "2026-10-10"
-            ],
-            "approximateDates": []
-          }
-        },
-        "records": [
-          {
-            "date": "2026-10-06",
-            "status": "已完成",
-            "training": true,
-            "duration": 60,
-            "durationApproximate": false,
-            "srpe": 5,
-            "load": 300,
-            "raw": {
-              "duration": "60 分钟（原地运球 10 分钟 + 行进间运球 20 分钟 + 半场实战 30 分钟）",
-              "srpe": "5/10",
-              "load": "300 AU",
-              "painBefore": "0/10 · 无疼痛",
-              "painDuring": "2/10 · 右膝内侧；左侧突破时右腿蹬地发力触发",
-              "painAfter": "0/10 · 无疼痛",
-              "painNext": "待补充",
-              "sleep": "4/5",
-              "fatigue": "1/5",
-              "soreness": "1/5",
-              "readinessPain": "0/10",
-              "motivation": "4/5",
-              "readiness": "92/100"
-            },
-            "warnings": [],
-            "sleep": 4,
-            "fatigue": 1,
-            "soreness": 1,
-            "readinessPain": 0,
-            "motivation": 4,
-            "readiness": 92,
-            "source": "records/2026-10.html#detail-2026-10-06",
-            "painBefore": 0.0,
-            "painDuring": 2.0,
-            "painAfter": 0.0,
-            "painNext": null
-          },
-          {
-            "date": "2026-10-08",
-            "status": "已完成",
-            "training": true,
-            "duration": 72,
-            "durationApproximate": true,
-            "srpe": 8,
-            "load": 576,
-            "raw": {
-              "duration": "约 72 分钟（健身房约 20:10–21:22；回家提踵与拉伸时长未记录）",
-              "srpe": "8/10",
-              "load": "576 AU",
-              "painBefore": "0/10 · 无疼痛",
-              "painDuring": "2/10 · 高杠后蹲双膝内侧、保加利亚单腿蹲右膝内侧",
-              "painAfter": "0/10 · 无疼痛",
-              "painNext": "待补充",
-              "sleep": "4/5",
-              "fatigue": "1/5",
-              "soreness": "1/5",
-              "readinessPain": "0/10",
-              "motivation": "3/5",
-              "readiness": "88/100"
-            },
-            "warnings": [],
-            "sleep": 4,
-            "fatigue": 1,
-            "soreness": 1,
-            "readinessPain": 0,
-            "motivation": 3,
-            "readiness": 88,
-            "source": "records/2026-10.html#detail-2026-10-08",
-            "painBefore": 0.0,
-            "painDuring": 2.0,
-            "painAfter": 0.0,
-            "painNext": null
-          },
-          {
-            "date": "2026-10-10",
-            "status": "部分完成（D2 上肢与核心已完成；篮球技术未记录）",
-            "training": true,
-            "duration": 53,
-            "durationApproximate": false,
-            "srpe": 7,
-            "load": 371,
-            "raw": {
-              "duration": "53 分钟",
-              "srpe": "7/10",
-              "load": "371 AU",
-              "painBefore": "0/10 · 无疼痛",
-              "painDuring": "0/10 · 无疼痛",
-              "painAfter": "0/10 · 无疼痛",
-              "painNext": "待补充",
-              "sleep": "4/5",
-              "fatigue": "1/5",
-              "soreness": "2/5",
-              "readinessPain": "0/10",
-              "motivation": "4/5",
-              "readiness": "88/100"
-            },
-            "warnings": [],
-            "sleep": 4,
-            "fatigue": 1,
-            "soreness": 2,
-            "readinessPain": 0,
-            "motivation": 4,
-            "readiness": 88,
-            "source": "records/2026-10.html#detail-2026-10-10",
-            "painBefore": 0.0,
-            "painDuring": 0.0,
-            "painAfter": 0.0,
-            "painNext": null
-          },
-          {
-            "date": "2026-10-11",
-            "status": "已完成（按实际内容记录）",
-            "training": true,
-            "duration": 92,
-            "durationApproximate": false,
-            "srpe": 7,
-            "load": 644,
-            "raw": {
-              "duration": "92 分钟",
-              "srpe": "7/10",
-              "load": "644 AU",
-              "painBefore": "0/10 · 复用当天推荐 Readiness",
-              "painDuring": "1/10 · 右膝内侧；单腿台阶下蹲触发，篮球时未超过",
-              "painAfter": "0/10",
-              "painNext": "10-12 训练前 0/10；当日实战中 1/10、训练后 0/10",
-              "sleep": "3/5",
-              "fatigue": "1/5",
-              "soreness": "1/5",
-              "readinessPain": "0/10",
-              "motivation": "4/5",
-              "readiness": "88/100"
-            },
-            "warnings": [],
-            "sleep": 3,
-            "fatigue": 1,
-            "soreness": 1,
-            "readinessPain": 0,
-            "motivation": 4,
-            "readiness": 88,
-            "source": "records/2026-10.html#detail-2026-10-11",
-            "painBefore": 0.0,
-            "painDuring": 1.0,
-            "painAfter": 0.0,
-            "painNext": 1.0
-          }
-        ],
-        "sources": {
-          "2026-10-06": "601a045ede8337068ffbd74e177365ab0ad70a1c43b3a6c007c08106bceb62dc",
-          "2026-10-08": "465e0234075c4ac98240c7032cc07ed503641c998f72aefaad38ad4f5e7984c2",
-          "2026-10-10": "ffb1705b6584906f8b42f7bc4a056c95526d40a33c20235771f3f37a6766ce37",
-          "2026-10-11": "02e6f88b5d3316e4882f163d6fe9811912120a507ff94efaf1d6780181ca7357"
-        }
-      },
-      "sources": {
-        "2026-10-06": "601a045ede8337068ffbd74e177365ab0ad70a1c43b3a6c007c08106bceb62dc",
-        "2026-10-08": "465e0234075c4ac98240c7032cc07ed503641c998f72aefaad38ad4f5e7984c2",
-        "2026-10-10": "ffb1705b6584906f8b42f7bc4a056c95526d40a33c20235771f3f37a6766ce37",
-        "2026-10-11": "02e6f88b5d3316e4882f163d6fe9811912120a507ff94efaf1d6780181ca7357"
-      },
-      "applicability": {
-        "start": "2026-10-12",
-        "end": "2026-10-18"
-      },
-      "id": "2026-09-21-weekly-2026-10-05-2026-10-11"
     }
   ]
 };

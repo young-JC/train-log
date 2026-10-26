@@ -25,6 +25,26 @@ function updateRecommendation(){const s=calcReady(), p=+pain.value;let title='�
 let currentRecKey='';
 function recommendationDates(){return Object.keys(TODAY_RECOMMENDATION).sort()}
 function latestRecKey(){const today=currentDateStr(),dates=recommendationDates();return dates.filter(d=>d<=today).pop()||dates[dates.length-1]||''}
+// 推荐保持只读；折叠仅改变阅读视图，不选择动作、不改写历史数据。
+function recPlainText(value){const el=document.createElement('div');el.innerHTML=String(value);return el.textContent||''}
+function renderRecommendationSlots(plan){
+ document.getElementById('recSlotCount').textContent=plan.length+' 个槽位';
+ document.getElementById('sessionSlots').innerHTML=plan.map((slot,index)=>{
+  const pinned=/Quality Stop|权限|疼痛监控|停止条件|训练后记录/i.test(slot[0]);
+  const parts=String(slot[1]).split(/<br\s*\/?\s*>/i),suggested=parts.find(part=>/^\s*A\s*[：:]/.test(recPlainText(part)));
+  const preview=recPlainText(suggested||parts[0]);
+  return '<details class="rec-slot'+(pinned?' rec-slot-caution':'')+'"'+(pinned?' data-rec-pinned="true"':'')+((pinned||(index===0&&!suggested))?' open':'')+'><summary><span class="rec-slot-num">'+String(index+1).padStart(2,'0')+'</span><span class="rec-slot-heading"><span class="rec-slot-name">'+escapeHtml(slot[0])+'</span><span class="rec-slot-preview">'+escapeHtml(preview)+'</span></span><span class="rec-slot-toggle" aria-hidden="true"></span></summary><div class="rec-slot-content">'+recViewSlotContent(slot)+'</div></details>';
+ }).join('');
+}
+function renderRecommendationReason(value){
+ const source=document.createElement('div');source.innerHTML=value;
+ document.getElementById('todayReason').innerHTML=Array.from(source.children).map((item,index)=>{
+  const text=item.textContent||'',separator=text.search(/[：:]/);
+  const title=separator>0&&separator<60?text.slice(0,separator):'依据 '+(index+1);
+  // 标题供扫读，正文保留源段落全文，避免改写条件或历史证据。
+  return '<details class="rec-reason"><summary>'+escapeHtml(title.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/,''))+'</summary><div>'+item.outerHTML+'</div></details>';
+ }).join('');
+}
 function renderToday(pickedKey){
  const w=weekIndex(),mode=document.getElementById('mode').value;
  const today=currentDateStr();
@@ -41,10 +61,11 @@ function renderToday(pickedKey){
   document.getElementById('todayPill').textContent=pillLabel+' · '+meta.date;
   document.getElementById('todayModule').textContent=meta.week+' · '+meta.day;
   document.getElementById('todayTitle').textContent=meta.focus;
-  document.getElementById('todayPurpose').textContent=recKey===today?'今日推荐 · '+meta.phase:(recKey===latestRecKey()?'最近一次推荐 · 未再次推荐时保持此内容':'过往推荐 · '+meta.date);
+  document.getElementById('todayPurpose').textContent=(recKey===today?'今日推荐':recKey===latestRecKey()?'最近一次推荐 · '+meta.date:'历史推荐 · '+meta.date)+' · '+meta.phase;
   document.getElementById('todayRpe').textContent=meta.readiness;
   document.getElementById('todayDuration').textContent=meta.duration;
-  document.getElementById('recMeta').innerHTML='<span class="pill">'+meta.date+'</span><span class="pill">'+meta.week+' · '+meta.day+'</span><span class="pill">'+meta.phase+'</span><span class="pill '+(meta.readiness.includes('绿色')?'green':meta.readiness.includes('红色')?'red':'yellow')+'">'+meta.readiness+'</span><span class="pill">'+meta.pain+'</span><span class="pill green">'+meta.duration+'</span><span class="pill blue">'+meta.focus+'</span>';
+  document.getElementById('todayRpe').className=meta.readiness.includes('绿色')?'green':meta.readiness.includes('红色')?'red':'yellow';
+  document.getElementById('recMeta').innerHTML='<span class="rec-label">推荐时疼痛 / 限制</span><p>'+escapeHtml(meta.pain)+'</p>';
  }else{
   const dow=currentWeekDay(), days=daysForMode(mode,w), todayDay=days.includes(dow)?dow:days[0], idx=days.indexOf(todayDay)+1, p=WEEK_PHASES[w];
   let title='训练日'; if(mode==='3'){title=['下肢爆发 + 力量','上肢 + 篮球技术','速度 + 减速 + 变向'][idx-1]||'训练';}else{title=['下肢A：垂直爆发 + 力量','上肢 + 篮球技术','速度 + 减速 + COD','下肢B：横向爆发 + 体能','篮球专项 / 可选恢复'][idx-1]||'训练'}
@@ -53,13 +74,17 @@ function renderToday(pickedKey){
   document.getElementById('todayModule').textContent=(idx===1?'Lower A':idx===2?'Upper + Skill':idx===3?'Speed / Decel':idx===4?'Lower B + Conditioning':'Basketball / Optional');
   document.getElementById('todayPurpose').textContent=p.focus.join(' · ');
   document.getElementById('todayRpe').textContent='目标 RPE '+p.rpe;
+  document.getElementById('todayRpe').className='';
+  document.getElementById('todayDuration').textContent='以计划剂量与实际休息为准';
   document.getElementById('recMeta').innerHTML='';
  }
  const p=WEEK_PHASES[w];
- const plan=(recKey&&TODAY_RECOMMENDATION[recKey])||dayPlan(daysForMode(mode,w).includes(currentWeekDay())?currentWeekDay():daysForMode(mode,w)[0],mode), container=document.getElementById('sessionSlots');container.innerHTML='';let html='';plan.forEach((s,i)=>{const dosage=s[2]||'按计划';html+='<div class="rec-slot"><div class="rec-slot-num">'+(i+1)+'</div><div class="rec-slot-body"><div class="rec-slot-name">'+s[0]+'</div><div class="rec-slot-detail">'+s[1]+'</div></div><div class="rec-slot-dose">'+dosage+'</div></div>'});container.innerHTML=html;
+ const plan=(recKey&&TODAY_RECOMMENDATION[recKey])||dayPlan(daysForMode(mode,w).includes(currentWeekDay())?currentWeekDay():daysForMode(mode,w)[0],mode);
+ renderRecommendationSlots(plan);
  const skills=(recKey&&TODAY_SKILLS[recKey])||[['运球','左手主导30%时间'],['投篮','定点→接球→移动'],['终结','左右手+对抗选择'],['防守/脚步','滑步→Closeout→追防']];
  document.getElementById('todaySkills').innerHTML=skills.map(x=>'<div class="skill"><h4>'+x[0]+'</h4><p>'+x[1]+'</p></div>').join('');
- document.getElementById('todayReason').innerHTML=(recKey&&TODAY_REASON[recKey])||'<p>① 训练顺序：速度/爆发 → 主力量 → 单腿/后链 → 核心/篮球。</p><p>② 当前阶段：'+p.name+'；重点是 '+p.focus.join('、')+'。</p><p>③ 选择规则：从动作库选择“当前阶段 + 能力短板 + 可承受冲击”的最高质量动作，而不是把动作库做遍。</p><p>④ 今日Ready状态会进一步决定训练量；训练后请使用 /record-training-2 记录实际完成内容、Session RPE 和疼痛。</p>';
+ document.getElementById('recSkillsCard').hidden=skills.length===0;
+ renderRecommendationReason((recKey&&TODAY_REASON[recKey])||'<p>① 训练顺序：速度/爆发 → 主力量 → 单腿/后链 → 核心/篮球。</p><p>② 当前阶段：'+p.name+'；重点是 '+p.focus.join('、')+'。</p><p>③ 选择规则：从动作库选择“当前阶段 + 能力短板 + 可承受冲击”的最高质量动作，而不是把动作库做遍。</p><p>④ 今日Ready状态会进一步决定训练量；训练后请使用 /record-training-2 记录实际完成内容、Session RPE 和疼痛。</p>');
  updateRecommendation();
 }
 
@@ -151,4 +176,6 @@ function refresh(){renderCycle();renderFormalMonth();renderToday();renderTodayRe
 document.getElementById('cycleStart').addEventListener('change',refresh);document.getElementById('mode').addEventListener('change',refresh);
 document.getElementById('monthPrev').addEventListener('click',()=>shiftMonth(-1));document.getElementById('monthNext').addEventListener('click',()=>shiftMonth(1));
 document.getElementById('recDateSelect').addEventListener('change',e=>{renderToday(e.target.value);updateReadiness();updateRecommendation()});
+document.getElementById('recExpandAll').addEventListener('click',()=>document.querySelectorAll('#sessionSlots details').forEach(slot=>slot.open=true));
+document.getElementById('recCollapseAll').addEventListener('click',()=>document.querySelectorAll('#sessionSlots details').forEach(slot=>slot.open=slot.hasAttribute('data-rec-pinned')));
 document.addEventListener('DOMContentLoaded',refresh);

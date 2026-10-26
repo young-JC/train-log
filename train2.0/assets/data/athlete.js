@@ -2,7 +2,7 @@
 // 未记录的标量用 null，未记录的列表用 []；不要把示例或猜测写成个人事实。
 const ATHLETE_DATA = {
   profile: {
-    updatedAt: "2026-10-19",
+    updatedAt: "2026-10-25",
     basic: {
       birthDate: "1995-11-30",
       ageYears: null,
@@ -35,7 +35,7 @@ const ATHLETE_DATA = {
     conditions: {
       weeklyDays: "3–4",
       sessionMinutes: null,
-      basketballSchedule: "每周 2–3 次",
+      basketballSchedule: "每周 2–3 次；篮球专项训练由用户自行安排，训练推荐只专注运动能力提升，不呈现篮球专项内容（2026-10-25 用户明确）",
       equipment: "健身房常规器械",
       venues: "健身房、球场"
     },
@@ -76,6 +76,10 @@ const ATHLETE_DATA = {
       date: "2026-10-19",
       detail: "补充用户自评上肢力量足够，降低纯上肢力量训练投入，以维持和左右均衡为主，更多采用复合动作与全身动力链训练；保留原有前三项目标顺序，不作为能力测试结论。",
       source: "用户对话（2026-10-19）"
+    }, {
+      date: "2026-10-25",
+      detail: "明确推荐范围与呈现偏好：篮球专项由用户自行安排，推荐只专注运动能力提升；有正式负重历史的动作须同时呈现历史负重数据及本次推荐负重。保留原有目标优先级与篮球频次。",
+      source: "用户对话（2026-10-25）"
     }]
   },
   metricsUpdatedAt: "2026-10-20",

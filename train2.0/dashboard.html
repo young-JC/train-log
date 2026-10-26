@@ -59,30 +59,27 @@
 </section>
 
 <section class="section" id="today">
- <div class="section-head"><div><h2>📋 训练推荐</h2><p>显示最近一次生成的推荐；若未再次生成推荐则保持上一条内容，可在右侧切换查看过往推荐。训练后请使用 /record-training-2 记录实际完成内容。</p></div><div class="rec-picker"><span class="pill orange" id="todayPill">DAY 1</span><label><span>查看推荐</span><select id="recDateSelect" aria-label="选择要查看的推荐日期"></select></label></div></div>
- <div class="today">
-  <div class="card">
-   <div class="session-head">
-    <div>
-     <div class="eyebrow" id="todayModule">Lower A</div>
-     <h3 id="todayTitle">下肢爆发 + 力量</h3>
-     <div class="muted" style="font-size:11px" id="todayPurpose">垂直爆发、膝主导力量、单腿稳定、后链。</div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
-     <span class="pill" id="todayRpe">目标 RPE 6-7</span>
-     <span class="pill green" id="todayDuration">预计 50 分钟</span>
-    </div>
-   </div>
-   <div class="rec-meta" id="recMeta"></div>
-   <div id="sessionSlots"></div>
+ <div class="section-head"><div><h2>📋 训练推荐</h2><p>先看重点，再按顺序展开动作。可切换日期查看历史推荐。</p></div><div class="rec-picker"><span class="pill orange" id="todayPill">DAY 1</span><label><span>推荐日期</span><select id="recDateSelect" aria-label="选择要查看的推荐日期"></select></label></div></div>
+ <div class="card rec-overview">
+  <p class="rec-context" id="todayPurpose"></p>
+  <div class="eyebrow" id="todayModule">Lower A</div>
+  <h3 id="todayTitle">下肢爆发 + 力量</h3>
+  <div class="rec-facts">
+   <div><span class="rec-label">预计时长</span><strong id="todayDuration">预计 50 分钟</strong></div>
+   <div><span class="rec-label">推荐时 Readiness</span><strong id="todayRpe">目标 RPE 6–7</strong></div>
   </div>
-  <div class="card">
-   <div class="card-header">🧠 推荐依据</div>
-   <div id="todayReason" class="hint"></div>
-   <div class="card-header" style="margin-top:16px">🎯 训练重点</div>
-   <div id="todaySkills" class="skill-grid"></div>
-  </div>
+  <div class="rec-meta" id="recMeta"></div>
  </div>
+ <div class="rec-plan-head"><div><h3>训练顺序 <span id="recSlotCount"></span></h3><p>展开查看完整剂量、备选与停止条件；查看备选不代表已选择。</p></div><div class="rec-view-controls"><button class="btn small" type="button" id="recExpandAll">展开全部</button><button class="btn small" type="button" id="recCollapseAll">收起详情</button></div></div>
+ <div id="sessionSlots"></div>
+ <div class="card rec-skills" id="recSkillsCard" hidden>
+  <h3>🎯 训练重点</h3><div id="todaySkills" class="skill-grid"></div>
+ </div>
+ <div class="card rec-reason-card">
+  <div class="rec-reason-head"><h3>为什么这样安排</h3><span>逐项展开推荐依据</span></div>
+  <div id="todayReason"></div>
+ </div>
+ <p class="rec-footnote">推荐仅供训练前参考。训练后请使用 /record-training-2 记录实际完成内容。</p>
 </section>
 
 <section class="section" id="assessment">
@@ -199,6 +196,7 @@
 <script src="assets/athlete-panel.js"></script>
 <script src="assets/data/reviews.js"></script>
 <script src="assets/review-panel.js"></script>
+<script src="assets/recommendation-view.js"></script>
 <script src="assets/dashboard.js"></script>
 </body>
 </html>
