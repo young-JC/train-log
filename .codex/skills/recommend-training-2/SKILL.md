@@ -551,6 +551,8 @@ Strength、Accessory、Core、Conditioning 和一般肌耐力可主要按 Sets /
 
 同步数据与本次日期、Readiness 原始值、动作候选、剂量、前置、互斥及 Quality Stop 一致。每个 A/B/C 槽位只创建一个 slot，未选保持 `selectedOptionId: null`，可选学习保留 optional 和 replacesSlotId；不默认选择复杂候选，不生成实际完成数据。无正式推荐时不造模板。成功后回复“已同步到随练，手机打开即可记录”并给出网址，默认不输出长 JSON；失败时明确说明未同步，提供 JSON 文件下载链接备用，不让用户通过微信传长文本。只有用户明确需要时才显示完整代码块。
 
+热身、防伤、拉伸整理的完整组合候选在 `options[].actions` 中逐个列出 `{name, prescription, notes}`，按 `mobile-recorder/FORMAT.md` 生成。仍保留完整 A/B/C 方案与剂量，不把候选拆成多个必做槽位；手机选定方案后按子动作生成空白记录，不预填实际剂量或完成状态。
+
 正式推荐的事实源与 Dashboard 五分节格式保持原样；仅额外允许在 Git 忽略的 `.training-transfer/` 生成待推送/备用 JSON 文件，并写入本人私有站点的推荐收件箱。不上传个人档案、完整历史、正式训练结果或草稿，不修改正式记录。凭据仅从 Sites 原生 get_site 取得，经隐藏 stdin 交给推送脚本，不保存到文件、命令行或浏览器代码。
 
 模板字段严格分工：`options[].name` 只放短动作/组合名称，不带 `A：` 等选项前缀，也不拼接经历、依据、限制等说明；剂量放 `prescription`，说明与停止条件放 `notes`。拆分现有候选文本时移除完整的字母及冒号，不能只删字母而残留首个“：”。推送前核对这三类字段，避免把整段描述当作名称。

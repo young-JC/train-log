@@ -19,8 +19,8 @@ const fixture = {
 function complete() {
   const s = C.createSession(fixture);
   s.sessionStatus = '已完成'; s.duration = '60'; s.sessionRpe = '5'; s.painDuring = '0'; s.painAfter = '0';
-  s.actions[0].status = 'completed'; s.actions[0].actual.dose = '90秒';
-  s.actions[1].status = 'completed'; s.actions[1].selectedOptionId = 'B'; s.actions[1].actual.dose = '2×8';
+  s.actions[0].status = 'completed'; s.actions[0].actual.doseMode = 'free'; s.actions[0].actual.dose = '90秒';
+  s.actions[1].status = 'completed'; s.actions[1].selectedOptionId = 'B'; s.actions[1].actual.doseMode = 'free'; s.actions[1].actual.dose = '2×8';
   s.actions[2].status = 'skipped';
   return s;
 }
@@ -110,7 +110,7 @@ test('Per-set values, unit, weight basis, side differences, replacements and add
   const s = complete(), a = s.actions[1];
   a.actualName = '实际替代动作'; a.status = 'partial'; a.actual.mode = 'sets';
   a.actual.sets = [{dose: '5次/侧', load: '30', unit: 'kg', basis: '单侧', rpe: '6–7', notes: '左6右7'}, {dose: '4次/侧', load: '70', unit: 'lb', basis: '总重', rpe: '8', notes: '右侧先做'}];
-  const extra = C.addAction(s); extra.actualName = '投篮测试'; extra.status = 'completed'; extra.actual.dose = '10分钟，命中20，出手30';
+  const extra = C.addAction(s); extra.actualName = '投篮测试'; extra.status = 'completed'; extra.actual.doseMode = 'free'; extra.actual.dose = '10分钟，命中20，出手30';
   const md = C.exportMarkdown(s);
   assert.match(md, /30 kg 单侧/); assert.match(md, /70 lb 总重/); assert.match(md, /左6右7/);
   assert.match(md, /动作乙 → 实际替代动作/); assert.match(md, /临时加练：投篮测试/);
@@ -142,6 +142,53 @@ test('Shared skill instructions and example stay parseable and never modify sour
   assert.equal(C.validateRecommendation(doc).slots.length, 1);
   for (const file of ['.codex/skills/recommend-training-2/SKILL.md', '.claude/skills/recommend-training-2/skill.md', '.codex/skills/record-training-2/SKILL.md', '.claude/skills/record-training-2/skill.md']) assert.match(fs.readFileSync(path.join(root, file), 'utf8'), /mobile-recorder\/FORMAT\.md/);
   assert.equal(fs.readFileSync(path.join(root, '.codex/skills/record-training-2/SKILL.md'), 'utf8'), fs.readFileSync(path.join(root, '.claude/skills/record-training-2/skill.md'), 'utf8'));
+});
+test('Slot components record independently, preserve reference, and prevent double counting', () => {
+  const f = C.copy(fixture);
+  f.slots[0].options[0].actions = [{name: '步行', prescription: '2分钟'}, {name: '抬踵', prescription: '1×8', notes: '保持稳定'}];
+  const s = C.createSession(f), parent = s.actions[0], children = s.actions.filter(a => a.parentActionId === parent.id);
+  assert.equal(children.length, 2); assert.equal(children[1].partReference.notes, '保持稳定');
+  assert.ok(children.every(a => a.status === 'pending' && a.actual.seconds === '' && a.actual.reps === ''));
+  children.forEach(a => { a.status = 'completed'; a.actual.count = '2'; a.actual.reps = '8'; });
+  s.sessionStatus = '部分完成';
+  assert.equal(C.issues(s).errors.length, 0);
+  parent.status = 'completed'; assert.ok(C.issues(s).errors.some(e => e.includes('重复计入')));
+  parent.status = 'pending'; assert.match(C.exportMarkdown(s), /组合逐项记录/);
+  assert.deepEqual(C.readBackup(C.backup([s])), [s]);
+  children[0].parentActionId = 'missing'; assert.throws(() => C.validateSession(s), /子动作/);
+});
+test('Time-only and per-set records export active values while mode switches preserve alternatives', () => {
+  const s = complete(), a = s.actions[1];
+  Object.assign(a.actual, {doseMode: 'time', count: '3', seconds: '30', reps: '8', rest: '90', side: '每侧'});
+  let md = C.exportMarkdown(s); assert.match(md, /3组 × 30秒\/侧/); assert.match(md, /组间休息设定：90秒（非实测）/);
+  a.actual.doseMode = 'reps'; assert.match(C.exportMarkdown(s), /3组 × 8次\/侧/); assert.equal(a.actual.seconds, '30');
+  a.actual.doseMode = 'time'; a.actual.seconds = ''; assert.ok(C.issues(s).missing.some(m => m.includes('实际组次')));
+  assert.doesNotMatch(C.exportMarkdown(s), /3组 × 8次/);
+  a.actual.mode = 'sets'; a.actual.sets = [{...C.emptyActual(), doseMode: 'time', seconds: '45', rest: '60'}];
+  assert.match(C.exportMarkdown(s), /第1组：45秒/);
+  a.actual.sets[0].reps = '1.5'; assert.throws(() => C.validateSession(s), /整数/);
+});
+test('History prefills only prior completed matching actions, keeps pending, and never replaces current input', () => {
+  const old = complete(); old.date = '2026-10-25'; old.actions[1].actual.notes = '旧反馈'; old.actions[1].actual.rpe = '9'; old.actions[1].actual.rest = '90';
+  const future = complete(); future.date = '2026-10-28'; future.actions[1].actual.load = '99';
+  const pending = complete(); pending.date = '2026-10-26'; pending.actions[1].status = 'pending'; pending.actions[1].actual.load = '88';
+  const fresh = C.createSession(fixture), a = fresh.actions[1]; a.selectedOptionId = 'B';
+  assert.equal(C.prefillActual(fresh, a, [future, pending, old]), true);
+  assert.equal(a.prefillDate, old.date); assert.equal(a.actual.dose, '2×8'); assert.equal(a.actual.rest, '90'); assert.equal(a.status, 'pending');
+  assert.equal(a.actual.rpe, ''); assert.equal(a.actual.notes, ''); assert.equal(fresh.duration, '');
+  a.actual.dose = '用户改为2×5'; assert.equal(C.prefillActual(fresh, a, [old]), false); assert.equal(a.actual.dose, '用户改为2×5');
+  const another = C.createSession(fixture); another.actions[1].selectedOptionId = 'A'; assert.equal(C.prefillActual(another, another.actions[1], [old]), false);
+});
+test('Start/end timestamps survive backup, derive duration across midnight, and reject invalid order', () => {
+  const s = complete(); C.stampSession(s, 'start', '2026-10-27T15:30:00.000Z'); C.stampSession(s, 'end', '2026-10-27T16:30:00.000Z');
+  assert.equal(s.duration, '60'); assert.match(C.exportMarkdown(s), /2026-10-28 00:30:00（北京时间）/);
+  assert.deepEqual(C.readBackup(C.backup([s])), [s]); assert.throws(() => C.stampSession(s, 'start'), /已经/);
+  const noStart = complete(); assert.throws(() => C.stampSession(noStart, 'end'), /先点击/);
+  noStart.endedAt = '2026-10-27T12:00:00Z'; assert.throws(() => C.validateSession(noStart), /结束时间/);
+});
+test('Old v1 drafts and free text remain restorable without structured fields', () => {
+  const s = complete(); s.actions.forEach(a => { ['doseMode', 'count', 'reps', 'seconds', 'rest', 'side'].forEach(k => delete a.actual[k]); });
+  assert.match(C.exportMarkdown(C.readBackup(C.backup([s]))[0]), /2×8/);
 });
 async function verifyServiceWorker() {
   const events = {}, deleted = [], added = [], state = {claimed: false, migrated: false};
