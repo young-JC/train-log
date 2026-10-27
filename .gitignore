@@ -17,3 +17,8 @@
 __pycache__/
 *.pyc
 /视频剪辑
+
+# Generated recorder Worker bundle; browser source remains in dist/.
+/mobile-recorder/dist/server/
+/mobile-recorder/dist/.openai/
+/.training-transfer/

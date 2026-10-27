@@ -545,6 +545,18 @@ Strength、Accessory、Core、Conditioning 和一般肌耐力可主要按 Sets /
 - 动作质量与运动能力表现
 ```
 
+### 推荐直达随练
+
+完成正式推荐后，读取仓库根目录 `mobile-recorder/FORMAT.md` 的「站点直达推荐」和「推荐导入块」，把同一份推荐转换为 `kind: train2.recommendation`、`schemaVersion: 1` 的数据，直接同步到本人私有随练站点。用户已明确授权默认同步推荐模板（含 Readiness、疼痛及停止注意事项），后续推荐沿用该授权；实际训练和手机草稿仍只在本机。
+
+同步数据与本次日期、Readiness 原始值、动作候选、剂量、前置、互斥及 Quality Stop 一致。每个 A/B/C 槽位只创建一个 slot，未选保持 `selectedOptionId: null`，可选学习保留 optional 和 replacesSlotId；不默认选择复杂候选，不生成实际完成数据。无正式推荐时不造模板。成功后回复“已同步到随练，手机打开即可记录”并给出网址，默认不输出长 JSON；失败时明确说明未同步，提供 JSON 文件下载链接备用，不让用户通过微信传长文本。只有用户明确需要时才显示完整代码块。
+
+正式推荐的事实源与 Dashboard 五分节格式保持原样；仅额外允许在 Git 忽略的 `.training-transfer/` 生成待推送/备用 JSON 文件，并写入本人私有站点的推荐收件箱。不上传个人档案、完整历史、正式训练结果或草稿，不修改正式记录。凭据仅从 Sites 原生 get_site 取得，经隐藏 stdin 交给推送脚本，不保存到文件、命令行或浏览器代码。
+
+模板字段严格分工：`options[].name` 只放短动作/组合名称，不带 `A：` 等选项前缀，也不拼接经历、依据、限制等说明；剂量放 `prescription`，说明与停止条件放 `notes`。拆分现有候选文本时移除完整的字母及冒号，不能只删字母而残留首个“：”。推送前核对这三类字段，避免把整段描述当作名称。
+
+Windows 受限执行器已验证普通网络执行可能连接重置；在此环境通过工具支持的 `require_escalated` 运行同一个推送脚本，复用已授权的私有同步范围，不反复询问数据上传授权。实际环境不支持该权限机制或执行仍失败时，才报告未同步并提供备用文件；不要重复盲试。
+
 ### 唯一落盘位置：Dashboard 推荐模块
 
 **推荐流程不写入任何训练记录文件。** `train2.0/records/YYYY-MM.md`、`train2.0/records/YYYY-MM.html`、`train2.0/records/00_摘要.md` 与 `train2.0/assets/data/records.js` 只由 `record-training-2` 在训练后更新；本技能不得修改它们，也不得为了「仅记录 Readiness」而在月度记录、摘要或正式月历中创建条目。

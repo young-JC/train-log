@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "随练 · train2.0 训练记录器",
+  "short_name": "随练",
+  "lang": "zh-CN",
+  "description": "把推荐带进训练场，记录实际表现，导出给记录 skill。",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f4ed",
+  "theme_color": "#203d35",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

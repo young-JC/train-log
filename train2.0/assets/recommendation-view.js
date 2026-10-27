@@ -14,8 +14,23 @@ function recViewList(value,extraClass=''){
  const items=recViewSplit(recViewText(value),'；;。\n').map(text=>text.replace(/[；;。]+$/,'')).filter(text=>/[^\s，,：:]/.test(text));
  return items.length?'<ul class="rec-instructions '+extraClass+'">'+items.map(text=>'<li>'+recViewEscape(text)+'</li>').join('')+'</ul>':'';
 }
+function recViewLineDoseOptions(text){
+ const lines=text.split(/\r?\n/);
+ const marked=lines.map((line,index)=>({index,match:line.match(/^\s*([ABC])(?![A-Za-z/])\s*[：:]?\s*/)})).filter(item=>item.match);
+ if(marked.length!==3||marked.some((item,index)=>item.match[1]!=='ABC'[index]))return null;
+ // 显式分行时保留每个选项的整段；只把另起一行且明确标记的共同说明分离。
+ const boundary=lines.findIndex((line,index)=>index>marked[2].index&&/^\s*(?:共同(?:剂量|安排|限制|说明|条件)|[ABC](?:\/[ABC])+)/.test(line));
+ const end=boundary<0?lines.length:boundary;
+ const options=Object.fromEntries(marked.map((item,index)=>[
+  item.match[1],lines.slice(item.index,index<2?marked[index+1].index:end).join('\n').slice(item.match[0].length).trim()
+ ]));
+ const prefix=lines.slice(0,marked[0].index).join('\n').trim(),tail=lines.slice(end).join('\n').trim();
+ return {options,common:[prefix,tail].filter(Boolean).join('\n'),prefix,tail};
+}
 function recViewDoseOptions(value){
- const text=recViewText(value),matches=[...text.matchAll(/(?:^|[：:；;。])\s*([ABC])(?![A-Za-z/])/g)];
+ const text=recViewText(String(value).replace(/<br\s*\/?\s*>/gi,'\n')),lined=recViewLineDoseOptions(text);
+ if(lined)return lined;
+ const matches=[...text.matchAll(/(?:^|[：:；;。])\s*([ABC])(?![A-Za-z/])\s*[：:]?\s*/g)];
  const ordered=[];
  for(const letter of ['A','B','C']){
   const match=matches.find(m=>m[1]===letter&&(!ordered.length||m.index>ordered.at(-1).index));
