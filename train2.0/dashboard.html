@@ -5,9 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#203d35">
 <title>超人不会飞专属训练系统 2.0</title>
+<link rel="icon" type="image/svg+xml" sizes="any" href="assets/favicon.svg">
 <link rel="stylesheet" href="assets/dashboard.css">
 </head>
 <body>
+<svg class="notebook-icons" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="0" height="0">
+ <defs>
+  <symbol id="nb-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-14 5h3m4 0h3"/></symbol>
+  <symbol id="nb-cycle" viewBox="0 0 24 24"><path d="M20 8a9 9 0 0 0-15-3L3 7m0-5v5h5M4 16a9 9 0 0 0 15 3l2-2m0 5v-5h-5"/></symbol>
+  <symbol id="nb-pulse" viewBox="0 0 24 24"><path d="M2 12h5l3-8 4 16 3-8h5"/></symbol>
+  <symbol id="nb-notebook" viewBox="0 0 24 24"><rect x="5" y="3" width="15" height="18" rx="3"/><path d="M9 3v18M3 7h4m-4 5h4m-4 5h4m6-9h4m-4 4h4"/></symbol>
+  <symbol id="nb-chart" viewBox="0 0 24 24"><path d="M4 3v17h17M9 15v-4m5 4V6m5 9V9"/></symbol>
+  <symbol id="nb-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="nb-trend" viewBox="0 0 24 24"><path d="M3 18 9 12l4 4 8-11m-6 0h6v6"/></symbol>
+  <symbol id="nb-library" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="8" y="4" width="5" height="16" rx="1"/><path d="m15 5 4-1 4 15-4 1zM3 8h10m-10 8h10"/></symbol>
+  <symbol id="nb-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6zM8 12l3 3 5-6"/></symbol>
+  <symbol id="nb-person" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol>
+  <symbol id="nb-review" viewBox="0 0 24 24"><path d="M9 4h9a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3M13 9h3m-6 5h6m-6 4h6M3 6h6M6 3 3 6l3 3"/></symbol>
+ </defs>
+</svg>
 <a class="skip-link" href="#mainContent">跳到训练内容</a>
 <nav class="nav" id="nav" aria-label="训练手记导航">
  <div class="nav-brand"><span aria-hidden="true">↗</span><div>随练<small>TRAIN 2.0 · DESKTOP</small></div></div>
@@ -44,31 +60,31 @@
 <div class="stats" id="stats"></div>
 
 <section class="section" id="monthCalendar">
- <div class="section-head"><div><h2 id="monthlyTitle">📅 2026 年 10 月正式记录</h2><p>数据镜像自月度 Markdown；旧 localStorage 历史不计入月历或统计。</p></div><div class="monthly-links"><div class="month-nav"><button class="btn small" id="monthPrev" type="button" aria-label="上一月">‹</button><span class="pill" id="monthLabel">2026 年 10 月</span><button class="btn small" id="monthNext" type="button" aria-label="下一月">›</button></div><span class="pill" id="monthlySnapshotStatus">0 个训练日 · 0 AU</span><a class="btn blue small" id="monthlyRecordLink" href="records/2026-10.html">查看月度记录</a></div></div>
- <div class="card"><div class="monthly-calendar" id="monthlyCalendar" aria-label="2026 年 10 月正式训练月历"></div></div>
+ <div class="section-head"><div><span class="section-kicker">02 / TRAINING CALENDAR</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-calendar"/></svg><span id="monthlyTitle">2026 年 10 月正式记录</span></h2><p>每一次出发，都在这里留下印记。点击训练日查看完整记录。</p></div><div class="monthly-links"><div class="month-nav"><button class="btn small" id="monthPrev" type="button" aria-label="上一月">‹</button><span class="pill" id="monthLabel">2026 年 10 月</span><button class="btn small" id="monthNext" type="button" aria-label="下一月">›</button></div><span class="pill" id="monthlySnapshotStatus">0 个训练日 · 0 AU</span><a class="btn blue small" id="monthlyRecordLink" href="records/2026-10.html">查看月度记录 ↗</a></div></div>
+ <div class="card"><div class="monthly-calendar" id="monthlyCalendar" aria-label="2026 年 10 月正式训练月历"></div><div class="calendar-key" aria-label="月历颜色说明"><span><i class="training"></i>正式训练</span><span><i class="readiness"></i>状态记录</span><span><i class="rest"></i>休息 / 停训</span><small>正式记录同步展示</small></div></div>
 </section>
 
 <section class="section" id="cycle">
- <div class="section-head"><div><h2>🗓 12周大周期</h2><p>4周一个中周期：进入 → 增量 → 高刺激 → Deload + 测试</p></div><span class="pill" id="cycleDates"></span></div>
+ <div class="section-head"><div><span class="section-kicker">03 / THE BIG PICTURE</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-cycle"/></svg>12 周大周期</h2><p>每四周积累一次，再用减量与测试看见进步。</p></div><span class="pill" id="cycleDates"></span></div>
  <div class="card"><div class="phase-row" id="phaseRow"></div><div class="meso" id="mesoCards"></div></div>
 </section>
 
 <section class="section" id="readiness">
- <div class="section-head"><div><h2>⚡ 每日 Readiness</h2><p>用睡眠、疲劳、酸痛、疼痛、训练意愿决定今天的“训练权限”。</p></div><button class="btn green small" onclick="saveReadiness()">保存今日状态</button></div>
+ <div class="section-head"><div><span class="section-kicker">04 / CHECK IN WITH YOURSELF</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-pulse"/></svg>每日 Readiness</h2><p>先听听身体的声音，再决定今天的训练节奏。</p></div><button class="btn green small" onclick="saveReadiness()">保存今日状态 ↗</button></div>
  <div class="readiness">
   <div class="card"><div class="score-inputs">
-   <div class="field"><label>睡眠 1-5 · 当前 <b id="sleepVal">3</b></label><input id="sleep" class="score" type="range" min="1" max="5" value="3" oninput="syncSlider('sleep')"></div>
-   <div class="field"><label>疲劳 1-5 · 当前 <b id="fatigueVal">2</b></label><input id="fatigue" class="score" type="range" min="1" max="5" value="2" oninput="syncSlider('fatigue')"></div>
-   <div class="field"><label>酸痛 1-5 · 当前 <b id="sorenessVal">2</b></label><input id="soreness" class="score" type="range" min="1" max="5" value="2" oninput="syncSlider('soreness')"></div>
-   <div class="field"><label>疼痛 0-10 · 当前 <b id="painVal">2</b></label><input id="pain" class="score" type="range" min="0" max="10" value="2" oninput="syncSlider('pain')"></div>
-   <div class="field"><label>训练意愿 1-5 · 当前 <b id="motivationVal">3</b></label><input id="motivation" class="score" type="range" min="1" max="5" value="3" oninput="syncSlider('motivation')"></div>
+   <div class="field"><label for="sleep">睡眠 1-5 · 当前 <b id="sleepVal">3</b></label><input id="sleep" class="score" type="range" min="1" max="5" value="3" oninput="syncSlider('sleep')"></div>
+   <div class="field"><label for="fatigue">疲劳 1-5 · 当前 <b id="fatigueVal">2</b></label><input id="fatigue" class="score" type="range" min="1" max="5" value="2" oninput="syncSlider('fatigue')"></div>
+   <div class="field"><label for="soreness">酸痛 1-5 · 当前 <b id="sorenessVal">2</b></label><input id="soreness" class="score" type="range" min="1" max="5" value="2" oninput="syncSlider('soreness')"></div>
+   <div class="field"><label for="pain">疼痛 0-10 · 当前 <b id="painVal">2</b></label><input id="pain" class="score" type="range" min="0" max="10" value="2" oninput="syncSlider('pain')"></div>
+   <div class="field"><label for="motivation">训练意愿 1-5 · 当前 <b id="motivationVal">3</b></label><input id="motivation" class="score" type="range" min="1" max="5" value="3" oninput="syncSlider('motivation')"></div>
   </div></div>
   <div class="readiness-result"><div><div class="eyebrow">READINESS SCORE</div><div class="ready-score" id="readyScore">92</div></div><div class="ready-note" id="readyNote">绿色区：按计划训练。训练后再记录 Session RPE 与第二天反应。</div></div>
  </div>
 </section>
 
 <section class="section" id="today">
- <div class="section-head"><div><h2>📋 训练推荐</h2><p>先看重点，再按顺序展开动作。可切换日期查看历史推荐。</p></div><div class="rec-picker"><span class="pill orange" id="todayPill">DAY 1</span><label><span>推荐日期</span><select id="recDateSelect" aria-label="选择要查看的推荐日期"></select></label></div></div>
+ <div class="section-head"><div><span class="section-kicker">05 / TODAY’S PRACTICE</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-notebook"/></svg>训练推荐</h2><p>带着重点开始。按顺序展开动作，也可以回看过去的安排。</p></div><div class="rec-picker"><span class="pill orange" id="todayPill">DAY 1</span><label><span>推荐日期</span><select id="recDateSelect" aria-label="选择要查看的推荐日期"></select></label></div></div>
  <div class="card rec-overview">
   <p class="rec-context" id="todayPurpose"></p>
   <div class="eyebrow" id="todayModule">Lower A</div>
@@ -82,7 +98,7 @@
  <div class="rec-plan-head"><div><h3>训练顺序 <span id="recSlotCount"></span></h3><p>展开查看完整剂量、备选与停止条件；查看备选不代表已选择。</p></div><div class="rec-view-controls"><button class="btn small" type="button" id="recExpandAll">展开全部</button><button class="btn small" type="button" id="recCollapseAll">收起详情</button></div></div>
  <div id="sessionSlots"></div>
  <div class="card rec-skills" id="recSkillsCard" hidden>
-  <h3>🎯 训练重点</h3><div id="todaySkills" class="skill-grid"></div>
+  <h3>训练重点</h3><div id="todaySkills" class="skill-grid"></div>
  </div>
  <div class="card rec-reason-card">
   <div class="rec-reason-head"><h3>为什么这样安排</h3><span>逐项展开推荐依据</span></div>
@@ -92,35 +108,37 @@
 </section>
 
 <section class="section" id="assessment">
- <div class="section-head"><div><h2>📊 能力评估</h2><p>只读镜像自 ability-assessment.md；仅收录正式训练中的可比较真实结果，并只在出现更优成绩时更新。</p></div><span class="pill green" id="assessmentCount">0 项真实记录</span></div>
- <div class="card"><div class="table-wrap"><table><thead><tr><th>能力 / 动作</th><th>评估指标</th><th>当前最佳表现</th><th>比较规则</th><th>首次记录</th><th>最佳结果日期</th><th>更新时间</th><th>来源</th></tr></thead><tbody id="assessmentList"></tbody></table></div></div>
+ <div class="section-head"><div><span class="section-kicker">06 / SMALL WINS ADD UP</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-chart"/></svg>能力评估</h2><p>进步有迹可循。只收录正式训练中的可比结果，出现更优成绩时更新。</p></div><span class="pill green" id="assessmentCount">0 项真实记录</span></div>
+ <div class="card data-card"><div class="table-wrap"><table><thead><tr><th>能力 / 动作</th><th>评估指标</th><th>当前最佳表现</th><th>比较规则</th><th>首次记录</th><th>最佳结果日期</th><th>更新时间</th><th>来源</th></tr></thead><tbody id="assessmentList"></tbody></table></div></div>
 </section>
 
 <section class="section" id="weakness">
- <div class="section-head"><div><h2>🎯 弱点管理</h2><p>完整镜像自 weakness-tracking.md；短板影响训练权重，但不用于无依据地增加动作。</p></div></div>
- <div class="card"><div class="table-wrap"><table><thead><tr><th>弱点项</th><th>板块</th><th>发现日期</th><th>当前状态</th><th>目标</th><th>备注</th></tr></thead><tbody id="weakList"></tbody></table></div></div>
+ <div class="section-head"><div><span class="section-kicker">07 / ROOM TO GROW</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-target"/></svg>弱点管理</h2><p>看清短板，慢慢补齐。根据真实训练反馈追踪，不盲目增加训练量。</p></div></div>
+ <div class="card data-card"><div class="table-wrap"><table><thead><tr><th>弱点项</th><th>板块</th><th>发现日期</th><th>当前状态</th><th>目标</th><th>备注</th></tr></thead><tbody id="weakList"></tbody></table></div></div>
 </section>
 
 <section class="section" id="load">
- <div class="section-head"><div><h2>📈 训练负荷 & 疼痛管理</h2><p>正式训练记录只读展示；数据来源为月度记录的已完成训练。</p></div><span class="pill" id="loadLatestBadge">最新：2026-10-06</span></div>
- <div class="grid2">
+ <div class="section-head"><div><span class="section-kicker">08 / WORK HARD, RECOVER WELL</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-trend"/></svg>训练负荷与疼痛管理</h2><p>练了多少，也要看恢复得怎样。这里汇总正式完成的训练。</p></div><span class="pill" id="loadLatestBadge">最新训练：—</span></div>
+ <div class="grid2 load-grid">
   <div class="card">
     <div class="eyebrow" style="margin-bottom:10px">最新训练 · <span id="latestTrainingDate">—</span></div>
-    <div class="grid3" style="margin-bottom:14px">
+    <div class="grid3 load-latest" style="margin-bottom:14px">
      <div class="status-box" id="latestLoadBox"><h4>Session Load</h4><p id="latestSessionLoad">—</p></div>
-     <div class="status-box" id="latestPainBox"><h4>疼痛（前/中/后）</h4><p id="latestPainDetail">—</p></div>
      <div class="status-box" id="latestReadyBox"><h4>Readiness</h4><p id="latestReadyScore">—</p></div>
+     <div class="status-box" id="latestPainBox"><h4>疼痛（前/中/后）</h4><p id="latestPainDetail">—</p></div>
     </div>
     <div style="border-top:1px solid var(--line);padding-top:14px">
      <div class="eyebrow" style="margin-bottom:10px" id="loadWeekLabel">本周统计</div>
-     <div class="grid3" style="margin-bottom:4px">
+     <div class="grid3 load-weekly" style="margin-bottom:4px">
       <div class="status-box"><h4>训练天数</h4><p id="loadTrainingDays">0</p></div>
       <div class="status-box"><h4>本周累计负荷</h4><p id="weeklyLoadDisplay">0 AU</p></div>
       <div class="status-box" id="weeklyPainBox"><h4>疼痛趋势</h4><p id="weeklyPainTrend">—</p></div>
      </div>
     </div>
-    <div style="border-top:1px solid var(--line);padding-top:14px">
-     <div class="eyebrow" style="margin-bottom:8px">近期训练记录</div>
+   </div>
+  <div class="card load-rules"><div class="card-header">训练调整指南 <span>听从身体的信号</span></div><div class="grid3"><div class="status-box green"><h4><i class="signal-dot"></i>Green · 正常</h4><p>疼痛稳定、恢复正常、动作质量≥4。按计划。</p></div><div class="status-box yellow"><h4><i class="signal-dot"></i>Yellow · 留意</h4><p>疲劳/疼痛升高。总量可降20–30%，减少高冲击Plyo/COD。</p></div><div class="status-box red"><h4><i class="signal-dot"></i>Red · 暂停</h4><p>尖锐痛、肿胀、不稳、卡顿或持续加重。停止高冲击并做专业评估。</p></div></div><div style="margin-top:14px" class="table-wrap"><table><thead><tr><th>情况</th><th>自动策略</th></tr></thead><tbody><tr><td>Ready ≥ 75 且疼痛 ≤ 2</td><td>100%计划；保持动作质量</td></tr><tr><td>Ready 60–74 或疼痛 3–4</td><td>训练量 -20%；Plyo/COD减少</td></tr><tr><td>Ready &lt; 60 或疼痛 ≥ 5</td><td>恢复/Prehab；取消高冲击训练</td></tr></tbody></table></div></div>
+    <div class="card load-history">
+     <div class="card-header">近期训练记录 <span>每一次积累，都算数</span></div>
      <div class="table-wrap">
       <table>
        <thead><tr><th>日期</th><th>周</th><th>负荷</th><th>Ready</th><th>疼痛备注</th></tr></thead>
@@ -128,13 +146,11 @@
       </table>
      </div>
     </div>
-   </div>
-  <div class="card"><div class="card-header">🚦 自动调整规则</div><div class="grid3"><div class="status-box green"><h4>🟢 Green</h4><p>疼痛稳定、恢复正常、动作质量≥4。按计划。</p></div><div class="status-box yellow"><h4>🟡 Yellow</h4><p>疲劳/疼痛升高。总量可降20–30%，减少高冲击Plyo/COD。</p></div><div class="status-box red"><h4>🔴 Red</h4><p>尖锐痛、肿胀、不稳、卡顿或持续加重。停止高冲击并做专业评估。</p></div></div><div style="margin-top:14px" class="table-wrap"><table><thead><tr><th>情况</th><th>自动策略</th></tr></thead><tbody><tr><td>Ready ≥ 75 且疼痛 ≤ 2</td><td>100%计划；保持动作质量</td></tr><tr><td>Ready 60–74 或疼痛 3–4</td><td>训练量 -20%；Plyo/COD减少</td></tr><tr><td>Ready &lt; 60 或疼痛 ≥ 5</td><td>恢复/Prehab；取消高冲击训练</td></tr></tbody></table></div></div>
  </div>
 </section>
 
 <section class="section" id="actionLib">
- <div class="section-head"><div><h2>📚 动作库 3.0</h2><p>按模块分组展示，点击动作行查看详细说明；可用搜索和筛选快速定位。等级 L1 基础 · L2 运动员基础 · L3 运动表现 · L4 篮球专项。</p></div><span class="pill purple" id="actionCount">0 个动作</span></div>
+ <div class="section-head"><div><span class="section-kicker">09 / YOUR MOVEMENT TOOLKIT</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-library"/></svg>动作库 3.0</h2><p>找到适合自己的动作。搜索或按条件筛选，点击动作查看细节。</p></div><span class="pill" id="actionCount">0 个动作</span></div>
  <div class="card">
   <div class="lib-toolbar">
    <input id="fSearch" class="input" aria-label="搜索动作" placeholder="搜索动作名称（中文 / 英文）…">
@@ -142,23 +158,24 @@
    <select id="fImpact" class="select" aria-label="冲击"><option value="">全部冲击</option><option>低</option><option>中</option><option>高</option></select>
    <select id="fEquipment" class="select" aria-label="器材"><option value="">全部器材</option></select>
   </div>
+  <p class="lib-level-guide">L1 基础 · L2 运动员基础 · L3 运动表现 · L4 篮球专项</p>
   <div id="actionLibGroups"></div>
   <div class="muted" id="actionLibEmpty" style="display:none;text-align:center;padding:20px 0">没有匹配的动作。</div>
  </div>
 </section>
 
 <section class="section" id="prehab">
- <div class="section-head"><div><h2>🛡️ 防伤系统</h2><p>原有 Level 1/2/3 保留，并升级为篮球运动员 Prehab：膝 → 髋 → 腘绳肌 → 内收肌 → 踝足 → 落地 → 减速。</p></div><span class="pill green">L2 训练前固定</span></div>
+ <div class="section-head"><div><span class="section-kicker">10 / PREPARE TO MOVE</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-shield"/></svg>防伤系统</h2><p>把准备做好，再走上球场。膝 → 髋 → 腘绳肌 → 内收肌 → 踝足 → 落地 → 减速。</p></div><span class="pill green">L2 训练前固定</span></div>
  <div class="prehab-grid">
-  <div class="prehab-card"><h4>🟢 Level 1 · 每日激活</h4><p>5–8min：蚌式、单腿臀桥、坐姿直腿抬、提踵。休息日也可做；不追求力竭。</p></div>
-  <div class="prehab-card"><h4>🟡 Level 2 · 训练前</h4><p>约5min：弹力带侧走 + 站姿膝控 + 踝背屈/侧向跨步蹲，按当天模块选2–3项。</p></div>
-  <div class="prehab-card"><h4>🔵 Level 3 · 力量巩固</h4><p>每周2–3次：保加利亚分腿蹲、单腿RDL、Copenhagen、单腿提踵、Step-down等。</p></div>
+  <div class="prehab-card"><div class="prehab-label"><span>LEVEL 01</span><span>日常积累</span></div><h4>每日激活</h4><p>5–8min：蚌式、单腿臀桥、坐姿直腿抬、提踵。休息日也可做；不追求力竭。</p></div>
+  <div class="prehab-card prehab-essential"><div class="prehab-label"><span>LEVEL 02</span><span>训练前固定</span></div><h4>训练前准备</h4><p>约5min：弹力带侧走 + 站姿膝控 + 踝背屈/侧向跨步蹲，按当天模块选2–3项。</p></div>
+  <div class="prehab-card"><div class="prehab-label"><span>LEVEL 03</span><span>持续巩固</span></div><h4>力量巩固</h4><p>每周2–3次：保加利亚分腿蹲、单腿RDL、Copenhagen、单腿提踵、Step-down等。</p></div>
  </div>
  <div class="card" style="margin-top:12px"><div class="table-wrap"><table><thead><tr><th>训练日</th><th>必选</th><th>推荐</th><th>补强</th></tr></thead><tbody><tr><td>Lower A</td><td>侧走 + 站姿膝控</td><td>踝背屈 / 侧跨</td><td>分腿蹲、Step-down</td></tr><tr><td>Upper</td><td>侧走</td><td>站姿膝控 / 腘绳肌</td><td>提踵 / 蚌式</td></tr><tr><td>Speed/COD</td><td>侧走 + 踝背屈</td><td>侧跨 + Step-down</td><td>Copenhagen</td></tr><tr><td>Lower B</td><td>侧走 + 站姿膝控</td><td>Copenhagen</td><td>单腿RDL + 提踵</td></tr></tbody></table></div></div>
 </section>
 
 <section class="section" id="athlete" aria-labelledby="athleteTitle">
- <div class="section-head"><div><h2 id="athleteTitle">👤 个人训练档案</h2><p>身体基础、训练目标与现实条件，为 AI 推荐和计划分析提供个人背景。</p></div><span class="pill" id="athleteStatus">尚未建档</span></div>
+ <div class="section-head"><div><span class="section-kicker">11 / YOUR OWN STARTING POINT</span><h2 id="athleteTitle"><svg class="section-icon" aria-hidden="true"><use href="#nb-person"/></svg>个人训练档案</h2><p>从自己的起点出发。身体基础、训练目标与日常条件，都值得被认真考虑。</p></div><span class="pill" id="athleteStatus">尚未建档</span></div>
  <div class="card athlete-guide">
   <p id="athleteIntro">告诉 AI 你的基础资料、目标或测量数据，即可逐步建立个人档案。</p>
   <details><summary>如何建档与更新</summary><p>例如：“建立个人档案：我每周能练 3 天，每次 60 分钟，主要想提高篮球爆发力。”</p><p>例如：“更新个人数据，今天体重 78.2 公斤，体脂率 18%，家用体脂秤测量。”</p><p>以上仅为对话示例。只提供你知道的内容；修改旧数据时说明原测量日期或记录 ID。</p></details>
@@ -180,7 +197,7 @@
 </section>
 
 <section class="section" id="review">
- <div class="section-head"><div><h2>🔁 周期复盘</h2><p>每周检查执行与恢复，W4 / W8 / W12总结阶段进展；AI报告自动供适用日期的推荐参考。</p></div><a class="btn small" href="reviews/00_索引.md">复盘索引</a></div>
+ <div class="section-head"><div><span class="section-kicker">12 / LOOK BACK, MOVE FORWARD</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-review"/></svg>周期复盘</h2><p>回头看看走过的路。每周留意执行与恢复，在 W4 / W8 / W12 整理阶段进步。</p></div><a class="btn small" href="reviews/00_索引.md">复盘索引 ↗</a></div>
  <div class="card review-due" id="reviewDue" aria-live="polite"></div>
  <div class="card review-history"><label for="reviewSelect">历史复盘</label><select class="select" id="reviewSelect" aria-label="选择复盘报告"></select></div>
  <div class="card" id="reviewReport" aria-live="polite"></div>
