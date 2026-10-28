@@ -35,11 +35,13 @@ test('JSON contract, fenced whole reply, missing and unsupported versions', () =
   assert.throws(() => C.validateRecommendation({...fixture, slots: [fixture.slots[2]]}), /替换关系/);
   assert.throws(() => C.validateRecommendation({...fixture, readiness: {...fixture.readiness, score: 99}}), /不一致/);
 });
-test('Actual results start blank; A/B/C and optional learning remain unselected', () => {
+test('Recommended entries remain pending; A/B/C and optional learning remain unselected', () => {
   const s = C.createSession(fixture);
   assert.equal(s.actions[1].selectedOptionId, null);
   assert.equal(s.actions[2].selectedOptionId, null);
   assert.ok(s.actions.every(a => a.status === 'pending' && a.actual.dose === '' && a.actual.load === '' && a.actual.rpe === ''));
+  assert.equal(s.actions[0].actual.seconds, '120');
+  assert.equal(s.actions[1].actual.reps, '');
   s.actions[0].actual.dose = '用户数据';
   assert.equal(fixture.slots[0].options[0].prescription, '推荐目标 2分钟');
 });
@@ -117,12 +119,28 @@ test('Per-set values, unit, weight basis, side differences, replacements and add
   assert.match(md, /命中20，出手30/); assert.doesNotMatch(md, /66\.7%/);
   a.actual.sets[0].rpe = '12'; assert.ok(C.issues(s).errors.some(e => e.includes('RPE')));
 });
-test('Mutually replacing slots, ambiguous completion and untrained contradictions block export', () => {
+test('Suggested replacements permit user extras; ambiguous completion and untrained still block export', () => {
   const s = complete(); s.actions[2].status = 'completed'; s.actions[2].selectedOptionId = 'A';
-  assert.throws(() => C.exportMarkdown(s), /替换槽位重复完成/);
+  assert.match(C.exportMarkdown(s), /两者同时训练，均按实绩保留/);
   s.actions[2].status = 'skipped'; s.actions[1].selectedOptionId = null;
   assert.throws(() => C.exportMarkdown(s), /实际动作|待选/);
   s.sessionStatus = '未训练'; assert.throws(() => C.exportMarkdown(s), /冲突/);
+});
+test('Several options in one slot preserve independent results and grouped children', () => {
+  const s = complete(), root = s.actions[1], original = C.copy(root.actual);
+  const extra = C.optionAction(s, root, 'A'); assert.equal(extra.extraOptionOf, root.id);
+  assert.deepEqual(root.actual, original); assert.equal(root.selectedOptionId, 'B'); assert.equal(extra.status, 'pending');
+  assert.equal(C.optionAction(s, root, 'A').id, extra.id); assert.equal(s.actions.length, 4);
+  assert.doesNotMatch(C.exportMarkdown(s).split('## 实际训练内容')[1].split('## 训练负荷与疼痛')[0], /动作甲/);
+  extra.status = 'completed'; assert.match(C.exportMarkdown(s), /同槽加练：动作甲/);
+  const third = C.optionAction(s, root, 'C'); third.status = 'partial'; assert.match(C.exportMarkdown(s), /动作丙/);
+  assert.deepEqual(C.readBackup(C.backup([s])), [s]);
+  C.removeAction(s, extra); assert.ok(!s.actions.includes(extra)); assert.deepEqual(root.actual, original);
+  const f = C.copy(fixture); f.slots[0].options.push({id: 'B', name: '另一热身组合', actions: [{name: '子动作1', prescription: '1×8'}, {name: '子动作2', prescription: '30秒'}]});
+  const grouped = C.createSession(f), alt = C.optionAction(grouped, grouped.actions[0], 'B');
+  assert.equal(grouped.actions.filter(a => a.parentActionId === alt.id).length, 2);
+  C.removeAction(grouped, alt); assert.ok(!grouped.actions.some(a => a.parentActionId === alt.id));
+  assert.equal(grouped.actions[0].selectedOptionId, 'A');
 });
 test('Recovery and cancelled session do not create fictitious activity/load', () => {
   const s = complete(); s.sessionStatus = '恢复日'; assert.match(C.exportMarkdown(s), /恢复日/);
@@ -148,7 +166,8 @@ test('Slot components record independently, preserve reference, and prevent doub
   f.slots[0].options[0].actions = [{name: '步行', prescription: '2分钟'}, {name: '抬踵', prescription: '1×8', notes: '保持稳定'}];
   const s = C.createSession(f), parent = s.actions[0], children = s.actions.filter(a => a.parentActionId === parent.id);
   assert.equal(children.length, 2); assert.equal(children[1].partReference.notes, '保持稳定');
-  assert.ok(children.every(a => a.status === 'pending' && a.actual.seconds === '' && a.actual.reps === ''));
+  assert.ok(children.every(a => a.status === 'pending' && a.actual.rpe === ''));
+  assert.equal(children[0].actual.seconds, '120'); assert.equal(children[1].actual.reps, '8');
   children.forEach(a => { a.status = 'completed'; a.actual.count = '2'; a.actual.reps = '8'; });
   s.sessionStatus = '部分完成';
   assert.equal(C.issues(s).errors.length, 0);
@@ -172,12 +191,31 @@ test('History prefills only prior completed matching actions, keeps pending, and
   const old = complete(); old.date = '2026-10-25'; old.actions[1].actual.notes = '旧反馈'; old.actions[1].actual.rpe = '9'; old.actions[1].actual.rest = '90';
   const future = complete(); future.date = '2026-10-28'; future.actions[1].actual.load = '99';
   const pending = complete(); pending.date = '2026-10-26'; pending.actions[1].status = 'pending'; pending.actions[1].actual.load = '88';
-  const fresh = C.createSession(fixture), a = fresh.actions[1]; a.selectedOptionId = 'B';
+  const fresh = C.createSession(fixture), a = fresh.actions[1]; a.selectedOptionId = 'B'; a.slot.options[1].prescription = '';
   assert.equal(C.prefillActual(fresh, a, [future, pending, old]), true);
   assert.equal(a.prefillDate, old.date); assert.equal(a.actual.dose, '2×8'); assert.equal(a.actual.rest, '90'); assert.equal(a.status, 'pending');
   assert.equal(a.actual.rpe, ''); assert.equal(a.actual.notes, ''); assert.equal(fresh.duration, '');
   a.actual.dose = '用户改为2×5'; assert.equal(C.prefillActual(fresh, a, [old]), false); assert.equal(a.actual.dose, '用户改为2×5');
-  const another = C.createSession(fixture); another.actions[1].selectedOptionId = 'A'; assert.equal(C.prefillActual(another, another.actions[1], [old]), false);
+  const another = C.createSession(fixture); another.actions[1].selectedOptionId = 'A'; assert.equal(C.prefillActual(another, another.actions[1], [old]), true); assert.equal(another.actions[1].actual.reps, '8'); assert.equal(another.actions[1].actual.rpe, '7');
+});
+test('Current recommendation defaults preserve ranges, units and confirmation boundaries', () => {
+  const f = C.copy(fixture);
+  f.guidance = {focus: ['今日重点'], safety: ['疼痛即停']};
+  const option = f.slots[1].options[0]; option.defaults = {doseMode: 'reps', count: '3', reps: '6', load: '20', unit: 'lb', basis: '单侧', rest: '60–90'};
+  f.slots[1].selectedOptionId = 'A';
+  const s = C.createSession(f), a = s.actions[1];
+  assert.equal(a.actual.rest, '60–90'); assert.equal(a.actual.load, '20'); assert.equal(a.actual.rpe, '7'); assert.equal(a.status, 'pending');
+  assert.equal(C.recommendationRow(a, true).count, '');
+  s.sessionStatus = '已完成'; s.actions[0].status = 'completed';
+  assert.doesNotMatch(C.exportMarkdown(s).split('## 实际训练内容')[1].split('## 训练负荷与疼痛')[0], /动作甲/);
+  a.status = 'partial'; a.actual.reps = '5';
+  assert.match(C.exportMarkdown(s), /3组 × 5次/); assert.match(C.exportMarkdown(s), /经用户核对并确认/); assert.match(C.exportMarkdown(s), /60–90秒（非实测）/);
+  assert.deepEqual(C.readBackup(C.backup([s])), [s]);
+  a.status = 'pending'; a.actual.load = ''; assert.equal(C.prefillActual(s, a, []), false); assert.equal(a.actual.load, '');
+  option.defaults = {rpe: '11'}; assert.throws(() => C.validateRecommendation(f), /RPE/);
+  option.defaults = {rest: '90–60'}; assert.throws(() => C.validateRecommendation(f), /范围/);
+  delete option.defaults; option.prescription = '3×6–8/侧；休息1–2分钟；目标 RPE 7';
+  const ranged = C.createSession(f).actions[1]; assert.equal(ranged.actual.dose, '3×6–8/侧'); assert.equal(ranged.actual.rest, '60–120'); assert.equal(ranged.actual.rpe, '7');
 });
 test('Start/end timestamps survive backup, derive duration across midnight, and reject invalid order', () => {
   const s = complete(); C.stampSession(s, 'start', '2026-10-27T15:30:00.000Z'); C.stampSession(s, 'end', '2026-10-27T16:30:00.000Z');

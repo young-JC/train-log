@@ -1,4 +1,4 @@
-/* Shared, dependency-free model. Recommendations never populate actual results. */
+/* Shared model. Suggested entries become results only after user completion confirmation. */
 (function (root) {
   'use strict';
   const UNKNOWN = '未记录';
@@ -68,14 +68,38 @@
     let notes = clean(string(option.notes, '动作注意事项'));
     if (extra && !notes.includes(extra)) notes = [extra, notes].filter(Boolean).join('；');
     const result = {id, name, prescription: clean(string(option.prescription, '推荐剂量')), notes};
+    if (option.defaults != null) result.defaults = entryDefaults(option.defaults);
     if (option.actions != null) {
       if (!Array.isArray(option.actions) || !option.actions.length || option.actions.length > 30) throw new Error('组合需包含 1–30 个子动作');
       result.actions = option.actions.map(part => {
         if (!part || typeof part !== 'object' || part.actions != null) throw new Error('组合子动作格式无效');
         const detail = optionDetails({...part, id: 'part'});
-        return {name: detail.name, prescription: detail.prescription, notes: detail.notes};
+        return {name: detail.name, prescription: detail.prescription, notes: detail.notes, ...(detail.defaults ? {defaults: detail.defaults} : {})};
       });
     }
+    return result;
+  }
+  function restValue(value) {
+    if (blank(value) || value === UNKNOWN) return value;
+    const parts = String(value).split(/\s*[–—\-~～至]\s*/);
+    if (parts.length > 2 || parts.some(v => number(v, 0, 86400, '休息秒数') === null) || (parts.length === 2 && Number(parts[0]) > Number(parts[1]))) throw new Error('休息应为 0–86400 秒或递增范围');
+    return String(value);
+  }
+  function entryDefaults(input) {
+    if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('defaults 必须为推荐预填对象');
+    const allowed = ['doseMode', 'dose', 'count', 'reps', 'seconds', 'side', 'rest', 'load', 'unit', 'basis', 'rpe'], result = {};
+    Object.keys(input).forEach(k => { if (!allowed.includes(k)) throw new Error('defaults 不支持字段：' + k); result[k] = string(input[k], '推荐预填 ' + k, 500); });
+    if (result.doseMode && !['reps', 'time', 'free'].includes(result.doseMode)) throw new Error('推荐预填剂量模式无效');
+    [['count', 1, 100], ['reps', 0, 999], ['seconds', 0, 86400]].forEach(([k, min, max]) => { const n = number(result[k], min, max, '推荐预填 ' + k); if (n !== null && k !== 'seconds' && !Number.isInteger(n)) throw new Error('推荐组数与次数必须为整数'); });
+    restValue(result.rest);
+    if (result.rpe) {
+      if (!/^\d+(?:\.\d+)?(?:\s*[–—\-~～至]\s*\d+(?:\.\d+)?)?$/.test(result.rpe)) throw new Error('推荐 RPE 应为 0–10 数字或范围');
+      const values = result.rpe.split(/\s*[–—\-~～至]\s*/).map(Number);
+      if (values.some(v => v > 10) || values.length === 2 && values[0] > values[1]) throw new Error('推荐 RPE 范围无效');
+    }
+    if (result.side && result.side !== '每侧') throw new Error('推荐侧别口径无效');
+    if (result.unit && !['kg', 'lb', '自重', '其他'].includes(result.unit)) throw new Error('推荐负荷单位无效');
+    if (result.basis && !['单侧', '总重', '器械标称', '不适用', '其他'].includes(result.basis)) throw new Error('推荐重量口径无效');
     return result;
   }
   function validateRecommendation(input) {
@@ -84,6 +108,15 @@
     if (!validDate(data.date)) throw new Error('推荐日期必须是有效的 YYYY-MM-DD');
     if (!Array.isArray(data.slots) || data.slots.length > 150) throw new Error('slots 必须是动作槽位数组，最多 150 项');
     const result = {kind: data.kind, schemaVersion: 1, date: data.date, title: string(data.title, '训练名称', 150), cycle: string(data.cycle, '周期信息', 300), notes: string(data.notes, '训练注意事项'), readiness: null, slots: []};
+    if (data.guidance != null) {
+      if (!data.guidance || typeof data.guidance !== 'object' || Array.isArray(data.guidance)) throw new Error('guidance 必须为分类提示对象');
+      result.guidance = {};
+      for (const key of ['focus', 'arrangement', 'safety']) {
+        if (data.guidance[key] == null) continue;
+        if (!Array.isArray(data.guidance[key]) || data.guidance[key].length > 15) throw new Error('guidance.' + key + ' 必须为最多 15 条提示');
+        result.guidance[key] = data.guidance[key].map(v => string(v, '分类提示', 1000, true));
+      }
+    }
     if (data.readiness != null) {
       const r = data.readiness;
       if (!r || typeof r !== 'object' || Array.isArray(r)) throw new Error('readiness 必须为原始值对象或 null');
@@ -139,6 +172,7 @@
     const ready = source?.date === date && source.readiness ? Object.fromEntries(Object.entries(source.readiness).map(([key, value]) => [key, value ?? ''])) : readinessValues();
     const session = {kind: 'train2.recorder-draft', schemaVersion: 1, date, title: source?.title || '', cycle: source?.date === date ? source.cycle : '', source, readiness: ready, readinessEdited: false, sessionStatus: '待确认', actions: source ? source.slots.map(newAction) : [], duration: '', sessionRpe: '', painDuring: '', painAfter: '', painNext: '', painDuringNote: '', painAfterNote: '', painNextNote: '', symptoms: '', completionNote: '', updatedAt: new Date().toISOString(), exportedAt: null};
     [...session.actions].forEach(a => expandSlot(session, a));
+    session.actions.forEach(a => prefillRecommendation(session, a));
     return session;
   }
   function addAction(session) {
@@ -159,6 +193,32 @@
     session.actions.splice(last + 1, 0, action);
     return action;
   }
+  function optionAction(session, parent, optionId) {
+    if (!parent || parent.parentActionId || parent.added || parent.extraOptionOf) throw new Error('请从原推荐槽位选择动作');
+    if (!parent.slot.options.some(o => o.id === optionId)) throw new Error('候选动作不存在');
+    const existing = session.actions.find(a => (a.id === parent.id || a.extraOptionOf === parent.id) && a.selectedOptionId === optionId);
+    if (existing) return existing;
+    const chosenOption = parent.slot.options.find(o => o.id === optionId);
+    if (session.actions.length + (parent.selectedOptionId ? 1 : 0) + (chosenOption.actions?.length || 0) > 200) throw new Error('一份草稿最多记录 200 个动作');
+    if (!parent.selectedOptionId) {
+      parent.selectedOptionId = optionId; expandSlot(session, parent); prefillRecommendation(session, parent); return parent;
+    }
+    if (session.actions.length >= 200) throw new Error('一份草稿最多记录 200 个动作');
+    const option = parent.slot.options.find(o => o.id === optionId);
+    const action = newAction({...parent.slot, options: [copy(option)], selectedOptionId: optionId}, session.actions.length);
+    action.id = 'option-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+    action.extraOptionOf = parent.id;
+    const last = session.actions.reduce((end, a, i) => a.id === parent.id || a.parentActionId === parent.id || a.extraOptionOf === parent.id || session.actions.some(root => root.extraOptionOf === parent.id && a.parentActionId === root.id) ? i : end, 0);
+    session.actions.splice(last + 1, 0, action);
+    expandSlot(session, action); prefillRecommendation(session, action);
+    return action;
+  }
+  function removeAction(session, action) {
+    const removed = new Set([action.id]);
+    let size;
+    do { size = removed.size; session.actions.forEach(a => { if (removed.has(a.parentActionId) || removed.has(a.extraOptionOf)) removed.add(a.id); }); } while (removed.size !== size);
+    session.actions = session.actions.filter(a => !removed.has(a.id));
+  }
   function latestActual(session, action, history) {
     const name = actionName(action).normalize('NFKC').trim().toLowerCase();
     if (!name) return null;
@@ -172,8 +232,9 @@
     return matches[0] || null;
   }
   function prefillActual(session, action, history) {
+    if (prefillRecommendation(session, action)) return true;
     const actual = action.actual;
-    if (action.prefillDate || session.actions.some(a => a.parentActionId === action.id) || action.status !== 'pending' || actual.sets.length || ['dose', 'count', 'reps', 'seconds', 'load', 'rpe', 'rest', 'notes'].some(k => !blank(actual[k]))) return false;
+    if (action.prefillSource || action.prefillDate || session.actions.some(a => a.parentActionId === action.id) || action.status !== 'pending' || actual.sets.length || ['dose', 'count', 'reps', 'seconds', 'load', 'rpe', 'rest', 'notes'].some(k => !blank(actual[k]))) return false;
     const last = latestActual(session, action, history);
     if (!last) return false;
     function values(row) {
@@ -194,7 +255,47 @@
       const child = addSlotAction(session, parent);
       child.actualName = part.name;
       child.partReference = {prescription: part.prescription, notes: part.notes};
+      if (part.defaults) child.partReference.defaults = copy(part.defaults);
+      prefillRecommendation(session, child);
     });
+  }
+  function recommendationRow(action, grouped = false) {
+    const option = action.parentActionId ? action.partReference : selected(action), row = emptyActual();
+    if (!option || action.added || text(action.actualName) && !action.parentActionId && action.actualName !== option.name) return row;
+    // Legacy templates: read only a single unambiguous dose clause; never select a range endpoint.
+    const clauses = String(option.prescription || '').split(/[；;。\n]/).map(v => v.trim());
+    const dose = clauses.find(v => /^(?:推荐目标[：:\s]*)?\d+(?:\.\d+)?(?:\s*[–—\-~～至]\s*\d+(?:\.\d+)?)?\s*(?:[×xX*]|组|分钟|秒|次|米)/.test(v))?.replace(/^推荐目标[：:\s]*/, '').replace(/\s*[@，,]?\s*(?:目标\s*)?RPE[\s\S]*$/i, '').trim();
+    if (dose) {
+      const exact = /^(\d+)\s*(?:组\s*)?[×xX*]\s*(\d+(?:\.\d+)?)\s*(秒|分钟|次)?\s*(\/侧|每侧)?$/.exec(dose);
+      const single = /^(\d+(?:\.\d+)?)\s*(秒|分钟)(\/侧)?$/.exec(dose);
+      if (exact) {
+        row.count = exact[1]; row.side = exact[4] ? '每侧' : '';
+        row.doseMode = /秒|分钟/.test(exact[3]) ? 'time' : 'reps';
+        row[row.doseMode === 'time' ? 'seconds' : 'reps'] = String(Number(exact[2]) * (exact[3] === '分钟' ? 60 : 1));
+      } else if (single) { row.doseMode = 'time'; row.seconds = String(Number(single[1]) * (single[2] === '分钟' ? 60 : 1)); row.count = '1'; row.side = single[3] ? '每侧' : ''; }
+      else { row.doseMode = 'free'; row.dose = dose; }
+    }
+    const rest = clauses.map(v => /^(?:组间)?休(?:息)?\s*[：:]?\s*(\d+(?:\.\d+)?(?:\s*[–—\-~～至]\s*\d+(?:\.\d+)?)?)\s*(秒|分钟)$/.exec(v)).find(Boolean);
+    if (rest) row.rest = rest[1].replace(/\d+(?:\.\d+)?/g, n => String(Number(n) * (rest[2] === '分钟' ? 60 : 1)));
+    const load = clauses.map(v => /^(?:负荷|重量)\s*[：:]?\s*(\d+(?:\.\d+)?(?:[–—\-~～至]\d+(?:\.\d+)?)?)\s*(kg|lb)\s*(单侧|总重|器械标称)?$/i.exec(v)).find(Boolean);
+    if (load) { row.load = load[1]; row.unit = load[2].toLowerCase(); row.basis = load[3] || ''; }
+    else if (clauses.some(v => /^(?:负荷[：:\s]*)?自重$/.test(v))) { row.load = '自重'; row.unit = '自重'; }
+    const effort = /RPE\s*[：:]?\s*(\d+(?:\.\d+)?(?:\s*[–—\-~～至]\s*\d+(?:\.\d+)?)?)/i.exec(option.prescription || '');
+    if (effort) { try { row.rpe = entryDefaults({rpe: effort[1]}).rpe; } catch (_) { /* Keep invalid source text as reference only. */ } }
+    Object.assign(row, option.defaults || {});
+    if (row.count && Number(row.count) < 1 || Number(row.count) > 100 || Number(row.reps) > 999 || row.reps && !Number.isInteger(Number(row.reps)) || Number(row.seconds) > 86400) { row.doseMode = 'free'; row.dose = dose || ''; row.count = ''; row.reps = ''; row.seconds = ''; }
+    try { restValue(row.rest); } catch (_) { row.rest = ''; }
+    if (grouped) row.count = '';
+    return row;
+  }
+  function prefillRecommendation(session, action) {
+    if (action.prefillSource || action.prefillDate || action.added || action.status !== 'pending' || session.actions.some(a => a.parentActionId === action.id)) return false;
+    const actual = action.actual;
+    if (actual.sets.length || ['dose', 'count', 'reps', 'seconds', 'load', 'unit', 'basis', 'side', 'rpe', 'rest', 'notes'].some(k => !blank(actual[k]))) return false;
+    const row = recommendationRow(action);
+    if (!['dose', 'count', 'reps', 'seconds', 'load', 'rest', 'rpe'].some(k => !blank(row[k]))) return false;
+    action.actual = row; action.prefillSource = 'recommendation';
+    return true;
   }
   function selected(action) { const option = action.slot.options.find(option => option.id === action.selectedOptionId); return option ? optionDetails(option) : undefined; }
   function actionName(action) { return text(action.actualName) || (action.added || action.parentActionId ? '' : selected(action)?.name) || ''; }
@@ -250,10 +351,13 @@
         if (!row || typeof row !== 'object') throw new Error('逐组数据无效');
         ['dose', 'load', 'unit', 'basis', 'rpe', 'notes'].forEach(key => string(row[key], '实际动作字段'));
         if (row.doseMode != null && !['free', 'reps', 'time'].includes(row.doseMode)) throw new Error('剂量模式无效');
-        [['count', 1, 100], ['reps', 0, 999], ['seconds', 0, 86400], ['rest', 0, 86400]].forEach(([key, min, max]) => { if (row[key] != null) { string(row[key], key); const n = number(row[key], min, max, key); if (n !== null && ['count', 'reps'].includes(key) && !Number.isInteger(n)) throw new Error('组数和次数必须为整数'); } });
+        [['count', 1, 100], ['reps', 0, 999], ['seconds', 0, 86400]].forEach(([key, min, max]) => { if (row[key] != null) { string(row[key], key); const n = number(row[key], min, max, key); if (n !== null && ['count', 'reps'].includes(key) && !Number.isInteger(n)) throw new Error('组数和次数必须为整数'); } });
+        if (row.rest != null) { string(row.rest, '休息秒数'); restValue(row.rest); }
         if (row.side != null && !['', '每侧'].includes(row.side)) throw new Error('侧别口径无效');
       });
       if (action.parentActionId != null && (typeof action.parentActionId !== 'string' || !session.actions.some(p => p.id === action.parentActionId && !p.parentActionId && p.slot.id === action.slot.id && p.selectedOptionId === action.selectedOptionId))) throw new Error('槽位子动作关联无效');
+      if (action.partReference?.defaults != null) entryDefaults(action.partReference.defaults);
+      if (action.extraOptionOf != null && (!session.actions.some(a => a.id === action.extraOptionOf && !a.extraOptionOf && !a.parentActionId && a.slot.id === action.slot.id) || action.extraOptionOf === action.id)) throw new Error('同槽加练关联无效');
       string(action.actualName, '实际动作名称', 300);
     });
     ['title', 'cycle', 'painDuringNote', 'painAfterNote', 'painNextNote', 'symptoms', 'completionNote'].forEach(key => string(session[key], key));
@@ -267,16 +371,10 @@
     const actual = session.actions.filter(a => ['completed', 'partial'].includes(a.status));
     if (session.sessionStatus === '未训练' && actual.length) errors.push('未训练状态与已完成动作冲突，请修正');
     if (session.sessionStatus !== '未训练' && !actual.length) errors.push('至少确认一个实际完成或部分完成的动作；休息或取消请选择未训练');
-    const replacements = new Map();
     actual.forEach(a => {
       if (session.actions.some(other => other.parentActionId === a.id)) errors.push(a.slot.module + '：组合与子动作不能重复计入，请只确认子动作');
       if (!actionName(a)) errors.push(a.slot.module + '：请填写或选择实际动作');
       if (!a.selectedOptionId && !text(a.actualName)) errors.push(a.slot.module + '：候选仍待选');
-      if (a.slot.replacesSlotId) {
-        const owner = a.parentActionId || a.id;
-        if ((replacements.has(a.slot.replacesSlotId) && replacements.get(a.slot.replacesSlotId) !== owner) || actual.some(other => other.slot.id === a.slot.replacesSlotId)) errors.push('替换槽位重复完成：' + a.slot.module + '，请确认保留的实际动作');
-        replacements.set(a.slot.replacesSlotId, owner);
-      }
       const rows = a.actual.mode === 'sets' ? a.actual.sets : [a.actual];
       if (!rows.length) errors.push(actionName(a) + '：逐组模式至少添加一组');
       rows.forEach((row, i) => {
@@ -307,7 +405,7 @@
     session.actions.filter(a => ['completed', 'partial'].includes(a.status)).forEach(a => {
       order++;
       const rows = a.actual.mode === 'sets' ? a.actual.sets : [a.actual];
-      rows.forEach((row, i) => lines.push('| ' + [a.actual.mode === 'sets' ? order + '.' + (i + 1) : order, a.slot.module, actionName(a), a.actual.mode === 'sets' ? '第' + (i + 1) + '组：' + shown(doseText(row, true)) : shown(doseText(row)), loadText(row), row.rpe, [a.status === 'partial' ? '部分完成' : '完成', !blank(row.rest) ? '组间休息设定：' + shown(row.rest) + '秒（非实测）' : '', a.prefillDate ? '剂量/负荷参考本机 ' + a.prefillDate + '，本次由用户确认完成' : '', row.notes, a.actual.mode === 'sets' ? a.actual.notes : ''].filter(Boolean).join('；')].map(cell).join(' | ') + ' |'));
+      rows.forEach((row, i) => lines.push('| ' + [a.actual.mode === 'sets' ? order + '.' + (i + 1) : order, a.slot.module, actionName(a), a.actual.mode === 'sets' ? '第' + (i + 1) + '组：' + shown(doseText(row, true)) : shown(doseText(row)), loadText(row), row.rpe, [a.status === 'partial' ? '部分完成' : '完成', !blank(row.rest) ? '组间休息设定：' + shown(row.rest) + '秒（非实测）' : '', a.prefillSource === 'recommendation' ? '本次推荐预填，经用户核对并确认' : '', a.prefillDate ? '剂量/负荷参考本机 ' + a.prefillDate + '，本次由用户确认完成' : '', row.notes, a.actual.mode === 'sets' ? a.actual.notes : ''].filter(Boolean).join('；')].map(cell).join(' | ') + ' |'));
     });
     if (!order) lines.push('| — | — | 未训练，无实际动作 | — | — | — | — |');
     lines.push('', '## 训练负荷与疼痛', '', '| 项目 | 用户填写 |', '|---|---|', '| 总时长（分钟） | ' + cell(session.duration) + ' |', '| Session RPE /10 | ' + cell(session.sessionRpe) + ' |', '| Session Load | ' + (session.sessionStatus === '未训练' ? '不计负荷' : load === null ? '未计算' : load + ' AU') + ' |', '| 训练中最高疼痛 /10 | ' + cell(session.painDuring) + '；' + cell(session.painDuringNote) + ' |', '| 训练后疼痛 /10 | ' + cell(session.painAfter) + '；' + cell(session.painAfterNote) + ' |', '| 次日疼痛 /10 | ' + (blank(session.painNext) ? '待补充' : cell(session.painNext)) + '；' + cell(session.painNextNote) + ' |', '| 异常症状/其他反馈 | ' + cell(session.symptoms) + ' |', '', '## 实际完成、替换、删减与加练');
@@ -318,9 +416,10 @@
       else if (a.status === 'pending') lines.push('- 待记录，未确认完成：' + a.slot.module + ' / ' + original + '；不计入实际训练');
       else {
         if (a.added) lines.push('- 临时加练：' + actionName(a));
+        if (a.extraOptionOf) lines.push('- 同槽加练：' + actionName(a) + '；由用户另选并确认实际完成');
         if (!a.added && !a.parentActionId && text(a.actualName) && a.actualName !== original) lines.push('- 替换动作：' + original + ' → ' + a.actualName);
         if (a.status === 'partial') lines.push('- 部分完成：' + actionName(a));
-        if (a.slot.replacesSlotId) lines.push('- ' + actionName(a) + ' 替换原槽位：' + a.slot.replacesSlotId);
+        if (a.slot.replacesSlotId) lines.push('- 推荐关系：' + actionName(a) + ' 原建议替换槽位 ' + a.slot.replacesSlotId + '；' + (session.actions.some(other => ['completed', 'partial'].includes(other.status) && other.slot.id === a.slot.replacesSlotId) ? '用户选择两者同时训练，均按实绩保留' : '实际是否替换以用户记录为准'));
       }
     });
     lines.push('- 本次补充：' + shown(session.completionNote), '', '## 待补充');
@@ -344,7 +443,7 @@
     });
     return copy(data.sessions);
   }
-  const api = {UNKNOWN, blank, shown, today, validDate, number, readyFields, readinessValues, readinessResult, parseJSON, optionDetails, validateRecommendation, createSession, addAction, addSlotAction, expandSlot, latestActual, prefillActual, selected, actionName, emptyActual, doseText, stampSession, timeText, sessionLoad, validateSession, issues, exportMarkdown, backup, readBackup, copy};
+  const api = {UNKNOWN, blank, shown, today, validDate, number, readyFields, readinessValues, readinessResult, parseJSON, optionDetails, entryDefaults, restValue, recommendationRow, prefillRecommendation, validateRecommendation, createSession, addAction, addSlotAction, optionAction, removeAction, expandSlot, latestActual, prefillActual, selected, actionName, emptyActual, doseText, stampSession, timeText, sessionLoad, validateSession, issues, exportMarkdown, backup, readBackup, copy};
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.TrainingRecorder = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -22,8 +22,9 @@
       const base = new URL('./', location.href);
       const registration = await navigator.serviceWorker.register(new URL('sw.js', base), {scope: base.pathname, updateViaCache: 'none'});
       await registration.update();
-      if (registration.installing) { status.textContent = '新版正在准备，已有草稿不会清空…'; await waitFor(registration.installing, 'installed'); }
-      const waiting = registration.waiting;
+      const installing = registration.installing;
+      if (installing) { status.textContent = '新版正在准备，已有草稿不会清空…'; await waitFor(installing, 'installed'); }
+      const waiting = registration.waiting || (installing?.state === 'installed' ? installing : null);
       if (waiting) { status.textContent = '新版已就绪，正在切换工具…'; waiting.postMessage({type: 'ACTIVATE_UPDATE'}); await waitFor(waiting, 'activated'); }
       else if (registration.active) await waitFor(registration.active, 'activated');
       else throw new Error('离线工具尚未准备好，请保持联网后重试。');

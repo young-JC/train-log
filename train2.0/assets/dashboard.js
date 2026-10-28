@@ -179,3 +179,25 @@ document.getElementById('recDateSelect').addEventListener('change',e=>{renderTod
 document.getElementById('recExpandAll').addEventListener('click',()=>document.querySelectorAll('#sessionSlots details').forEach(slot=>slot.open=true));
 document.getElementById('recCollapseAll').addEventListener('click',()=>document.querySelectorAll('#sessionSlots details').forEach(slot=>slot.open=slot.hasAttribute('data-rec-pinned')));
 document.addEventListener('DOMContentLoaded',refresh);
+
+// 侧栏与内容滚动保持同步；不参与训练数据的读取或保存。
+(()=>{
+ const links=[...document.querySelectorAll('#nav a[href^="#"]')];
+ const targets=links.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
+ let pending=false;
+ function markLocation(){
+  const offset=matchMedia('(min-width:1200px)').matches?100:150;
+  let current=targets[0];
+  for(const target of targets){if(target.getBoundingClientRect().top<=offset)current=target}
+  for(const link of links){
+   const active=link.getAttribute('href')==='#'+current.id;
+   link.classList.toggle('active',active);
+   if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
+  }
+  pending=false;
+ }
+ function scheduleLocation(){if(!pending){pending=true;requestAnimationFrame(markLocation)}}
+ addEventListener('scroll',scheduleLocation,{passive:true});
+ addEventListener('resize',scheduleLocation);
+ addEventListener('load',scheduleLocation);
+})();

@@ -3,21 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#203d35">
 <title>超人不会飞专属训练系统 2.0</title>
 <link rel="stylesheet" href="assets/dashboard.css">
 </head>
 <body>
-<nav class="nav" id="nav">
- <a href="#dashboard">🏀 总览</a><a href="#monthCalendar">📅 月历</a><a href="#cycle">🗓 12周周期</a><a href="#readiness">⚡ Ready</a><a href="#today">📋 训练推荐</a><a href="#assessment">📊 能力评估</a><a href="#weakness">🎯 弱项</a><a href="#load">📈 负荷</a><a href="#actionLib">📚 动作库</a><a href="#prehab">🛡️ 防伤</a><a href="#athlete">👤 个人档案</a><a href="#review">🔁 周期复盘</a>
+<a class="skip-link" href="#mainContent">跳到训练内容</a>
+<nav class="nav" id="nav" aria-label="训练手记导航">
+ <div class="nav-brand"><span aria-hidden="true">↗</span><div>随练<small>TRAIN 2.0 · DESKTOP</small></div></div>
+ <div class="nav-caption">我的训练手记</div>
+ <a href="#dashboard" class="active" aria-current="location"><span>01</span>训练总览</a><a href="#monthCalendar"><span>02</span>训练月历</a><a href="#cycle"><span>03</span>12 周周期</a><a href="#readiness"><span>04</span>今日状态</a><a href="#today"><span>05</span>训练推荐</a><a href="#assessment"><span>06</span>能力评估</a><a href="#weakness"><span>07</span>弱点追踪</a><a href="#load"><span>08</span>负荷与恢复</a><a href="#actionLib"><span>09</span>动作库</a><a href="#prehab"><span>10</span>防伤准备</a><a href="#athlete"><span>11</span>个人档案</a><a href="#review"><span>12</span>周期复盘</a>
+ <div class="nav-note"><span aria-hidden="true">↗</span><p>认真训练，慢慢变强。<small>超人不会飞 · 专属训练手记</small></p></div>
 </nav>
-<div class="container">
+<main class="container" id="mainContent">
 <header class="header" id="dashboard">
  <div class="head">
-  <div class="brand"><div class="brand-icon">⚡</div><div><h1>超人不会飞专属训练系统 2.0</h1><p>Athlete Performance Operating System</p></div></div>
+  <div class="brand"><div class="brand-icon" aria-hidden="true">↗</div><div><h1>超人不会飞的训练手记</h1><p>TRAINING NOTEBOOK / 2.0</p></div></div>
   <div class="cycle-controls">
    <label class="pill">周期开始 <input class="control" id="cycleStart" type="date" value="2026-09-21"></label>
    <label class="pill">训练模式 <select class="control" id="mode"><option value="3">3日版</option><option value="4">4日版</option><option value="5">4+1日版</option></select></label>
   </div>
+ </div>
+ <div class="notebook-intro">
+  <div class="notebook-copy"><div class="owner-signature"><span></span>超人不会飞 <small>专属训练手记</small></div><h2>每一次训练，<br>都在<span>积蓄力量。</span></h2><p>把计划带进训练场，把进步留在手记里。</p><a class="notebook-cta" href="#today">看看这次练什么 <span aria-hidden="true">↗</span></a></div>
+  <div class="notebook-note"><div class="note-heading"><span>写在训练之前</span><span aria-hidden="true">↗</span></div><a href="#readiness"><span class="note-number">01</span><div>先听听身体的声音<small>检查状态，找到今天的节奏</small></div><span aria-hidden="true">↗</span></a><a href="#today"><span class="note-number">02</span><div>带着重点开始训练<small>按顺序看动作、剂量与提醒</small></div><span aria-hidden="true">↗</span></a><a href="#review"><span class="note-number">03</span><div>回头看，才能走得更远<small>留意恢复，也看见自己的进步</small></div><span aria-hidden="true">↗</span></a><div class="note-footer"><span>保持耐心 · 持续积累</span><span>TRAIN 2.0</span></div></div>
  </div>
 </header>
 
@@ -185,7 +194,7 @@
 </div>
 
 <footer class="footer"><div>篮球运动员训练系统 2.0 · 12周周期化 + 动作库筛选 + Ready自调节</div><div style="margin-top:4px">正式训练历史来自月度 Markdown，并同步镜像到月度 HTML 与本 Dashboard；旧 localStorage 历史不计入正式统计。</div></footer>
-</div>
+</main>
 <script src="assets/data/reference.js"></script>
 <script src="assets/data/records.js"></script>
 <script src="assets/data/actions.js"></script>

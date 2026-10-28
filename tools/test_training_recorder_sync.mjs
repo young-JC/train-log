@@ -20,6 +20,8 @@ const bucket = {
 };
 const env = {BUCKET: bucket}, base = 'https://fictional-test.chatgpt.site';
 const source = {kind: 'train2.recommendation', schemaVersion: 1, date: '2026-10-27', title: '虚构本地测试，不上线', readiness: null, slots: [{id: 'main', module: '三选一', selectedOptionId: null, options: [{id: 'A', name: '示例动作甲', prescription: '2×8'}, {id: 'B', name: '示例动作乙', prescription: '2×5'}]}]};
+source.guidance = {focus: ['动作稳定'], arrangement: ['按顺序练'], safety: ['疼痛即停']};
+source.slots[0].options[0].defaults = {doseMode: 'reps', count: '2', reps: '8', rest: '90', load: '20', unit: 'kg', basis: '总重'};
 async function request(route, body, headers = {}) {
   const response = await worker.fetch(new Request(base + route, body === undefined ? {} : {method: 'POST', headers: {'content-type': 'application/json', ...headers}, body: JSON.stringify(body)}), env);
   return {response, result: await response.json()};
@@ -37,6 +39,8 @@ await request('/api/recommendations', {...source, date: '2026-10-26', title: '�
 const latest = await request('/api/recommendations/latest?asOf=2026-10-27');
 assert.equal(latest.result.inbox.recommendation.date, '2026-10-27');
 assert.equal(latest.result.inbox.recommendation.title, '虚构新版');
+assert.deepEqual(latest.result.inbox.recommendation.guidance, source.guidance);
+assert.deepEqual(latest.result.inbox.recommendation.slots[0].options[0].defaults, source.slots[0].options[0].defaults);
 assert.equal(latest.response.headers.get('cache-control'), 'no-store');
 assert.equal((await request('/api/recommendations/latest?asOf=2026-02-30')).response.status, 400);
 assert.equal((await request('/api/recommendations', source, {origin: 'https://unrelated.invalid'})).response.status, 403);

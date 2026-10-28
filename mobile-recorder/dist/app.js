@@ -5,7 +5,7 @@
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
   const labels = {pending: '待记录', completed: '完成', partial: '部分', skipped: '跳过'};
   let drafts = new Map(), current = null, imported = null, tab = 'training', writeQueue = Promise.resolve(), revision = 0, toastTimer;
-  let cloudRecommendation = null, syncing = false;
+  let cloudRecommendation = null, viewedRecommendation = null, syncing = false;
   let toolRegistration = null, lastUpdateCheck = 0, applyingUpdate = false;
   let pickerPath = null;
   const toolBuild = document.querySelector('meta[name="recorder-build"]')?.content || 'dev';
@@ -37,14 +37,17 @@
     current = C.copy(session); tab = 'training';
     const filled = current.actions.map(a => C.prefillActual(current, a, [...drafts.values()])).some(Boolean);
     $('welcome').hidden = true; $('workspace').hidden = false; document.body.classList.add('has-session');
+    $('workspaceInbox').append(document.querySelector('.cloud-inbox'));
     render();
     $('saveStatus').textContent = '本机草稿 · ' + savedAt(current.updatedAt);
     if (filled) save();
   }
   function field(path, label, placeholder = '', options = {}) {
     const value = get(path) ?? '', unknown = value === C.UNKNOWN;
-    const control = options.area ? '<textarea rows="2" data-field="' + path + '" placeholder="' + esc(placeholder) + '"' + (unknown ? ' disabled' : '') + '>' + (unknown ? '' : esc(value)) + '</textarea>' : '<input data-field="' + path + '" value="' + (unknown ? '' : esc(value)) + '" placeholder="' + esc(placeholder) + '"' + (options.numeric ? ' readonly data-wheel="' + path + '" data-label="' + esc(label) + '" aria-haspopup="dialog"' : '') + (unknown ? ' disabled' : '') + '>' + (options.wheel ? '<button type="button" class="unknown-toggle" data-wheel="' + path + '" data-label="' + esc(label) + '"' + (unknown ? ' disabled' : '') + '>滚轮</button>' : '');
-    return '<label class="field"><span>' + esc(label) + '</span><span class="field-row">' + control + (options.unknown === false ? '' : '<button type="button" class="unknown-toggle' + (unknown ? ' active' : '') + '" data-unknown="' + path + '">' + (unknown ? '已标未记录' : '未记录') + '</button>') + '</span></label>';
+    const controlId = 'field-' + path.replace(/\./g, '-');
+    const attributes = ' id="' + controlId + '" data-field="' + path + '" placeholder="' + esc(placeholder) + '"' + (unknown ? ' disabled' : '');
+    const control = options.area ? '<textarea rows="2"' + attributes + '>' + (unknown ? '' : esc(value)) + '</textarea>' : '<input' + attributes + ' value="' + (unknown ? '' : esc(value)) + '"' + (options.numeric ? ' readonly data-wheel="' + path + '" data-label="' + esc(label) + '" aria-haspopup="dialog"' : '') + '>' + (options.wheel ? '<button type="button" class="wheel-trigger" data-wheel="' + path + '" data-label="' + esc(label) + '" aria-label="滚轮选择' + esc(label) + '"' + (unknown ? ' disabled' : '') + '>选数</button>' : '') + (options.numeric ? '<span class="number-affordance" aria-hidden="true">⌃⌄</span>' : '');
+    return '<div class="field' + (unknown ? ' is-unknown' : '') + '"><div class="field-label"><label for="' + controlId + '">' + esc(label) + '</label>' + (options.unknown === false ? '' : '<button type="button" class="unknown-toggle' + (unknown ? ' active' : '') + '" data-unknown="' + path + '" aria-pressed="' + unknown + '" aria-label="' + esc(label) + '：' + (unknown ? '取消未记录' : '标记未记录') + '">未记录' + (unknown ? ' ✓' : '') + '</button>') + '</div><div class="field-row">' + control + '</div></div>';
   }
   function selectField(path, label, choices) {
     const value = get(path) ?? (path.endsWith('.doseMode') ? 'free' : '');
@@ -52,9 +55,9 @@
   }
   function actualFields(base, grouped = false) {
     const mode = get(base + '.doseMode') || 'free';
-    return selectField(base + '.doseMode', '记录方式', [['reps', '组数 × 次数'], ['time', '组数 × 时间（不记次数）'], ['free', '自由填写 / 距离 / 旧记录']]) +
+    return '<div class="actual-fields"><div class="entry-heading"><span>实际表现</span><small>' + (grouped ? '本组实绩' : '按动作汇总') + '</small></div>' + selectField(base + '.doseMode', '记录方式', [['reps', '组数 × 次数'], ['time', '组数 × 时间（不记次数）'], ['free', '自由填写 / 距离 / 旧记录']]) +
       (mode === 'free' ? field(base + '.dose', grouped ? '本组次数 / 时长 / 距离' : '实际组次 / 时长 / 距离', '按实际填写') : '<div class="field-grid">' + (grouped ? '' : field(base + '.count', '组数', '选择组数', {numeric: true})) + (mode === 'time' ? field(base + '.seconds', '每组时间 · 秒', '选择时长', {numeric: true}) : field(base + '.reps', '每组次数', '选择次数', {numeric: true})) + '</div>' + selectField(base + '.side', '侧别', [['', '整体 / 不区分'], ['每侧', '每侧']])) +
-      '<div class="field-grid">' + field(base + '.rpe', '实际 RPE', '例：7 或 6–7', {wheel: true}) + field(base + '.load', '实际负荷', '数字用滚轮，也可写自重', {wheel: true}) + '</div><div class="unit-grid">' + selectField(base + '.unit', '负荷单位', [['', '未说明'], ['kg', 'kg'], ['lb', 'lb'], ['自重', '自重'], ['其他', '其他 / 见负荷描述']]) + selectField(base + '.basis', '重量口径', [['', '未说明'], ['单侧', '单侧'], ['总重', '总重'], ['器械标称', '器械标称'], ['不适用', '不适用'], ['其他', '其他 / 见备注']]) + '</div>' + field(base + '.rest', grouped ? '本组后休息 · 秒' : '组间休息 · 秒', '选择后可开始倒计时', {numeric: true}) + '<button class="button outline wide rest-start" data-rest="' + base + '">开始休息倒计时 ↻</button>';
+      '<div class="field-grid">' + field(base + '.rpe', '实际 RPE', '例：7 或 6–7', {wheel: true}) + field(base + '.load', '实际负荷', '数值 / 自重', {wheel: true}) + '</div><div class="unit-grid">' + selectField(base + '.unit', '负荷单位', [['', '未说明'], ['kg', 'kg'], ['lb', 'lb'], ['自重', '自重'], ['其他', '其他 / 见负荷描述']]) + selectField(base + '.basis', '重量口径', [['', '未说明'], ['单侧', '单侧'], ['总重', '总重'], ['器械标称', '器械标称'], ['不适用', '不适用'], ['其他', '其他 / 见备注']]) + '</div><div class="rest-entry">' + field(base + '.rest', grouped ? '本组后休息 · 秒' : '组间休息 · 秒', '选择休息秒数', {numeric: true}) + '<button class="button outline rest-start" data-rest="' + base + '" aria-label="开始休息倒计时">开始休息 ↻</button></div></div>';
   }
   function pickerSpec(path) {
     const key = path.split('.').pop();
@@ -102,6 +105,7 @@
   };
   $('clearNumber').onclick = () => { if (current && pickerPath) { set(pickerPath, ''); markEdited(pickerPath); $('numberDialog').close(); renderTraining(); renderFinish(); updateSummaries(); } };
   function startRest(base) {
+    if (/[–—\-~～至]/.test(String(get(base + '.rest')))) { toast('推荐休息为范围，请先点选本次具体秒数再计时'); return; }
     const seconds = C.number(get(base + '.rest'), 0, 86400, '休息秒数');
     if (!seconds) { toast('请先选择大于 0 的休息秒数'); return; }
     const action = current.actions[Number(base.split('.')[1])];
@@ -116,7 +120,12 @@
   function updateClocks() {
     if (!current) return;
     $('startTraining').disabled = !!current.startedAt;
+    $('startTraining').textContent = current.endedAt ? '已结束' : current.startedAt ? '训练中' : '开始训练';
     $('endTraining').disabled = !current.startedAt || !!current.endedAt;
+    $('endTraining').hidden = !!current.endedAt;
+    $('reviewTraining').hidden = !!current.startedAt && !current.endedAt;
+    $('reviewTraining').textContent = current.endedAt ? '前往收尾反馈 ↘' : '未使用计时？直接填写反馈 ↘';
+    $('endHint').textContent = current.endedAt ? '结束时间已保存，仍可修改动作实绩和收尾反馈。' : '结束计时后，补充整体用力与身体反馈。';
     $('startTime').textContent = current.startedAt ? C.timeText(current.startedAt) : '尚未开始';
     $('endTime').textContent = current.endedAt ? C.timeText(current.endedAt) : '尚未结束';
     $('elapsedTime').textContent = current.startedAt ? (current.endedAt ? '本次用时 ' : '已进行 ') + clockText(Date.parse(current.endedAt || new Date().toISOString()) - Date.parse(current.startedAt)) : '点击开始，自动记录当前时间';
@@ -140,15 +149,20 @@
   $('endTraining').onclick = () => {
     try {
       if (!C.blank(current.duration) && !confirm('结束将按起止时间更新总时长（原为 ' + current.duration + ' 分钟），之后仍可修改。继续？')) return;
-      C.stampSession(current, 'end'); markEdited(); renderFinish(); updateSummaries(); toast('已记录结束时间，总时长已带入收尾页');
+      C.stampSession(current, 'end'); markEdited(); renderFinish(); showTab('finish'); $('finishTab').scrollIntoView({behavior: 'smooth', block: 'start'}); toast('已记录结束时间，请补充收尾反馈');
     } catch (error) { toast(error.message); }
   };
+  $('reviewTraining').onclick = () => { showTab('finish'); $('finishTab').scrollIntoView({behavior: 'smooth', block: 'start'}); };
   $('stopRest').onclick = () => { delete current.restTimer; markEdited(); };
   setInterval(updateClocks, 500);
   function renderAction(a, index) {
     const chosen = C.selected(a), base = 'actions.' + index + '.actual';
-    const options = a.added || a.parentActionId ? '' : '<div class="option-list">' + a.slot.options.map(C.optionDetails).map(o => '<button class="option-button' + (a.selectedOptionId === o.id ? ' chosen' : '') + '" data-option="' + esc(o.id) + '" data-index="' + index + '" aria-pressed="' + (a.selectedOptionId === o.id) + '"><span class="option-key">' + esc(o.id) + '</span><span class="option-content"><span class="option-name">' + L.lines(o.name, true).map(name => '<span>' + esc(name) + '</span>').join('') + '</span><span class="option-dose-preview">' + esc(L.lines(o.prescription || '', true)[0] || '查看推荐安排') + '</span></span><span class="option-check" aria-hidden="true">' + (a.selectedOptionId === o.id ? '✓' : '○') + '</span></button>').join('') + '</div>';
-    let content = '<article class="action-card ' + a.status + '" data-action-card="' + index + '"><div class="card-top"><span class="action-number">' + String(index + 1).padStart(2, '0') + '</span><span class="module-label">' + esc(a.slot.module) + (a.slot.optional ? ' · 可跳过' : '') + '</span><div class="order-buttons"><button data-move="-1" data-index="' + index + '" aria-label="动作上移"' + (!index ? ' disabled' : '') + '>↑</button><button data-move="1" data-index="' + index + '" aria-label="动作下移"' + (index === current.actions.length - 1 ? ' disabled' : '') + '>↓</button>' + (a.added || a.parentActionId ? '<button data-remove="' + index + '" aria-label="移除动作记录">×</button>' : '') + '</div></div>' + (a.added ? '<h3>加练动作</h3>' : '') + options;
+    const options = a.added || a.parentActionId || a.extraOptionOf ? '' : '<div class="option-list">' + a.slot.options.map(C.optionDetails).map(o => {
+      const recorded = current.actions.find(other => (other.id === a.id || other.extraOptionOf === a.id) && other.selectedOptionId === o.id);
+      return '<button class="option-button' + (recorded ? ' chosen' : '') + '" data-option="' + esc(o.id) + '" data-index="' + index + '" aria-pressed="' + !!recorded + '"><span class="option-key">' + esc(o.id) + '</span><span class="option-content"><span class="option-name">' + L.lines(o.name, true).map(name => '<span>' + esc(name) + '</span>').join('') + '</span><span class="option-dose-preview">' + (recorded?.extraOptionOf ? '已加入加练 · 点此定位' : esc(L.lines(o.prescription || '', true)[0] || '查看推荐安排')) + '</span></span><span class="option-check" aria-hidden="true">' + (recorded ? '✓' : '＋') + '</span></button>';
+    }).join('') + '</div>' + (a.slot.options.length > 1 ? '<p class="selection-hint">可选择多个动作，另选动作会生成独立记录，已有实绩保留。</p>' : '');
+    let content = '<article class="action-card ' + a.status + '" data-action-card="' + index + '"><div class="card-top"><span class="action-number">' + String(index + 1).padStart(2, '0') + '</span><span class="module-label">' + esc(a.slot.module.replace(/三选一|3选1/g, '可多选')) + (a.slot.optional ? ' · 可跳过' : '') + '</span><div class="order-buttons"><button data-move="-1" data-index="' + index + '" aria-label="动作上移"' + (!index ? ' disabled' : '') + '>↑</button><button data-move="1" data-index="' + index + '" aria-label="动作下移"' + (index === current.actions.length - 1 ? ' disabled' : '') + '>↓</button>' + (a.added || a.parentActionId || a.extraOptionOf ? '<button data-remove="' + index + '" aria-label="移除动作记录">×</button>' : '') + '</div></div>' + (a.added ? '<h3>加练动作</h3>' : '') + options;
+    if (a.extraOptionOf) content += '<h3>' + esc(chosen?.name || '同槽加练') + '</h3><p class="selection-hint">同槽加练 · 剂量、完成状态独立记录</p>';
     if (chosen && !a.added && !a.parentActionId) content += L.reference(chosen, a.slot.replacesSlotId);
     if (!chosen && a.slot.options.length > 1) content += '<p class="fine">候选未选，所有动作都还没有计入实绩。</p>';
     const parts = current.actions.filter(other => other.parentActionId === a.id);
@@ -159,16 +173,40 @@
     if (a.status !== 'skipped' && (chosen || a.added || a.parentActionId)) {
       content += field('actions.' + index + '.actualName', a.added || a.parentActionId ? '实际动作名称' : '替换为其他动作（按需填写）', a.added || a.parentActionId ? '填写你实际做的动作' : '沿用上方已选动作名称', {unknown: false});
       if (a.prefillDate) content += '<p class="reference history-note">已带入本机 ' + esc(a.prefillDate) + ' 的剂量、负荷与休息设定。请核对本次数据，再点完成；RPE、反馈重新填写。</p>';
+      if (a.prefillSource === 'recommendation') content += '<p class="reference prefill-note">已预填本次推荐（含明确的目标 RPE）。请核对或改成实际数据，再点“完成”或“部分”；身体反馈另填。</p>';
       if (a.actual.mode === 'summary') content += actualFields(base);
-      else content += a.actual.sets.map((row, i) => '<div class="set-row"><div class="set-heading"><b>第 ' + (i + 1) + ' 组</b><button data-remove-set="' + i + '" data-index="' + index + '">删除此组</button></div>' + actualFields(base + '.sets.' + i, true) + field(base + '.sets.' + i + '.notes', '本组反馈 / 左右侧 / 测量结果', '例：左侧7、右侧6；跳高/用时', {area: true}) + '</div>').join('') + '<button class="button outline wide mode-button" data-add-set="' + index + '">＋ 添加一组（空白实际数据）</button>';
+      else content += a.actual.sets.map((row, i) => '<div class="set-row"><div class="set-heading"><b>第 ' + (i + 1) + ' 组</b><button data-remove-set="' + i + '" data-index="' + index + '">删除此组</button></div>' + actualFields(base + '.sets.' + i, true) + field(base + '.sets.' + i + '.notes', '本组反馈 / 左右侧 / 测量结果', '例：左侧7、右侧6；跳高/用时', {area: true}) + '</div>').join('') + '<button class="button outline wide mode-button" data-add-set="' + index + '">＋ 添加一组（带入推荐，按实际修改）</button>';
       content += '<button class="button outline mode-button" data-mode="' + index + '">' + (a.actual.mode === 'sets' ? '改为按动作汇总填写' : '各组不一样？展开逐组填写') + '</button><details class="card-details"><summary>动作反馈、侧别与其他数据</summary>' + field(base + '.notes', '整体备注 / 部分完成说明', '动作质量、左右差异、投篮命中/出手等', {area: true}) + '</details>';
     } else if (a.status === 'skipped') content += field(base + '.notes', '跳过原因（可选）', '例：器材不可用、时间不足', {area: true});
     return content + '</article>';
   }
   function renderTraining() {
+    const visible = !document.getElementById('trainingTab').hidden;
+    const anchor = visible ? [...$('actionList').children].find(e => e.getBoundingClientRect().bottom > 60) : null;
+    const id = anchor?.dataset.actionId, top = anchor?.getBoundingClientRect().top;
+    const overviewOpen = $('recommendationNotes').querySelector('details')?.open;
+    const opened = new Set([...$('actionList').querySelectorAll('.card-details[open]')].map(e => e.closest('[data-action-id]')?.dataset.actionId));
     $('actionList').innerHTML = current.actions.length ? current.actions.map(renderAction).join('') : '<div class="form-card"><h3>从第一个动作开始</h3><p class="muted">添加你实际做过的动作，或导入一份推荐生成卡片。</p></div>';
-    $('recommendationNotes').innerHTML = current.source?.notes ? L.overview(current.source.notes) : '';
-    $('recommendationNotes').hidden = !current.source?.notes;
+    [...$('actionList').children].forEach((e, i) => { if (!current.actions[i]) return; e.dataset.actionId = current.actions[i].id; if (opened.has(e.dataset.actionId)) { const details = e.querySelector('.card-details'); if (details) details.open = true; } });
+    $('recommendationNotes').innerHTML = L.overview(current.source?.notes, current.source?.guidance);
+    $('recommendationNotes').hidden = !$('recommendationNotes').innerHTML;
+    if (overviewOpen !== undefined && $('recommendationNotes').querySelector('details')) $('recommendationNotes').querySelector('details').open = overviewOpen;
+    const next = [...$('actionList').children].find(e => e.dataset.actionId === id);
+    if (next && visible) window.scrollBy(0, next.getBoundingClientRect().top - top);
+    renderTimeline();
+  }
+  function renderTimeline() {
+    if (!current) return;
+    $('timelineList').innerHTML = current.actions.map((a, i) => '<button class="timeline-item ' + a.status + (a.parentActionId ? ' timeline-child' : '') + '" data-jump-action="' + esc(a.id) + '"><span class="timeline-dot">' + (['completed', 'partial'].includes(a.status) ? '✓' : String(i + 1).padStart(2, '0')) + '</span><span><strong>' + esc(C.actionName(a) || a.slot.module) + '</strong><small>' + esc(a.parentActionId ? '组合内动作' : a.slot.module) + '</small></span><em>' + (current.actions.some(child => child.parentActionId === a.id) ? '组合' : labels[a.status]) + '</em></button>').join('');
+    $('timelineCount').textContent = current.actions.length + ' 项 · 按实际顺序';
+  }
+  function jumpAction(id) {
+    showTab('training');
+    const target = [...$('actionList').children].find(e => e.dataset.actionId === id);
+    if (!target) return;
+    target.scrollIntoView({block: 'start', behavior: 'auto'});
+    target.setAttribute('tabindex', '-1'); target.focus({preventScroll: true});
+    target.classList.remove('located'); void target.offsetWidth; target.classList.add('located');
   }
   function renderFinish() {
     $('finishFields').innerHTML = '<div class="form-card"><h3>本次训练</h3>' + field('title', '训练名称', '例：下肢力量 + 核心', {unknown: false}) + field('cycle', '周期 / 槽位', '按实际确认填写', {unknown: false}) + selectField('sessionStatus', '本次训练状态', ['待确认', '已完成', '部分完成', '恢复日', '未训练'].map(v => [v, v])) + '<div class="field-grid">' + field('duration', '训练总时长 · 分钟', '不按动作时间相加推测', {numeric: true}) + field('sessionRpe', 'Session RPE · 0–10', '整堂训练的整体用力程度', {numeric: true}) + '</div><div id="loadSummary" class="reference"></div></div>' +
@@ -181,6 +219,7 @@
     $('progressNumber').textContent = done + '/' + current.actions.filter(a => !current.actions.some(other => other.parentActionId === a.id)).length;
     $('progressLabel').textContent = done + ' 个实际动作 · ' + current.actions.filter(a => a.status === 'skipped').length + ' 个跳过';
     $('bottomProgress').textContent = current.exportedAt ? '已导出 · 待 skill 入库' : done + ' 个动作已记录';
+    renderTimeline();
     $('sessionHeading').textContent = current.title || '今日训练';
     updateClocks();
     try {
@@ -243,7 +282,7 @@
     inboxStatus('正在获取推荐…');
     try {
       const inbox = await requestInbox();
-      if (!inbox) { inboxStatus('还没有已同步推荐，生成推荐后会显示在这里'); cloudRecommendation = null; $('openCloudRecommendation').hidden = true; return; }
+      if (!inbox) { inboxStatus('还没有已同步推荐，生成推荐后会显示在这里'); cloudRecommendation = null; $('openCloudRecommendation').disabled = true; return; }
       const source = C.validateRecommendation(inbox.recommendation);
       if (source.date > C.today()) throw new Error('站点返回了未来日期推荐，请稍后重试');
       cloudRecommendation = source;
@@ -254,7 +293,7 @@
       } else if (existing && JSON.stringify(C.validateRecommendation(existing.source || {kind: 'train2.recommendation', schemaVersion: 1, date: existing.date, slots: []})) === JSON.stringify(source)) {
         inboxStatus(source.date + ' 推荐已同步，已有实绩保留');
       } else inboxStatus(source.date + (source.date !== C.today() ? ' 非今日推荐，请核对训练日期；已有草稿保留' : ' 有推荐可查看，已有草稿不会自动覆盖'));
-      $('openCloudRecommendation').hidden = false;
+      $('openCloudRecommendation').disabled = false;
     } catch (error) { inboxStatus(error.message, true); }
     finally { syncing = false; $('syncRecommendation').disabled = false; }
   }
@@ -299,6 +338,7 @@
         }
       }
       $('importDialog').close();
+      return true;
     } catch (error) { errorMessage('importError', error); }
   }
   function download(filename, content, type) {
@@ -352,6 +392,7 @@
     const button = event.target.closest('button'); if (!button) return;
     try {
       const d = button.dataset;
+      if (d.jumpAction) { $('timelineDialog').close(); jumpAction(d.jumpAction); return; }
       if (d.command === 'import') openImport();
       if (d.command === 'blank') {
         const date = prompt('新建训练日期（YYYY-MM-DD）', C.today()); if (!date) return;
@@ -363,41 +404,42 @@
       if (d.unknown) { set(d.unknown, get(d.unknown) === C.UNKNOWN ? '' : C.UNKNOWN); markEdited(d.unknown); render(); }
       const index = Number(d.index), action = current?.actions[index];
       if (d.option && action) {
-        if (action.selectedOptionId === d.option) return;
-        if ((action.status !== 'pending' || action.actualName || JSON.stringify(action.actual) !== JSON.stringify(C.emptyActual())) && !confirm('切换候选会清空此动作已填的实绩并恢复待记录，其他动作保留。确认切换？')) return;
-        const parts = current.actions.filter(a => a.parentActionId === action.id);
-        if (parts.length && !confirm('切换方案将移除此槽位下 ' + parts.length + ' 个子动作记录。继续？')) return;
-        current.actions = current.actions.filter(a => a.parentActionId !== action.id);
-        action.selectedOptionId = d.option; action.actualName = ''; action.status = 'pending'; action.actual = C.emptyActual(); delete action.prefillDate; C.expandSlot(current, action); [action, ...current.actions.filter(a => a.parentActionId === action.id)].forEach(a => C.prefillActual(current, a, [...drafts.values()])); markEdited(); renderTraining(); updateSummaries();
+        const existing = current.actions.find(other => (other.id === action.id || other.extraOptionOf === action.id) && other.selectedOptionId === d.option);
+        if (existing) { if (existing.id !== action.id) jumpAction(existing.id); return; }
+        const selected = C.optionAction(current, action, d.option);
+        [selected, ...current.actions.filter(a => a.parentActionId === selected.id)].forEach(a => C.prefillActual(current, a, [...drafts.values()]));
+        markEdited(); renderTraining(); updateSummaries(); if (selected.id !== action.id) jumpAction(selected.id);
       }
       if (d.status && action) { if (d.status === 'completed' || d.status === 'partial') C.prefillActual(current, action, [...drafts.values()]); action.status = d.status; markEdited(); renderTraining(); updateSummaries(); }
       if (d.addPart !== undefined) {
         const parent = current.actions[Number(d.addPart)];
         if (['completed', 'partial'].includes(parent.status) && !confirm('改为逐个记录后，组合本身恢复待记录，已填数据保留。请在子动作中核对本次实绩。继续？')) return;
-        C.addSlotAction(current, parent); parent.status = 'pending'; markEdited(); renderTraining(); updateSummaries();
+        const added = C.addSlotAction(current, parent); parent.status = 'pending'; markEdited(); renderTraining(); updateSummaries(); jumpAction(added.id);
       }
       if (d.rest) startRest(d.rest);
       if (d.move && action) {
         const target = index + Number(d.move);
         if (target >= 0 && target < current.actions.length) { [current.actions[index], current.actions[target]] = [current.actions[target], current.actions[index]]; markEdited(); renderTraining(); }
       }
-      if (d.remove !== undefined && confirm('移除此动作及其实际数据？')) { current.actions.splice(Number(d.remove), 1); markEdited(); renderTraining(); }
+      if (d.remove !== undefined && confirm('移除此动作及其子动作实际数据？')) { C.removeAction(current, current.actions[Number(d.remove)]); markEdited(); renderTraining(); updateSummaries(); }
       if (d.mode !== undefined) {
         const a = current.actions[Number(d.mode)];
-        if (!confirm(a.actual.mode === 'summary' ? '改为逐组填写：各组从空白开始，汇总数值不会自动分配。导出采用逐组数据。继续？' : '改为动作汇总：导出采用汇总数据，请核对实际组次。逐组输入仍保留在草稿。继续？')) return;
+        if (!confirm(a.actual.mode === 'summary' ? '改为逐组填写：按本次推荐生成待核对数据，原汇总输入保留。请逐组修改为实际数据。继续？' : '改为动作汇总：导出采用汇总数据，请核对实际组次。逐组输入仍保留在草稿。继续？')) return;
         a.actual.mode = a.actual.mode === 'summary' ? 'sets' : 'summary';
-        if (a.actual.mode === 'sets' && !a.actual.sets.length) a.actual.sets.push(C.emptyActual());
+        if (a.actual.mode === 'sets' && !a.actual.sets.length) { const suggested = C.recommendationRow(a); a.actual.sets = Array.from({length: Math.min(100, Math.max(1, Number(suggested.count) || 1))}, () => C.recommendationRow(a, true)); a.status = 'pending'; }
         markEdited(); renderTraining();
       }
-      if (d.addSet !== undefined) { const rows = current.actions[Number(d.addSet)].actual.sets; if (rows.length >= 100) throw new Error('一个动作最多记录 100 组'); rows.push(C.emptyActual()); markEdited(); renderTraining(); }
+      if (d.addSet !== undefined) { const a = current.actions[Number(d.addSet)], rows = a.actual.sets; if (rows.length >= 100) throw new Error('一个动作最多记录 100 组'); rows.push(C.recommendationRow(a, true)); a.status = 'pending'; markEdited(); renderTraining(); }
       if (d.removeSet !== undefined && confirm('删除这一组实际数据？')) { action.actual.sets.splice(Number(d.removeSet), 1); markEdited(); renderTraining(); }
       if (button.id === 'rebuildImported') await applyImport(true);
     } catch (error) { toast(error.message); }
   });
   $('helpButton').onclick = () => $('helpDialog').showModal();
+  $('openTimeline').onclick = () => { renderTimeline(); $('timelineDialog').showModal(); };
   $('homeButton').onclick = async () => {
     if (current) await save();
     $('welcome').hidden = false; $('workspace').hidden = true;
+    $('welcomeInbox').append(document.querySelector('.cloud-inbox'));
     $('resumeSession').hidden = !current; document.body.classList.remove('has-session');
     window.scrollTo({top: 0, behavior: 'smooth'});
   };
@@ -405,9 +447,23 @@
   $('syncRecommendation').onclick = syncInbox;
   $('openCloudRecommendation').onclick = () => {
     if (!cloudRecommendation) return;
-    $('importText').value = JSON.stringify(cloudRecommendation);
-    openImport(); preview();
+    viewedRecommendation = C.copy(cloudRecommendation);
+    const source = viewedRecommendation, existing = drafts.get(source.date), ready = source.readiness && C.readinessResult(source.readiness);
+    $('recommendationContent').innerHTML = '<h3 class="reader-title">' + esc(source.title || '训练推荐') + '</h3><p class="reader-meta">' + source.date + (source.cycle ? ' · ' + esc(source.cycle) : '') + '<br>Readiness：' + (ready?.score ?? '未提供完整原始值') + (ready ? ' · ' + esc(ready.level) : '') + '</p>' + L.overview(source.notes, source.guidance) + source.slots.map((slot, i) => '<section class="reader-slot"><h3><span>' + String(i + 1).padStart(2, '0') + '</span>' + esc(slot.module) + '</h3>' + (slot.replacesSlotId ? '<p class="selection-hint">原建议替换 ' + esc(slot.replacesSlotId) + '，也可按当天状态另作加练。</p>' : '') + slot.options.map(o => '<details class="reader-option"' + (o.id === slot.selectedOptionId || slot.options.length === 1 ? ' open' : '') + '><summary>' + esc(o.id) + ' · ' + esc(o.name) + '</summary>' + L.prescription(o.prescription || '未提供剂量') + L.list(o.notes, 'guidance-lines') + (o.actions?.length ? '<ul class="reader-parts">' + o.actions.map(part => '<li><strong>' + esc(part.name) + '</strong>' + L.prescription(part.prescription || '未提供剂量') + L.list(part.notes, 'guidance-lines') + '</li>').join('') + '</ul>' : '') + '</details>').join('') + '</section>').join('');
+    $('readerDraftNote').textContent = existing ? '此日已有草稿，继续记录会保留所有实绩。' : '开始记录后生成待核对卡片，可按状态多选或加练。';
+    $('useRecommendation').textContent = existing ? '继续已有草稿 ↗' : '开始记录 ↗';
+    $('rebuildRecommendation').hidden = !existing || JSON.stringify(existing.source) === JSON.stringify(source);
+    $('readerError').hidden = true; $('recommendationDialog').showModal(); $('recommendationDialog').scrollTop = 0;
   };
+  async function useViewedRecommendation(rebuild = false) {
+    if (!viewedRecommendation) return;
+    $('importError').hidden = true;
+    imported = {type: 'recommendation', source: C.copy(viewedRecommendation)};
+    if (await applyImport(rebuild)) $('recommendationDialog').close();
+    else if (!$('importError').hidden) errorMessage('readerError', new Error($('importError').textContent));
+  }
+  $('useRecommendation').onclick = () => useViewedRecommendation();
+  $('rebuildRecommendation').onclick = () => useViewedRecommendation(true);
   $('previewImport').onclick = preview;
   $('confirmImport').onclick = () => applyImport();
   $('importText').oninput = () => { imported = null; $('confirmImport').disabled = true; $('importPreview').hidden = true; };

@@ -4,51 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2026 年 9 月训练记录 · 2.0</title>
-<style>
-:root{--bg:#070b10;--panel:#101720;--panel-2:#0c131c;--line:#243244;--text:#eef4fb;--muted:#96a6b8;--muted-2:#65778c;--orange:#ff7043;--green:#13c89a;--blue:#52a8ff;--purple:#a88bff;--yellow:#ffc44d;--radius:14px;--shadow:0 18px 48px rgba(0,0,0,.28)}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:radial-gradient(circle at 85% 0,rgba(255,112,67,.08),transparent 34%),var(--bg);color:var(--text);font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6}
-a{color:inherit}
-a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-.container{width:min(1120px,calc(100% - 32px));margin:0 auto;padding:28px 0 56px}
-.header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:22px}
-.eyebrow{color:var(--orange);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
-h1{margin:4px 0 4px;font-size:clamp(24px,4vw,38px);line-height:1.2}
-.subtitle{margin:0;color:var(--muted);font-size:13px}
-.back{display:inline-flex;align-items:center;min-height:40px;padding:8px 13px;border:1px solid var(--line);border-radius:10px;background:var(--panel);text-decoration:none;font-size:12px;font-weight:700}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.stat,.card{background:linear-gradient(145deg,rgba(20,29,40,.96),rgba(12,19,28,.96));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-.stat{padding:16px}.stat span{display:block;color:var(--muted);font-size:11px}.stat strong{display:block;margin-top:2px;font-size:22px}.stat small{color:var(--muted-2);font-size:10px}
-.card{padding:20px;margin-bottom:20px}
-.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px}
-.section-head h2{margin:0;font-size:18px}.section-head p{margin:3px 0 0;color:var(--muted);font-size:11px}
-.legend{display:flex;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:10px}.legend span{display:flex;align-items:center;gap:5px}.legend i{width:9px;height:9px;border-radius:3px;background:var(--panel-2);border:1px solid var(--line)}.legend .training{background:rgba(19,200,154,.24);border-color:var(--green)}.legend .rest{background:rgba(168,139,255,.22);border-color:var(--purple)}.legend .ready{background:rgba(82,168,255,.2);border-color:var(--blue)}
-.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;min-width:0;overflow:hidden}
-.weekday{min-width:0;padding:4px;text-align:center;color:var(--muted);font-size:10px;font-weight:800}
-.day{position:relative;min-width:0;min-height:105px;overflow:hidden;padding:10px;border:1px solid var(--line);border-radius:11px;background:var(--panel-2)}
-.day.outside{border-color:transparent;background:transparent}
-.day.cycle-start{border-color:rgba(255,112,67,.7);box-shadow:inset 0 0 0 1px rgba(255,112,67,.15)}
-.day.training{border-color:rgba(19,200,154,.55);background:rgba(19,200,154,.07)}
-.day.readiness{border-color:rgba(82,168,255,.55);background:rgba(82,168,255,.06)}
-.day.rest{border-color:rgba(168,139,255,.45);background:rgba(168,139,255,.06)}
-.day-link{display:block;height:100%;color:inherit;text-decoration:none}
-.day-number{font-size:15px;font-weight:800}.day-label{display:block;margin-top:22px;color:var(--muted);font-size:10px;line-height:1.35}.day-status{display:block;margin-top:5px;font-size:10px;font-weight:800}.day.training .day-status{color:var(--green)}.day.readiness .day-status{color:var(--blue)}.day.rest .day-status{color:var(--purple)}
-.phase{position:absolute;top:10px;right:9px;color:var(--orange);font-size:9px;font-weight:800}
-.empty{padding:32px 18px;text-align:center;border:1px dashed var(--line);border-radius:11px;background:var(--panel-2)}.empty strong{display:block;font-size:14px}.empty p{margin:5px auto 0;max-width:560px;color:var(--muted);font-size:11px}
-.detail{scroll-margin-top:20px;padding:22px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2)}.detail+.detail{margin-top:12px}.detail h3{margin:0 0 16px;font-size:20px}.detail-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}.pill{padding:5px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px}.detail-section-title{display:flex;align-items:center;gap:8px;margin:22px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--line);font-size:14px;font-weight:800}.detail-section-title:first-of-type{margin-top:0}.detail p{margin:10px 0;color:#c5d0dc;font-size:13px}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}.detail table{width:100%;border-collapse:collapse;min-width:680px;font-size:12px}.detail th{padding:10px 12px;background:rgba(255,255,255,.025);color:var(--muted-2);font-size:10px;text-align:left;letter-spacing:.5px;white-space:nowrap}.detail td{padding:10px 12px;border-top:1px solid rgba(36,50,68,.7);color:#b9c6d4;vertical-align:top}.detail td strong{color:var(--text)}.detail .training-meta{display:flex;flex-wrap:wrap;gap:8px}.training-tag{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:700}.tag-power{background:rgba(255,196,77,.14);color:var(--yellow)}.tag-strength{background:rgba(255,112,67,.14);color:var(--orange)}.tag-bball{background:rgba(168,139,255,.14);color:var(--purple)}.tag-status{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted)}.feedback-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.feedback-card{padding:14px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02)}.feedback-card strong{display:block;font-size:21px;color:var(--text)}.feedback-card span{display:block;margin-top:3px;color:var(--muted);font-size:10px}.feedback-card.green{border-color:rgba(19,200,154,.35)}.feedback-card.green strong{color:var(--green)}.feedback-card.yellow{border-color:rgba(255,196,77,.35)}.feedback-card.yellow strong{color:var(--yellow)}.insight-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}.insight-list li{padding:11px 13px;border-left:3px solid var(--line);border-radius:7px;background:rgba(255,255,255,.02);color:#c5d0dc;font-size:12px}.insight-list li.high{border-left-color:var(--yellow)}.insight-list li.alert{border-left-color:var(--orange)}.insight-list b{color:var(--text)}
-.footer{padding:10px 0;text-align:center;color:var(--muted-2);font-size:10px}
-::-webkit-scrollbar{width:11px;height:11px}::-webkit-scrollbar-track{background:#0c131c}::-webkit-scrollbar-thumb{background:#2b3a4d;border-radius:999px;border:2px solid #0c131c}::-webkit-scrollbar-thumb:hover{background:#3b4e66}::-webkit-scrollbar-corner{background:#0c131c}@supports not selector(::-webkit-scrollbar){*{scrollbar-width:thin;scrollbar-color:#2b3a4d #0c131c}}
-@media(max-width:760px){.container{width:min(100% - 20px,1120px);padding-top:18px}.header{display:grid}.back{justify-self:start}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:13px}.section-head{align-items:flex-start;display:grid}.calendar{gap:4px}.weekday{padding-inline:0;font-size:9px}.day{min-height:78px;padding:7px 5px}.day-label{display:none}.day-status{margin-top:14px;font-size:8px}.phase{top:7px;right:4px;font-size:7px}.feedback-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.detail{padding:15px}}
-@media(max-width:430px){.stats{grid-template-columns:1fr 1fr}.stat{padding:12px}.calendar{gap:3px}.day{min-height:64px;border-radius:8px}.day-number{font-size:12px}.day-status{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.phase{display:none}.feedback-grid{grid-template-columns:1fr}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-</style>
+<meta name="theme-color" content="#203d35">
+<link rel="stylesheet" href="../assets/records.css">
 </head>
 <body>
-<main class="container">
+<a class="skip-link" href="#recordContent">跳到训练记录</a>
+<aside class="records-timeline" aria-label="训练日期导航">
+ <a class="timeline-brand" href="../dashboard.html" aria-label="随练，返回首页"><span aria-hidden="true">↗</span><div>随练<small>TRAINING NOTEBOOK</small></div></a>
+ <div class="timeline-heading"><h2>日期时间轴</h2><p id="timelineCount"></p><nav class="timeline-months" aria-label="切换记录月份"><a href="2026-09.html" aria-current="page">2026 / 09</a><a href="2026-10.html">2026 / 10</a></nav></div>
+ <nav class="timeline-items" id="recordTimeline" aria-label="切换训练日期"></nav>
+ <div class="timeline-note"><p>每一次实绩，都值得认真留下。</p><a href="../dashboard.html">返回首页 <span aria-hidden="true">↗</span></a></div>
+</aside>
+<main class="container" id="recordContent">
 <header class="header">
 <div><div class="eyebrow">Training Records · Cycle 2.0</div><h1>2026 年 9 月训练记录</h1><p class="subtitle">12 周周期第 1–2 周 · 正式周期始于 2026-09-21 · 3 日版</p></div>
-<a class="back" href="../dashboard.html">返回训练 Dashboard</a>
+<a class="back" href="../dashboard.html"><span aria-hidden="true">←</span> 返回首页</a>
 </header>
 
 <section class="stats" aria-label="月度统计">
@@ -69,7 +39,7 @@ h1{margin:4px 0 4px;font-size:clamp(24px,4vw,38px);line-height:1.2}
 <article class="detail" id="detail-2026-09-30"><h3>2026-09-30 · D2 上肢与核心（部分完成）</h3><div class="training-meta"><span class="training-tag tag-strength">🏋️ 上肢力量</span><span class="training-tag tag-status">核心稳定</span><span class="training-tag tag-status">第 2 周 · 基础重建（增量）· D2</span><span class="training-tag tag-status">Session RPE 7/10</span><span class="training-tag tag-status">Session Load 469 AU</span></div><div class="detail-section-title">⚡ 当日 Readiness</div><div class="table-wrap"><table><thead><tr><th>睡眠</th><th>疲劳</th><th>酸痛</th><th>疼痛</th><th>训练意愿</th><th>得分</th><th>等级</th></tr></thead><tbody><tr><td>4/5</td><td>1/5</td><td>1/5</td><td>0/10</td><td>5/5</td><td><strong>96/100</strong></td><td><strong style="color:var(--green);">绿色</strong></td></tr></tbody></table></div><div class="detail-section-title">📝 疼痛备注</div><p>训练前、训练中及训练后均为 0/10，无疼痛。</p><div class="detail-section-title">🔥 热身与肩胛激活阶段</div><div class="table-wrap"><table><thead><tr><th>项目</th><th>组次/时长</th><th>负荷</th><th>RPE</th><th>训练反馈</th></tr></thead><tbody><tr><td><strong>热身</strong></td><td>15 分钟</td><td>未记录</td><td>未记录</td><td>19:05–19:20</td></tr><tr><td><strong>肩胛俯卧撑（Scapular Push-Up）</strong></td><td>2×10；5 分钟</td><td>未记录</td><td>6</td><td>19:20–19:25</td></tr></tbody></table></div><div class="detail-section-title">🏋️ 上肢力量与肩部健康阶段</div><div class="table-wrap"><table><thead><tr><th>项目</th><th>组数 × 次数</th><th>负荷</th><th>RPE</th><th>训练反馈</th></tr></thead><tbody><tr><td><strong>弓步单臂哑铃推举（Split-Stance Single-Arm DB Press）</strong></td><td>3×7（侧别未说明）</td><td>14kg</td><td>6</td><td>19:27–19:33；组间休息 1 分 20 秒</td></tr><tr><td><strong>哑铃卧推（Dumbbell Bench Press）</strong></td><td>4×10</td><td>20kg（负荷口径未说明）</td><td>5</td><td>19:35–19:40；组间休息 45 秒</td></tr><tr><td><strong>引体向上（Pull-Up）</strong></td><td>3×6</td><td>未记录</td><td>8</td><td>19:43–19:47；组间休息 1 分 20 秒；末组力竭</td></tr><tr><td><strong>单臂哑铃划船（Single-Arm Dumbbell Row）</strong></td><td>3×8（侧别未说明）</td><td>16kg</td><td>7</td><td>19:49–19:55；组间休息 1 分 10 秒</td></tr><tr><td><strong>面拉（Face Pull）</strong></td><td>3×15</td><td>未记录</td><td>未记录</td><td>20:00–20:04；组间休息 25 秒</td></tr></tbody></table></div><div class="detail-section-title">🧱 核心阶段</div><div class="table-wrap"><table><thead><tr><th>项目</th><th>组数 × 时长</th><th>负荷</th><th>RPE</th><th>训练反馈</th></tr></thead><tbody><tr><td><strong>侧桥（Side Plank）</strong></td><td>3×35秒/侧</td><td>未记录</td><td>8</td><td>20:05–20:12；组间休息 20 秒</td></tr></tbody></table></div><div class="detail-section-title">📊 训练负荷与疼痛反馈</div><div class="feedback-grid"><div class="feedback-card"><strong>67 分钟</strong><span>总训练时长<br>19:05–20:12</span></div><div class="feedback-card yellow"><strong>7/10</strong><span>整次训练 Session RPE</span></div><div class="feedback-card green"><strong>0 → 0 → 0</strong><span>训练前 → 训练中最高 → 训练后</span></div><div class="feedback-card green"><strong>469 AU</strong><span>Session Load<br>67 × 7</span></div></div><div class="detail-section-title">✅ 实际完成情况</div><p>完成 15 分钟热身、肩胛俯卧撑、弓步单臂哑铃推举、哑铃卧推、引体向上、单臂哑铃划船、面拉和侧桥。引体向上完成 3×6、RPE 8，末组力竭。本次未提供篮球技术训练数据，因此不记为已完成；D2 按上肢与核心部分完成记录。</p><div class="detail-section-title">📝 训练总结</div><p>本次完成第 2 周 D2 的上肢与核心部分，总时长 67 分钟，Session RPE 7，Session Load 469 AU；训练前、中、后疼痛均为 0/10。引体向上完成量与 09-23 相同，均为 3×6；本次 RPE 8 且末组力竭，不构成严格更优结果。单臂哑铃划船本次为 16kg、3×8、RPE 7，低于 09-23 的 18kg、3×10/侧完成量，不更新当前最佳。哑铃卧推本次为 20kg、4×10、RPE 5，但本次负荷口径未说明且组次结构不同，不作强行比较。弓步单臂哑铃推举未说明每侧完成量；侧桥虽然增至 3×35秒/侧，但主观难度由“比较轻松”变为 RPE 8，均不更新能力评估。肩胛俯卧撑没有已定义的固定负荷或质量评分，面拉缺少负荷与 RPE，本次不建立或更新对应能力成绩。</p><div class="detail-section-title">🔧 后续关注</div><ul class="insight-list"><li><b>引体向上：</b>后续继续记录是否出现末组力竭，以便在同条件下比较完成质量。</li><li><b>篮球技术：</b>本次未记录为已完成，后续是否补做需按新的 Readiness 与周期安排决定。</li></ul><div class="detail-section-title">📅 待补充</div><p>次日疼痛：待补充。</p></article></div>
 </section>
 
-<footer class="footer">数据源：train2.0/records/2026-09.md</footer>
+<footer class="footer"><a class="footer-home" href="../dashboard.html">返回首页 <span aria-hidden="true">↗</span></a><p>每一次实绩，都值得认真留下。</p><p>数据源：train2.0/records/2026-09.md</p></footer>
 </main>
 <script>
 const MONTH={year:2026,month:8,days:30,startOffset:1};
@@ -135,6 +105,7 @@ function renderSummary(){
 renderCalendar();
 renderSummary();
 </script>
+<script src="../assets/records.js"></script>
 </body>
 </html>
 
