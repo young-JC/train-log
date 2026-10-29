@@ -90,4 +90,25 @@ for(const slot of original.plans['2026-10-27']){
 }
 assert.equal(checked,10);
 assert.deepEqual(evaluate('RECOMMEND_2026_10'),original);
+// 新 skill 风格标签与动作名称分离；不足三项和纯换行仍完整对应剂量。
+assert.deepEqual(evaluate("recViewAction('最推荐｜六角杠深蹲（Trap-Bar Squat）；有正式记录；屏气即停止。')"),{
+ name:'六角杠深蹲（Trap-Bar Squat）',notes:'有正式记录；屏气即停止。',role:'最推荐'
+});
+assert.equal(evaluate("recViewAction('高脚杯深蹲；经历待确认').role"),'');
+const limited=['力量·两选一·待选','A：最推荐｜动作甲；保留主项。\nB：兼容推荐｜动作乙；经历待确认。',
+ 'A：3×5；历史负重：10-20单只16kg；本次推荐负重：待热身定标。\nB：2×6；轻器械。\n共同限制：自然呼吸，疼痛即停。'];
+const limitedView=evaluate('recViewSlotContent('+JSON.stringify(limited)+')');
+assert.equal((limitedView.match(/class="rec-candidate"/g)||[]).length,2);
+assert(limitedView.includes('最推荐')&&limitedView.includes('本次推荐负重：待热身定标'));
+assert(limitedView.includes('自然呼吸，疼痛即停')&&!limitedView.includes('方案 C'));
+const single=evaluate("recViewDoseOptions('A：2×5；轻负荷，疼痛即停。')");
+assert.equal(single.options.A,'2×5；轻负荷，疼痛即停。');
+assert.equal(single.common,'');
+const info=evaluate('recViewSlotInfo('+JSON.stringify(limited)+')');
+assert.equal(info.action.name,'动作甲');
+assert.equal(info.dose,'3×5');
+assert.equal(evaluate("recViewPhase(['可选学习·替换power','',''])"),'main');
+assert.equal(evaluate("recViewPhase(['防伤训练（Prehab）','',''])"),'prepare');
+assert.equal(evaluate("recViewPhase(['整理拉伸','',''])"),'cooldown');
+assert.equal(evaluate("recViewPhase(['权限、停止与训练后记录','',''])"),'rules');
 console.log('OK: 括号、间歇、小数、选项完整剂量、共同边界、分行与 '+checked+' 个真实推荐槽位');

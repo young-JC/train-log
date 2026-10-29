@@ -40,25 +40,48 @@ function latestRecKey(){const today=currentDateStr(),dates=recommendationDates()
 // 推荐保持只读；折叠仅改变阅读视图，不选择动作、不改写历史数据。
 function recPlainText(value){const el=document.createElement('div');el.innerHTML=String(value);return el.textContent||''}
 function renderRecommendationSlots(plan){
- document.getElementById('recSlotCount').textContent=plan.length+' 个槽位';
+ const slots=plan.filter(slot=>recViewPhase(slot)!=='rules'),optional=slots.filter(slot=>/可选|可跳过/.test(slot[0])).length;
+ document.getElementById('recSlotCount').textContent=slots.length+' 个槽位'+(optional?' · 含 '+optional+' 个可选':'');
+ const phases={prepare:['01','训练准备','热身与防伤'],main:['02','主训练','按顺序完成，保留必要休息'],cooldown:['03','整理恢复','逐步降速，照顾今日受力区域'],rules:['!','执行边界','权限、停止条件与训练后记录']};
+ const routes=[];let previous='',opened=false,step=0;
  document.getElementById('sessionSlots').innerHTML=plan.map((slot,index)=>{
-  const pinned=/Quality Stop|权限|疼痛监控|停止条件|训练后记录/i.test(slot[0]);
-  const parts=String(slot[1]).split(/<br\s*\/?\s*>/i),suggested=parts.find(part=>/^\s*A\s*[：:]/.test(recPlainText(part)));
-  const preview=recPlainText(suggested||parts[0]);
-  return '<details class="rec-slot'+(pinned?' rec-slot-caution':'')+'"'+(pinned?' data-rec-pinned="true"':'')+((pinned||(index===0&&!suggested))?' open':'')+'><summary><span class="rec-slot-num">'+String(index+1).padStart(2,'0')+'</span><span class="rec-slot-heading"><span class="rec-slot-name">'+escapeHtml(slot[0])+'</span><span class="rec-slot-preview">'+escapeHtml(preview)+'</span></span><span class="rec-slot-toggle" aria-hidden="true"></span></summary><div class="rec-slot-content">'+recViewSlotContent(slot)+'</div></details>';
- }).join('');
+  const phase=recViewPhase(slot),pinned=phase==='rules',info=recViewSlotInfo(slot),learning=/可选|可跳过/.test(slot[0]);
+  let heading='';
+  if(phase!==previous){
+   const id='rec-phase-'+index,[number,label,description]=phases[phase];
+   heading='<div class="rec-phase-heading" id="'+id+'"><span>'+number+'</span><h4>'+label+'</h4><p>'+description+'</p></div>';
+   routes.push('<a href="#'+id+'"'+(pinned?' class="rec-route-rules"':'')+'><span>'+number+'</span>'+label+'<span aria-hidden="true">↗</span></a>');previous=phase;
+  }
+  if(pinned)return heading+'<article class="rec-slot rec-slot-caution" data-rec-pinned="true"><header class="rec-rule-head"><svg aria-hidden="true"><use href="#nb-notebook"/></svg><h4>'+escapeHtml(slot[0])+'</h4><span>训练前先看</span></header><div class="rec-slot-content">'+recViewSlotContent(slot)+'</div></article>';
+  step++;
+  const fullName=recPlainText(slot[0]),title=fullName.split(/[·；;]/)[0],note=fullName.slice(title.length).replace(/^[·；;]\s*/,'');
+  const open=phase==='main'&&!learning&&!opened;if(open)opened=true;
+  return heading+'<details class="rec-slot'+(learning?' rec-slot-optional':'')+'"'+(open?' open':'')+'><summary><span class="rec-slot-num">'+String(step).padStart(2,'0')+'</span><span class="rec-slot-heading"><span class="rec-slot-name">'+recViewName(title)+(learning?'<small class="rec-optional-tag">可选学习</small>':'')+'</span>'+(note?'<span class="rec-slot-note">'+escapeHtml(note)+'</span>':'')+'<span class="rec-slot-preview">'+(info.key?'<b>'+info.key+'</b>':'')+recViewName(info.action.name)+'</span>'+(info.dose?'<span class="rec-slot-dose">'+escapeHtml(info.dose)+'</span>':'')+'</span><span class="rec-slot-toggle"><span>'+(info.choices.length?'比较 '+info.choices.length+' 个方案':'查看详情')+'</span><i aria-hidden="true"></i></span></summary><div class="rec-slot-content">'+recViewSlotContent(slot)+'</div></details>';
+ }).join('')||'<div class="rec-empty">还没有保存的训练推荐。生成推荐后，会在这里展示具体安排。</div>';
+ document.getElementById('recRoute').innerHTML=routes.join('');
+ document.querySelector('.rec-choice-hint').hidden=!slots.some(slot=>recViewChoices(slot).length);
 }
 function renderRecommendationReason(value){
  const source=document.createElement('div');source.innerHTML=value;
- document.getElementById('todayReason').innerHTML=Array.from(source.children).map((item,index)=>{
-  const text=item.textContent||'',separator=text.search(/[：:]/);
-  const title=separator>0&&separator<60?text.slice(0,separator):'依据 '+(index+1);
-  // 标题供扫读，正文保留源段落全文，避免改写条件或历史证据。
-  return '<details class="rec-reason"><summary>'+escapeHtml(title.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/,''))+'</summary><div>'+item.outerHTML+'</div></details>';
+ // 原段落直接展示，兼容带加粗分组标题的新推荐和旧段落，不折叠决策条件。
+ document.getElementById('todayReason').innerHTML=Array.from(source.childNodes).map(item=>{
+  if(!item.textContent.trim())return '';
+  return '<div class="rec-reason-item">'+(item.nodeType===1?item.outerHTML:escapeHtml(item.textContent))+'</div>';
  }).join('');
+ document.querySelector('.rec-reason-card').hidden=!source.textContent.trim();
+}
+function renderRecommendationReadiness(key){
+ const readiness=TODAY_READINESS[key];
+ const fields=[['sleep','睡眠',5],['fatigue','疲劳',5],['soreness','酸痛',5],['pain','疼痛',10],['motivation','意愿',5]];
+ document.getElementById('recReadinessValues').innerHTML=readiness?'<span>当次自评</span>'+fields.map(([field,label,scale])=>'<span>'+label+' <b>'+(Number.isFinite(readiness[field])?readiness[field]:'—')+'</b><small>/'+scale+'</small></span>').join(''):'<span>该次推荐未保留五项原始自评</span>';
+ document.getElementById('recReadinessValues').hidden=!key;
+ const dates=recommendationDates(),index=dates.indexOf(key);
+ document.getElementById('recPrevious').disabled=index<=0;
+ document.getElementById('recNext').disabled=index<0||index>=dates.length-1;
+ document.getElementById('recLatest').disabled=key===latestRecKey()||!dates.length;
+ document.getElementById('recDateSelect').disabled=!dates.length;
 }
 function renderToday(pickedKey){
- const w=weekIndex(),mode=document.getElementById('mode').value;
  const today=currentDateStr();
  const recKey=pickedKey&&TODAY_RECOMMENDATION[pickedKey]?pickedKey:latestRecKey();
  currentRecKey=recKey||'';
@@ -68,35 +91,32 @@ function renderToday(pickedKey){
   if(select.value!==currentRecKey)select.value=currentRecKey;}
  const meta=recKey?TODAY_META[recKey]:null;
  if(recKey&&meta){
-  const pillIdx=meta.day.indexOf('D');
-  const pillLabel=FORMAL_RECORDS[recKey]?.status==='training'?'已完成':meta.day.includes('恢复日')?'恢复日':(pillIdx>=0?meta.day.slice(pillIdx).replace(/（.*）/,''):'计划');
+  const pillLabel=recKey===today?'今日推荐':recKey===latestRecKey()?'最近一次':'历史推荐';
   document.getElementById('todayPill').textContent=pillLabel+' · '+meta.date;
   document.getElementById('todayModule').textContent=meta.week+' · '+meta.day;
   document.getElementById('todayTitle').textContent=meta.focus;
-  document.getElementById('todayPurpose').textContent=(recKey===today?'今日推荐':recKey===latestRecKey()?'最近一次推荐 · '+meta.date:'历史推荐 · '+meta.date)+' · '+meta.phase;
+  document.getElementById('todayPurpose').textContent=meta.phase;
   document.getElementById('todayRpe').textContent=meta.readiness;
   document.getElementById('todayDuration').textContent=meta.duration;
   document.getElementById('todayRpe').className=meta.readiness.includes('绿色')?'green':meta.readiness.includes('红色')?'red':'yellow';
-  document.getElementById('recMeta').innerHTML='<span class="rec-label">推荐时疼痛 / 限制</span><p>'+escapeHtml(meta.pain)+'</p>';
+  document.getElementById('recMeta').innerHTML='<span class="rec-label">疼痛与权限</span><p>'+escapeHtml(meta.pain)+'</p>';
  }else{
-  const dow=currentWeekDay(), days=daysForMode(mode,w), todayDay=days.includes(dow)?dow:days[0], idx=days.indexOf(todayDay)+1, p=WEEK_PHASES[w];
-  let title='训练日'; if(mode==='3'){title=['下肢爆发 + 力量','上肢 + 篮球技术','速度 + 减速 + 变向'][idx-1]||'训练';}else{title=['下肢A：垂直爆发 + 力量','上肢 + 篮球技术','速度 + 减速 + COD','下肢B：横向爆发 + 体能','篮球专项 / 可选恢复'][idx-1]||'训练'}
-  document.getElementById('todayPill').textContent='DAY '+idx+' · 周'+todayDay;
-  document.getElementById('todayTitle').textContent=title;
-  document.getElementById('todayModule').textContent=(idx===1?'Lower A':idx===2?'Upper + Skill':idx===3?'Speed / Decel':idx===4?'Lower B + Conditioning':'Basketball / Optional');
-  document.getElementById('todayPurpose').textContent=p.focus.join(' · ');
-  document.getElementById('todayRpe').textContent='目标 RPE '+p.rpe;
+  document.getElementById('todayPill').textContent='待生成';
+  document.getElementById('todayTitle').textContent='等待下一份训练安排';
+  document.getElementById('todayModule').textContent='训练推荐';
+  document.getElementById('todayPurpose').textContent='从当日状态与实际训练出发';
+  document.getElementById('todayRpe').textContent='—';
   document.getElementById('todayRpe').className='';
-  document.getElementById('todayDuration').textContent='以计划剂量与实际休息为准';
+  document.getElementById('todayDuration').textContent='—';
   document.getElementById('recMeta').innerHTML='';
  }
- const p=WEEK_PHASES[w];
- const plan=(recKey&&TODAY_RECOMMENDATION[recKey])||dayPlan(daysForMode(mode,w).includes(currentWeekDay())?currentWeekDay():daysForMode(mode,w)[0],mode);
+ renderRecommendationReadiness(recKey);
+ const plan=(recKey&&TODAY_RECOMMENDATION[recKey])||[];
  renderRecommendationSlots(plan);
- const skills=(recKey&&TODAY_SKILLS[recKey])||[['运球','左手主导30%时间'],['投篮','定点→接球→移动'],['终结','左右手+对抗选择'],['防守/脚步','滑步→Closeout→追防']];
+ const skills=(recKey&&TODAY_SKILLS[recKey])||[];
  document.getElementById('todaySkills').innerHTML=skills.map(x=>'<div class="skill"><h4>'+x[0]+'</h4><p>'+x[1]+'</p></div>').join('');
  document.getElementById('recSkillsCard').hidden=skills.length===0;
- renderRecommendationReason((recKey&&TODAY_REASON[recKey])||'<p>① 训练顺序：速度/爆发 → 主力量 → 单腿/后链 → 核心/篮球。</p><p>② 当前阶段：'+p.name+'；重点是 '+p.focus.join('、')+'。</p><p>③ 选择规则：从动作库选择“当前阶段 + 能力短板 + 可承受冲击”的最高质量动作，而不是把动作库做遍。</p><p>④ 今日Ready状态会进一步决定训练量；训练后请使用 /record-training-2 记录实际完成内容、Session RPE 和疼痛。</p>');
+ renderRecommendationReason((recKey&&TODAY_REASON[recKey])||'');
  updateRecommendation();
 }
 
@@ -109,43 +129,6 @@ function renderWeak(){document.getElementById('weakList').innerHTML=WEAKNESSES.m
 function updateLoad(){const entries=Object.entries(FORMAL_RECORDS),week=weekIndex(),start=(week-1)*7;const sorted=entries.filter(([,record])=>record.status==='training').sort((a,b)=>b[0].localeCompare(a[0]));if(sorted.length>0){const[date,record]=sorted[0];document.getElementById('latestTrainingDate').textContent=date;document.getElementById('loadLatestBadge').textContent='最新：'+date;const r=record.readiness||{};document.getElementById('latestSessionLoad').textContent=Number.isFinite(record.sessionLoad)?record.sessionLoad+' AU':'未计算';const painNote=r.painNote||'无';document.getElementById('latestPainDetail').textContent=painNote.length>45?painNote.slice(0,45)+'…':painNote;document.getElementById('latestReadyScore').textContent=r.score?(r.score+(r.level?' · '+r.level:'')):'—';document.getElementById('latestLoadBox').className='status-box '+(Number.isFinite(record.sessionLoad)?(record.sessionLoad>=600?'green':record.sessionLoad>=400?'yellow':''):'');document.getElementById('latestPainBox').className='status-box '+(r.pain<=2?'green':r.pain<=4?'yellow':'red')}else{document.getElementById('latestTrainingDate').textContent='—';document.getElementById('loadLatestBadge').textContent='暂无正式训练';document.getElementById('latestSessionLoad').textContent='—';document.getElementById('latestPainDetail').textContent='—';document.getElementById('latestReadyScore').textContent='—'}const cycleStartDate=new Date(document.getElementById('cycleStart').value+'T00:00:00'),weekStart=new Date(cycleStartDate);weekStart.setDate(weekStart.getDate()+start);const weekEnd=new Date(weekStart);weekEnd.setDate(weekEnd.getDate()+7);const weekEntries=entries.filter(([date])=>{const d=new Date(date+'T00:00:00');return d>=weekStart&&d<weekEnd});const weekTraining=weekEntries.filter(([,record])=>record.status==='training');const weekLoad=weekTraining.reduce((total,[,record])=>total+(record.sessionLoad||0),0);document.getElementById('weeklyLoadDisplay').textContent=weekLoad+' AU';document.getElementById('loadTrainingDays').textContent=weekTraining.length;document.getElementById('loadWeekLabel').textContent='W'+week+' 本周统计';const painScores=weekEntries.filter(([,record])=>record.readiness).map(([,record])=>Math.max(record.readiness.pain||0,record.maxPain||0));const maxPain=painScores.length>0?Math.max(...painScores):-1;const trendBox=document.getElementById('weeklyPainBox');if(maxPain<=0){trendBox.className='status-box green';document.getElementById('weeklyPainTrend').textContent='无疼痛'}else if(maxPain<=2){trendBox.className='status-box green';document.getElementById('weeklyPainTrend').textContent='绿色 · 稳定'}else if(maxPain<=4){trendBox.className='status-box yellow';document.getElementById('weeklyPainTrend').textContent='黄色 · 注意'}else{trendBox.className='status-box red';document.getElementById('weeklyPainTrend').textContent='红色 · 需关注'}document.getElementById('weekLoadBadge').textContent='正式周负荷 '+weekLoad;const body=document.getElementById('loadHistoryBody');body.innerHTML=entries.filter(([,record])=>record.status==='training').sort((a,b)=>b[0].localeCompare(a[0])).map(([date,record])=>{const r=record.readiness||{};const weekNum=Math.min(12,Math.max(1,Math.floor((new Date(date+'T00:00:00')-new Date('2026-09-21T00:00:00'))/604800000)+1));const painNote=r.painNote?r.painNote:'—';return '<tr><td><strong>'+date+'</strong></td><td>W'+weekNum+'</td><td>'+(Number.isFinite(record.sessionLoad)?record.sessionLoad+' AU':'未计算')+'</td><td>'+(r.score||'—')+'</td><td>'+escapeHtml(painNote.length>35?painNote.slice(0,35)+'…':painNote)+'</td></tr>'}).join('')||'<tr><td colspan="5" class="muted" style="text-align:center">暂无正式训练记录</td></tr>'}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function replaceOptions(select,placeholder,values){select.replaceChildren(new Option(placeholder,''),...values.map(value=>new Option(value,value)))}
-let actionModalTrigger=null;
-let actionInteractionsInitialized=false;
-function actionMeta(label,value){return '<div><span>'+label+'</span><strong>'+escapeHtml(value)+'</strong></div>'}
-function openActionModal(index,trigger){const action=ACTIONS[index];if(!action)return;actionModalTrigger=trigger;actionModalCategory.textContent=action.id+' · '+moduleDisplayName(action.module);actionModalTitle.textContent=actionDisplayName(action);actionModalDescription.textContent=actionDescription(action);actionModalMeta.innerHTML=actionMeta('能力',action.ability)+actionMeta('等级',action.level)+actionMeta('冲击',action.impact)+actionMeta('器材',action.equipment)+actionMeta('用途',action.use);actionModal.hidden=false;document.body.classList.add('no-scroll');actionModalClose.focus()}
-function closeActionModal(){if(actionModal.hidden)return;actionModal.hidden=true;document.body.classList.remove('no-scroll');if(actionModalTrigger)actionModalTrigger.focus();actionModalTrigger=null}
-function toggleActionGroup(btn){btn.parentElement.classList.toggle('open')}
-function levelPill(level){return '<span class="lvl-pill l'+level.slice(1)+'">'+escapeHtml(level)+'</span>'}
-function impactPill(impact){return '<span class="impact-pill '+(impact==='低'?'low':impact==='中'?'mid':'high')+'">'+escapeHtml(impact)+'</span>'}
-function filterActions(){
- const level=fLevel.value,impact=fImpact.value,equipment=fEquipment.value,query=fSearch.value.trim().toLowerCase();
- const match=action=>(!level||action.level===level)&&(!impact||action.impact===impact)&&(!equipment||action.equipment===equipment)&&(!query||((action.name||'')+(action.en||'')+moduleDisplayName(action.module)+action.ability+action.equipment+action.use).toLowerCase().includes(query));
- let total=0;let html='';
- Object.keys(ACTION_MODULES).forEach(letter=>{
-  const list=ACTIONS.map((a,i)=>({a,i})).filter(x=>x.a.id.charAt(0)===letter&&match(x.a));
-  if(!list.length)return;
-  total+=list.length;
-  html+='<div class="lib-group"><button type="button" class="lib-group-toggle" onclick="toggleActionGroup(this)"><span>'+letter+' · '+escapeHtml(ACTION_MODULES[letter])+' <span class="lib-group-count">（'+list.length+' 个动作）</span></span><span class="lib-group-arrow">▶</span></button><div class="lib-group-body"><div class="table-wrap"><table class="lib-table"><thead><tr><th>动作</th><th>类别</th><th>能力</th><th>等级</th><th>冲击</th><th>器材</th></tr></thead><tbody>'
-   +list.map(x=>'<tr class="lib-row" tabindex="0" data-action-index="'+x.i+'"><td class="lib-name">'+escapeHtml(x.a.name)+(x.a.en?'<span class="action-name-en">'+escapeHtml(x.a.en)+'</span>':'')+'</td><td>'+escapeHtml(moduleDisplayName(x.a.module))+'</td><td>'+escapeHtml(x.a.ability)+'</td><td>'+levelPill(x.a.level)+'</td><td>'+impactPill(x.a.impact)+'</td><td>'+escapeHtml(x.a.equipment)+'</td></tr>').join('')
-   +'</tbody></table></div></div></div>';
- });
- actionCount.textContent=total+' 个动作';
- actionLibGroups.innerHTML=html;
- actionLibEmpty.style.display=total?'none':'block';
-}
-function renderActions(){
- replaceOptions(fEquipment,'全部器材',[...new Set(ACTIONS.map(action=>action.equipment))].sort());
- if(!actionInteractionsInitialized){
-  ['fLevel','fImpact','fEquipment','fSearch'].forEach(id=>document.getElementById(id).addEventListener('input',filterActions));
-  actionLibGroups.addEventListener('click',event=>{const row=event.target.closest('.lib-row');if(row)openActionModal(+row.dataset.actionIndex,row)});
-  actionLibGroups.addEventListener('keydown',event=>{if(event.key!=='Enter'&&event.key!==' ')return;const row=event.target.closest('.lib-row');if(!row)return;event.preventDefault();openActionModal(+row.dataset.actionIndex,row)});
-  actionModalClose.addEventListener('click',closeActionModal);
-  actionModal.addEventListener('click',event=>{if(event.target===actionModal)closeActionModal()});
-  document.addEventListener('keydown',event=>{if(event.key==='Escape')closeActionModal()});
-  actionInteractionsInitialized=true;
- }
- filterActions();
-}
 function calendarMonths(){return [...new Set([...Object.keys(FORMAL_RECORDS).map(date=>date.slice(0,7)),`${FORMAL_MONTH.year}-${FORMAL_MONTH.month}`])].sort()}
 let calendarMonth='';
 function shiftMonth(delta){const months=calendarMonths(),index=months.indexOf(calendarMonth),next=months[index+delta];if(index<0||!next)return;calendarMonth=next;renderFormalMonth()}
@@ -188,6 +171,9 @@ function refresh(){renderCycle();renderFormalMonth();renderToday();renderTodayRe
 document.getElementById('cycleStart').addEventListener('change',refresh);document.getElementById('mode').addEventListener('change',refresh);
 document.getElementById('monthPrev').addEventListener('click',()=>shiftMonth(-1));document.getElementById('monthNext').addEventListener('click',()=>shiftMonth(1));
 document.getElementById('recDateSelect').addEventListener('change',e=>{renderToday(e.target.value);updateReadiness();updateRecommendation()});
+document.getElementById('recPrevious').addEventListener('click',()=>{const dates=recommendationDates(),index=dates.indexOf(currentRecKey);if(index>0)renderToday(dates[index-1])});
+document.getElementById('recNext').addEventListener('click',()=>{const dates=recommendationDates(),index=dates.indexOf(currentRecKey);if(index>=0&&index<dates.length-1)renderToday(dates[index+1])});
+document.getElementById('recLatest').addEventListener('click',()=>renderToday());
 document.getElementById('recExpandAll').addEventListener('click',()=>document.querySelectorAll('#sessionSlots details').forEach(slot=>slot.open=true));
 document.getElementById('recCollapseAll').addEventListener('click',()=>document.querySelectorAll('#sessionSlots details').forEach(slot=>slot.open=slot.hasAttribute('data-rec-pinned')));
 document.addEventListener('DOMContentLoaded',refresh);

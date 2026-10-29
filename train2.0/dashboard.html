@@ -7,6 +7,8 @@
 <title>超人不会飞专属训练系统 2.0</title>
 <link rel="icon" type="image/svg+xml" sizes="any" href="assets/favicon.svg">
 <link rel="stylesheet" href="assets/dashboard.css">
+<link rel="stylesheet" href="assets/recommendation-view.css">
+<link rel="stylesheet" href="assets/action-library.css">
 </head>
 <body>
 <svg class="notebook-icons" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="0" height="0">
@@ -19,6 +21,7 @@
   <symbol id="nb-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
   <symbol id="nb-trend" viewBox="0 0 24 24"><path d="M3 18 9 12l4 4 8-11m-6 0h6v6"/></symbol>
   <symbol id="nb-library" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="8" y="4" width="5" height="16" rx="1"/><path d="m15 5 4-1 4 15-4 1zM3 8h10m-10 8h10"/></symbol>
+  <symbol id="nb-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
   <symbol id="nb-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6zM8 12l3 3 5-6"/></symbol>
   <symbol id="nb-person" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol>
   <symbol id="nb-review" viewBox="0 0 24 24"><path d="M9 4h9a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3M13 9h3m-6 5h6m-6 4h6M3 6h6M6 3 3 6l3 3"/></symbol>
@@ -84,27 +87,31 @@
 </section>
 
 <section class="section" id="today">
- <div class="section-head"><div><span class="section-kicker">05 / TODAY’S PRACTICE</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-notebook"/></svg>训练推荐</h2><p>带着重点开始。按顺序展开动作，也可以回看过去的安排。</p></div><div class="rec-picker"><span class="pill orange" id="todayPill">DAY 1</span><label><span>推荐日期</span><select id="recDateSelect" aria-label="选择要查看的推荐日期"></select></label></div></div>
+ <div class="section-head"><div><span class="section-kicker">05 / TODAY’S PRACTICE</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-notebook"/></svg>训练推荐</h2><p>先看重点，再按顺序开始。</p></div><div class="rec-picker"><label for="recDateSelect">回看推荐</label><div class="rec-date-control"><button type="button" id="recPrevious" aria-label="上一条推荐">←</button><select id="recDateSelect" aria-label="选择要查看的推荐日期"></select><button type="button" id="recNext" aria-label="下一条推荐">→</button></div><button class="btn small" type="button" id="recLatest">最近一次</button></div></div>
  <div class="card rec-overview">
-  <p class="rec-context" id="todayPurpose"></p>
-  <div class="eyebrow" id="todayModule">Lower A</div>
-  <h3 id="todayTitle">下肢爆发 + 力量</h3>
-  <div class="rec-facts">
-   <div><span class="rec-label">预计时长</span><strong id="todayDuration">预计 50 分钟</strong></div>
-   <div><span class="rec-label">推荐时 Readiness</span><strong id="todayRpe">目标 RPE 6–7</strong></div>
-  </div>
+  <div class="rec-overview-top"><p class="rec-context" id="todayPurpose"></p><span class="pill orange" id="todayPill"></span></div>
+  <div class="rec-overview-body"><div class="rec-heading">
+   <div class="eyebrow" id="todayModule"></div>
+   <h3 id="todayTitle"></h3>
+   <p class="rec-choice-hint">每个槽位按推荐选择一份方案；可选学习替换原槽位，安排见下方。</p>
+  </div><div class="rec-facts">
+   <div><span class="rec-label">预计用时</span><strong id="todayDuration"></strong></div>
+   <div><span class="rec-label" id="recReadinessLabel">推荐时状态 · Readiness</span><strong id="todayRpe"></strong></div>
+  </div></div>
+  <div class="rec-readiness-values" id="recReadinessValues"></div>
   <div class="rec-meta" id="recMeta"></div>
  </div>
- <div class="rec-plan-head"><div><h3>训练顺序 <span id="recSlotCount"></span></h3><p>展开查看完整剂量、备选与停止条件；查看备选不代表已选择。</p></div><div class="rec-view-controls"><button class="btn small" type="button" id="recExpandAll">展开全部</button><button class="btn small" type="button" id="recCollapseAll">收起详情</button></div></div>
+ <div class="rec-plan-head"><div><h3>按顺序练 <span id="recSlotCount"></span></h3><p>先扫读动作与剂量摘要，展开比较完整方案。</p></div><div class="rec-view-controls"><button class="btn small" type="button" id="recExpandAll">展开全部</button><button class="btn small" type="button" id="recCollapseAll">收起详情</button></div></div>
+ <nav class="rec-route" id="recRoute" aria-label="训练环节快捷导航"></nav>
  <div id="sessionSlots"></div>
  <div class="card rec-skills" id="recSkillsCard" hidden>
-  <h3>训练重点</h3><div id="todaySkills" class="skill-grid"></div>
+  <h3>当时推荐的技能安排</h3><div id="todaySkills" class="skill-grid"></div>
  </div>
  <div class="card rec-reason-card">
-  <div class="rec-reason-head"><h3>为什么这样安排</h3><span>逐项展开推荐依据</span></div>
+  <div class="rec-reason-head"><div><span class="rec-label">PLAN NOTES</span><h3>为什么这样安排</h3></div><span>周期、恢复与本次取舍</span></div>
   <div id="todayReason"></div>
  </div>
- <p class="rec-footnote">推荐仅供训练前参考。训练后请使用 /record-training-2 记录实际完成内容。</p>
+ <p class="rec-footnote">这里保留推荐方案。实际完成的动作、重量与感受，请在训练后记录。</p>
 </section>
 
 <section class="section" id="assessment">
@@ -150,17 +157,20 @@
 </section>
 
 <section class="section" id="actionLib">
- <div class="section-head"><div><span class="section-kicker">09 / YOUR MOVEMENT TOOLKIT</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-library"/></svg>动作库 3.0</h2><p>找到适合自己的动作。搜索或按条件筛选，点击动作查看细节。</p></div><span class="pill" id="actionCount">0 个动作</span></div>
- <div class="card">
-  <div class="lib-toolbar">
-   <input id="fSearch" class="input" aria-label="搜索动作" placeholder="搜索动作名称（中文 / 英文）…">
-   <select id="fLevel" class="select" aria-label="等级"><option value="">全部等级</option><option>L1</option><option>L2</option><option>L3</option><option>L4</option></select>
-   <select id="fImpact" class="select" aria-label="冲击"><option value="">全部冲击</option><option>低</option><option>中</option><option>高</option></select>
-   <select id="fEquipment" class="select" aria-label="器材"><option value="">全部器材</option></select>
+ <div class="section-head"><div><span class="section-kicker">09 / YOUR MOVEMENT TOOLKIT</span><h2><svg class="section-icon" aria-hidden="true"><use href="#nb-library"/></svg>动作库 3.0</h2><p>从想练的能力出发，找到合适的动作。</p></div><span class="pill" id="actionCount">0 个动作</span></div>
+ <div class="card lib-workspace">
+  <div class="lib-searchbar"><label class="lib-search" for="fSearch"><svg aria-hidden="true"><use href="#nb-search"/></svg><input id="fSearch" type="search" autocomplete="off" aria-label="搜索动作" placeholder="搜索动作名称、能力或器材…"></label><button class="btn lib-filter-toggle" id="actionFilterToggle" type="button" aria-expanded="false" aria-controls="actionFilterPanel">筛选条件 <span id="actionFilterCount" hidden></span><span aria-hidden="true">＋</span></button></div>
+  <div class="lib-filter-panel" id="actionFilterPanel" hidden>
+   <label>动作等级<select id="fLevel" class="select" aria-label="等级"><option value="">全部等级</option><option>L1</option><option>L2</option><option>L3</option><option>L4</option></select></label>
+   <label>机械冲击<select id="fImpact" class="select" aria-label="冲击"><option value="">全部冲击</option><option>低</option><option>中</option><option>高</option></select></label>
+   <label>可用器材<select id="fEquipment" class="select" aria-label="器材"><option value="">全部器材</option></select></label>
+   <p class="lib-level-guide">L1 基础 · L2 运动员基础 · L3 运动表现 · L4 篮球专项</p>
   </div>
-  <p class="lib-level-guide">L1 基础 · L2 运动员基础 · L3 运动表现 · L4 篮球专项</p>
-  <div id="actionLibGroups"></div>
-  <div class="muted" id="actionLibEmpty" style="display:none;text-align:center;padding:20px 0">没有匹配的动作。</div>
+  <div class="lib-active-filters" id="actionActiveFilters" aria-label="当前筛选条件" hidden></div>
+  <div class="lib-layout">
+   <aside class="lib-directory" id="actionDirectory"><button class="lib-directory-toggle" id="actionDirectoryToggle" type="button" aria-expanded="false" aria-controls="actionModuleList"><span>浏览模块 <small>按训练目标找动作</small></span><span aria-hidden="true">＋</span></button><nav id="actionModuleList" aria-label="动作模块目录"></nav></aside>
+   <div class="lib-results"><div class="lib-results-head"><div><span class="lib-eyebrow">MOVEMENT LIBRARY</span><h3 id="actionResultsTitle">全部动作</h3></div><span id="actionResultsCount" role="status" aria-live="polite"></span></div><div id="actionLibGroups"></div><div class="lib-empty" id="actionLibEmpty" hidden><span aria-hidden="true">⌕</span><h4>暂时没有匹配的动作</h4><p id="actionEmptyHint">试试其他关键词，或减少筛选条件。</p><button class="btn" id="actionClearEmpty" type="button">清除筛选</button></div></div>
+  </div>
  </div>
 </section>
 
@@ -203,15 +213,17 @@
  <div class="card" id="reviewReport" aria-live="polite"></div>
 </section>
 
+<footer class="footer"><div>篮球运动员训练系统 2.0 · 12周周期化 + 动作库筛选 + Ready自调节</div><div style="margin-top:4px">正式训练历史来自月度 Markdown，并同步镜像到月度 HTML 与本 Dashboard；旧 localStorage 历史不计入正式统计。</div></footer>
+</main>
+
 <div class="modal" id="actionModal" role="dialog" aria-modal="true" aria-labelledby="actionModalTitle" hidden>
- <div class="modal-panel">
-  <div class="modal-head"><div><div class="eyebrow" id="actionModalCategory">动作详情</div><h3 id="actionModalTitle"></h3></div><button class="btn modal-close" id="actionModalClose" type="button" aria-label="关闭动作详情">×</button></div>
-  <div class="modal-body"><p class="modal-description" id="actionModalDescription"></p><div class="modal-meta" id="actionModalMeta"></div></div>
+ <div class="modal-panel" tabindex="-1">
+  <div class="modal-head"><div><div class="eyebrow" id="actionModalCategory">动作详情</div><h3 id="actionModalTitle"></h3><p id="actionModalEnglish"></p></div><button class="btn modal-close" id="actionModalClose" type="button" aria-label="关闭动作详情">×</button></div>
+  <div class="modal-body"><div class="lib-detail-tags" id="actionModalTags"></div><div class="lib-detail-intro"><span class="lib-eyebrow">动作说明</span><p class="modal-description" id="actionModalDescription"></p></div><div class="lib-detail-sections" id="actionModalDetails"></div><div class="modal-meta" id="actionModalMeta"></div></div>
+  <div class="lib-detail-footer"><span>动作库用于查阅，当日安排以训练推荐为准。</span><button class="btn" id="actionModalDone" type="button">返回动作列表</button></div>
  </div>
 </div>
 
-<footer class="footer"><div>篮球运动员训练系统 2.0 · 12周周期化 + 动作库筛选 + Ready自调节</div><div style="margin-top:4px">正式训练历史来自月度 Markdown，并同步镜像到月度 HTML 与本 Dashboard；旧 localStorage 历史不计入正式统计。</div></footer>
-</main>
 <script src="assets/data/reference.js"></script>
 <script src="assets/data/records.js"></script>
 <script src="assets/data/actions.js"></script>
@@ -223,6 +235,7 @@
 <script src="assets/data/reviews.js"></script>
 <script src="assets/review-panel.js"></script>
 <script src="assets/recommendation-view.js"></script>
+<script src="assets/action-library.js"></script>
 <script src="assets/dashboard.js"></script>
 </body>
 </html>

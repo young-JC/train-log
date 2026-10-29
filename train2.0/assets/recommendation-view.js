@@ -1,6 +1,22 @@
 // 只读阅读适配：按原文的选项、句界和括号边界拆分，不生成训练处方。
-function recViewText(value){const el=document.createElement('div');el.innerHTML=String(value);return el.textContent||''}
+function recViewText(value){const el=document.createElement('div');el.innerHTML=String(value).replace(/<br\s*\/?\s*>/gi,'\n');return el.textContent||''}
 function recViewEscape(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function recViewName(value){return recViewEscape(value).replace(/（([^）]*[A-Za-z][^）]*)）/g,'<span class="rec-name-en">（$1）</span>')}
+function recViewParts(value){return String(value).split(/<br\s*\/?\s*>|\r?\n/gi).map(recViewText).filter(text=>text.trim())}
+function recViewChoices(slot){return recViewParts(slot[1]).filter(text=>/^\s*[ABC]\s*[：:]/.test(text))}
+function recViewPhase(slot){
+ if(/Quality Stop|权限|疼痛监控|停止条件|训练后记录/i.test(slot[0]))return 'rules';
+ if(/整理|拉伸|Cooldown|Recovery|恢复/i.test(slot[0]))return 'cooldown';
+ if(/热身|防伤|活动度|Warm.up|Prehab|Mobility/i.test(slot[0]))return 'prepare';
+ return 'main';
+}
+function recViewSlotInfo(slot){
+ const choices=recViewChoices(slot),first=choices[0];
+ const action=recViewAction(first?first.replace(/^\s*[ABC]\s*[：:]\s*/,''):recViewParts(slot[1])[0]||'');
+ const doses=recViewDoseOptions(slot[2]||''),key=first?.match(/^\s*([ABC])/)[1];
+ const dose=key?doses.options[key]||'':String(slot[2]||'');
+ return {choices,action,dose:recViewDoseLines(dose)[0]?.replace(/[，,；;。]+$/,'')||'',key};
+}
 function recViewSplit(value,separators){
  const result=[];let depth=0,start=0;
  for(let i=0;i<value.length;i++){
@@ -17,12 +33,15 @@ function recViewList(value,extraClass=''){
 function recViewLineDoseOptions(text){
  const lines=text.split(/\r?\n/);
  const marked=lines.map((line,index)=>({index,match:line.match(/^\s*([ABC])(?![A-Za-z/])\s*[：:]?\s*/)})).filter(item=>item.match);
- if(marked.length!==3||marked.some((item,index)=>item.match[1]!=='ABC'[index]))return null;
+ if(!marked.length||new Set(marked.map(item=>item.match[1])).size!==marked.length)return null;
+ if(marked.length===1&&(!/^\s*[ABC]\s*[：:]/.test(lines[marked[0].index])||/[；;。]\s*[ABC](?![A-Za-z/])\s*[：:]?\s*\S/.test(text)))return null;
+ if(marked.length===2&&!text.includes('\n'))return null;
+ if(marked.some((item,index)=>index&&item.match[1]<=marked[index-1].match[1]))return null;
  // 显式分行时保留每个选项的整段；只把另起一行且明确标记的共同说明分离。
- const boundary=lines.findIndex((line,index)=>index>marked[2].index&&/^\s*(?:共同(?:剂量|安排|限制|说明|条件)|[ABC](?:\/[ABC])+)/.test(line));
+ const boundary=lines.findIndex((line,index)=>index>marked.at(-1).index&&/^\s*(?:共同(?:剂量|安排|限制|说明|条件)|[ABC](?:\/[ABC])+)/.test(line));
  const end=boundary<0?lines.length:boundary;
  const options=Object.fromEntries(marked.map((item,index)=>[
-  item.match[1],lines.slice(item.index,index<2?marked[index+1].index:end).join('\n').slice(item.match[0].length).trim()
+  item.match[1],lines.slice(item.index,index<marked.length-1?marked[index+1].index:end).join('\n').slice(item.match[0].length).trim()
  ]));
  const prefix=lines.slice(0,marked[0].index).join('\n').trim(),tail=lines.slice(end).join('\n').trim();
  return {options,common:[prefix,tail].filter(Boolean).join('\n'),prefix,tail};
@@ -49,9 +68,12 @@ function recViewDoseOptions(value){
  return {options,common:[prefix,common].filter(Boolean).join('\n'),prefix,tail:common};
 }
 function recViewAction(value){
- const text=recViewText(value).trim(),parts=recViewSplit(text,'，,；;。：:');
+ let text=recViewText(value).trim();
+ const role=text.match(/^(最推荐|兼容推荐|新动作或过往少练)\s*[｜|]\s*/);
+ if(role)text=text.slice(role[0].length);
+ const parts=recViewSplit(text,'，,；;。：:');
  const first=parts[0]||text;
- return {name:first.replace(/[，,；;。：:]$/,''),notes:text.slice(first.length).trim()};
+ return {name:first.replace(/[，,；;。：:]$/,''),notes:text.slice(first.length).trim(),role:role?.[1]||''};
 }
 function recViewDoseLines(value){
  // 数值小数点与括号内的间歇安排不拆开；每条原文独立一行。
@@ -68,17 +90,17 @@ function recViewExerciseRows(action,dose){
  const doses=recViewSplit(firstDose,'、+＋').map(value=>value.replace(/[、+＋；;。]$/,'').trim());
  // 仅在原文逐项数量一致时按顺序对应；不明确的共同剂量单列，避免猜配。
  const paired=actions.length>1&&doses.length===actions.length;
- const rows=actions.map((name,index)=>'<div class="rec-exercise-row"><span class="rec-exercise-index">'+(index+1)+'</span><span class="rec-exercise-title">'+recViewEscape(name)+'</span>'+(paired?'<strong class="rec-exercise-amount">'+recViewEscape(doses[index])+'</strong>':'')+'</div>').join('');
+ const rows=actions.map((name,index)=>'<div class="rec-exercise-row"><span class="rec-exercise-index">'+(index+1)+'</span><span class="rec-exercise-title">'+recViewName(name)+'</span>'+(paired?'<strong class="rec-exercise-amount">'+recViewEscape(doses[index])+'</strong>':'')+'</div>').join('');
  return '<div class="rec-exercise-list">'+rows+'</div>'+recViewDose(paired?dose.slice(firstDose.length).trim():dose);
 }
 function recViewCandidate(action,dose,key,recommended){
  const parsed=recViewAction(action),multiple=recViewSplit(parsed.name,'+＋→').length>1;
- return '<article class="rec-candidate"><header>'+(key?'<span class="rec-candidate-key">'+key+'</span>':'')+'<h4>'+(multiple?'组合 '+key:recViewEscape(parsed.name))+'</h4>'+(recommended?'<span class="rec-candidate-tag">建议 · 待选</span>':'')+'</header>'
-  +(multiple?recViewExerciseRows(parsed.name,dose):recViewDose(dose))
-  +(parsed.notes?'<div class="rec-exercise-notes"><span class="rec-label">动作说明与经历</span>'+recViewList(parsed.notes)+'</div>':'')+'</article>';
+ return '<article class="rec-candidate"><header><div class="rec-candidate-label">'+(key?'<span class="rec-candidate-key">'+key+'</span>':'')+'<span>'+(parsed.role|| (recommended?'建议 · 待选':key?'方案 '+key:'推荐动作'))+'</span></div><h4>'+recViewName(parsed.name)+'</h4></header>'
+  +'<div class="rec-candidate-dose">'+(multiple?recViewExerciseRows(parsed.name,dose):recViewDose(dose))+'</div>'
+  +(parsed.notes?'<div class="rec-exercise-notes"><span class="rec-label">依据、经历与执行条件</span>'+recViewList(parsed.notes)+'</div>':'')+'</article>';
 }
 function recViewSlotContent(slot){
- const pieces=String(slot[1]).split(/<br\s*\/?\s*>/i).map(recViewText);
+ const pieces=recViewParts(slot[1]);
  const choices=pieces.filter(text=>/^\s*[ABC]\s*[：:]/.test(text));
  if(!choices.length){
   if(/Quality Stop|权限|训练后记录|疼痛监控/i.test(slot[0]))return '<div class="rec-shared-guidance"><h4>执行边界</h4>'+recViewList(slot[1])+'<h4>执行与记录</h4>'+recViewList(slot[2]||'按计划')+'</div>';

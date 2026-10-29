@@ -7,13 +7,22 @@
     {key: 'bodyFatPct', label: '体脂率', unit: '%', color: '#ff7043'},
     {key: 'waistCm', label: '腰围', unit: 'cm', color: '#a786ff'}
   ];
+  const chartMetrics = [
+    ...metrics.slice(1, 3),
+    {key: 'basalMetabolismKcal', label: '基础代谢', unit: 'kcal', color: '#49a7ff'},
+    {key: 'muscleMassKg', label: '肌肉量', unit: 'kg', color: '#a786ff'}
+  ];
   const palette = ['#ff7043', '#49a7ff', '#13c89a', '#a786ff', '#ffc44d'];
   const esc = value => String(value).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
   const missing = value => value === null || value === undefined || value === '';
   const shown = value => missing(value) ? '未记录' : esc(value);
-  const validMetric = (record, key) => typeof record[key] === 'number' && Number.isFinite(record[key]) && (key === 'bodyFatPct' ? record[key] > 0 && record[key] < 100 : record[key] > 0);
+  const metricValue = (record, key) => record[key] ?? record.observations?.find(item => item.key === key)?.value;
+  const validMetric = (record, key) => {
+    const value = metricValue(record, key);
+    return typeof value === 'number' && Number.isFinite(value) && (key === 'bodyFatPct' ? value > 0 && value < 100 : value > 0);
+  };
   const measuredAt = record => record.date + (record.time ? ' ' + record.time : ' · 时间未记录');
-  const method = (record, key) => (record.methods?.[key] || '').trim();
+  const method = (record, key) => (record.methods?.[key] || record.observations?.find(item => item.key === key)?.method || '').trim();
   const timestamp = record => Date.parse(record.date + 'T' + (record.time || '00:00') + ':00+08:00');
 
   function todayInShanghai() {
@@ -37,13 +46,13 @@
     const points = rows.filter(row => validMetric(row, metric.key));
     const heading = '<h4>' + metric.label + '<span>' + metric.unit + ' · ' + points.length + ' 次测量</span></h4>';
     if (!points.length) return '<div class="athlete-chart">' + heading + '<p class="athlete-chart-empty">此范围内未记录</p></div>';
-    const values = points.map(p => p[metric.key]);
+    const values = points.map(p => metricValue(p, metric.key));
     const minValue = Math.min(...values), maxValue = Math.max(...values);
     const padding = Math.max((maxValue - minValue) * .15, maxValue * .005, .1);
     const low = Math.max(0, minValue - padding), high = maxValue + padding;
     const firstTime = timestamp(points[0]), lastTime = timestamp(points[points.length - 1]);
     const x = p => firstTime === lastTime ? 206 : 50 + (timestamp(p) - firstTime) / (lastTime - firstTime) * 312;
-    const y = p => 110 - (p[metric.key] - low) / (high - low) * 82;
+    const y = p => 110 - (metricValue(p, metric.key) - low) / (high - low) * 82;
     const groups = new Map();
     points.forEach(p => {
       // 未知方法的体脂点分别成组，不建立暗示可比性的连线。
@@ -63,7 +72,7 @@
       const color = metric.key === 'bodyFatPct' ? (unknown ? '#8292a5' : palette[groupIndex++ % palette.length]) : metric.color;
       if (group.length > 1 && !unknown) svg += '<polyline fill="none" stroke="' + color + '" stroke-width="2" points="' + group.map(p => x(p) + ',' + y(p)).join(' ') + '"/>';
       group.forEach(p => {
-        const label = measuredAt(p) + ' · ' + p[metric.key] + ' ' + metric.unit + ' · ' + (method(p, metric.key) || '方法未记录') + ' · ' + p.id;
+        const label = measuredAt(p) + ' · ' + metricValue(p, metric.key) + ' ' + metric.unit + ' · ' + (method(p, metric.key) || '方法未记录') + ' · ' + p.id;
         svg += '<circle cx="' + x(p) + '" cy="' + y(p) + '" r="4" fill="' + color + '"><title>' + esc(label) + '</title></circle>';
       });
       if (metric.key === 'bodyFatPct' && !unknown) legend.push('<span><i style="background:' + color + '"></i>' + esc(key) + '</span>');
@@ -116,7 +125,7 @@
     const observations = selected.slice().reverse().flatMap(row => (row.observations || []).map(observation => ({row, observation})));
     supplementary.innerHTML = '<summary>体脂秤补充指标（' + observations.length + ' 项记录）</summary><p class="hint">家用体脂秤报告值，历史范围与上方选择一致。设备与测量条件确认可比后再对照变化，不自动判定健康状态或训练进步。</p>' + (observations.length ? '<div class="table-wrap"><table><thead><tr><th>测量日期 / ID</th><th>指标</th><th>报告值</th><th>单位</th><th>方法 / 设备</th><th>备注 / 来源</th></tr></thead><tbody>' + observations.map(({row, observation}) => '<tr><td>' + esc(measuredAt(row)) + '<br>' + esc(row.id) + '</td><td>' + shown(observation.label) + '</td><td><strong>' + shown(observation.value) + '</strong></td><td>' + shown(observation.unit) + '</td><td>' + shown(observation.method) + '</td><td>' + shown(observation.note) + '<br><span class="hint">来源：' + shown(row.source) + ' · 更新：' + shown(row.updatedAt) + '</span></td></tr>').join('') + '</tbody></table></div>' : '<p class="hint">此范围内未记录补充指标。</p>');
     document.getElementById('athleteRangeNote').textContent = (all ? '全部历史（截至 ' + today + '）' : startDate + ' 至 ' + today) + ' · ' + selected.length + ' 条测量；最新值不受范围筛选影响。同日时间未记录时按记录 ID 排序。';
-    document.getElementById('athleteCharts').innerHTML = metrics.map(metric => chart(metric, selected)).join('');
+    document.getElementById('athleteCharts').innerHTML = chartMetrics.map(metric => chart(metric, selected)).join('');
     document.getElementById('athleteHistoryLabel').textContent = '查看测量历史（' + selected.length + ' 条）';
     document.getElementById('athleteHistory').innerHTML = selected.length ? selected.slice().reverse().map(row => '<tr><td><strong>' + esc(measuredAt(row)) + '</strong><br>' + esc(row.id) + '</td>' + metrics.map(metric => '<td>' + (validMetric(row, metric.key) ? '<strong>' + esc(row[metric.key]) + '</strong><br><span class="hint">' + shown(method(row, metric.key)) + '</span>' : '未记录') + '</td>').join('') + '<td>' + shown(row.note) + '<br><span class="hint">来源：' + shown(row.source) + '</span></td><td>' + shown(row.updatedAt) + '</td></tr>').join('') : '<tr><td colspan="7">此范围内未记录测量。可切换全部历史，或告诉 AI 新的测量数据。</td></tr>';
     document.getElementById('athleteUpdated').textContent = '档案更新：' + (profile.updatedAt || '未记录') + ' · 指标更新：' + (data.metricsUpdatedAt || '未记录');
