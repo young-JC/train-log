@@ -43,34 +43,40 @@ function renderRecommendationSlots(plan){
  const slots=plan.filter(slot=>recViewPhase(slot)!=='rules'),optional=slots.filter(slot=>/可选|可跳过/.test(slot[0])).length;
  document.getElementById('recSlotCount').textContent=slots.length+' 个槽位'+(optional?' · 含 '+optional+' 个可选':'');
  const phases={prepare:['01','训练准备','热身与防伤'],main:['02','主训练','按顺序完成，保留必要休息'],cooldown:['03','整理恢复','逐步降速，照顾今日受力区域'],rules:['!','执行边界','权限、停止条件与训练后记录']};
- const routes=[];let previous='',opened=false,step=0;
+ let previous='',opened=false,step=0,phaseStep=0;
  document.getElementById('sessionSlots').innerHTML=plan.map((slot,index)=>{
   const phase=recViewPhase(slot),pinned=phase==='rules',info=recViewSlotInfo(slot),learning=/可选|可跳过/.test(slot[0]);
   let heading='';
   if(phase!==previous){
-   const id='rec-phase-'+index,[number,label,description]=phases[phase];
-   heading='<div class="rec-phase-heading" id="'+id+'"><span>'+number+'</span><h4>'+label+'</h4><p>'+description+'</p></div>';
-   routes.push('<a href="#'+id+'"'+(pinned?' class="rec-route-rules"':'')+'><span>'+number+'</span>'+label+'<span aria-hidden="true">↗</span></a>');previous=phase;
+   const id='rec-phase-'+index,group=[];
+   for(let cursor=index;cursor<plan.length&&recViewPhase(plan[cursor])===phase;cursor++)group.push(plan[cursor]);
+   const label=recViewPhaseLabel(phase,group,phases),description=phases[phase][2];
+   heading='<div class="rec-phase-heading" id="'+id+'"><span>'+String(++phaseStep).padStart(2,'0')+'</span><h4>'+label+'</h4><p>'+description+'</p></div>';
+   previous=phase;
   }
-  if(pinned)return heading+'<article class="rec-slot rec-slot-caution" data-rec-pinned="true"><header class="rec-rule-head"><svg aria-hidden="true"><use href="#nb-notebook"/></svg><h4>'+escapeHtml(slot[0])+'</h4><span>训练前先看</span></header><div class="rec-slot-content">'+recViewSlotContent(slot)+'</div></article>';
+  if(pinned)return heading+'<article class="rec-slot rec-slot-caution" id="rec-slot-'+index+'" data-rec-index="'+index+'" data-rec-phase="'+phase+'" data-rec-pinned="true"><header class="rec-rule-head"><svg aria-hidden="true"><use href="#nb-notebook"/></svg><h4>'+escapeHtml(slot[0])+'</h4><span>训练前先看</span></header><div class="rec-slot-content">'+recViewSlotContent(slot)+'</div></article>';
   step++;
   const fullName=recPlainText(slot[0]),title=fullName.split(/[·；;]/)[0],note=fullName.slice(title.length).replace(/^[·；;]\s*/,'');
   const open=phase==='main'&&!learning&&!opened;if(open)opened=true;
-  return heading+'<details class="rec-slot'+(learning?' rec-slot-optional':'')+'"'+(open?' open':'')+'><summary><span class="rec-slot-num">'+String(step).padStart(2,'0')+'</span><span class="rec-slot-heading"><span class="rec-slot-name">'+recViewName(title)+(learning?'<small class="rec-optional-tag">可选学习</small>':'')+'</span>'+(note?'<span class="rec-slot-note">'+escapeHtml(note)+'</span>':'')+'<span class="rec-slot-preview">'+(info.key?'<b>'+info.key+'</b>':'')+recViewName(info.action.name)+'</span>'+(info.dose?'<span class="rec-slot-dose">'+escapeHtml(info.dose)+'</span>':'')+'</span><span class="rec-slot-toggle"><span>'+(info.choices.length?'比较 '+info.choices.length+' 个方案':'查看详情')+'</span><i aria-hidden="true"></i></span></summary><div class="rec-slot-content">'+recViewSlotContent(slot)+'</div></details>';
+  return heading+'<details class="rec-slot'+(learning?' rec-slot-optional':'')+'" id="rec-slot-'+index+'" data-rec-index="'+index+'" data-rec-phase="'+phase+'"'+(open?' open':'')+'><summary><span class="rec-slot-num">'+String(step).padStart(2,'0')+'</span><span class="rec-slot-heading"><span class="rec-slot-name">'+recViewName(title)+(learning?'<small class="rec-optional-tag">可选学习</small>':'')+'</span>'+(note?'<span class="rec-slot-note">'+escapeHtml(note)+'</span>':'')+'<span class="rec-slot-preview">'+(info.key?'<b>'+info.key+'</b>':'')+recViewName(info.action.name)+'</span>'+(info.dose?'<span class="rec-slot-dose">'+escapeHtml(info.dose)+'</span>':'')+'</span><span class="rec-slot-toggle"><span>'+(info.choices.length?'比较 '+info.choices.length+' 个方案':'查看详情')+'</span><i aria-hidden="true"></i></span></summary><div class="rec-slot-content">'+recViewSlotContent(slot)+'</div></details>';
  }).join('')||'<div class="rec-empty">还没有保存的训练推荐。生成推荐后，会在这里展示具体安排。</div>';
- document.getElementById('recRoute').innerHTML=routes.join('');
+ recViewBuildRoute(plan,phases);
+ recViewSetupReader();
  document.querySelector('.rec-choice-hint').hidden=!slots.some(slot=>recViewChoices(slot).length);
 }
 function renderRecommendationReason(value){
  const source=document.createElement('div');source.innerHTML=value;
- // 原段落直接展示，兼容带加粗分组标题的新推荐和旧段落，不折叠决策条件。
+ // 新推荐显式区分重点与可展开依据；旧段落保持原文，不猜测或截断安全条件。
  document.getElementById('todayReason').innerHTML=Array.from(source.childNodes).map(item=>{
   if(!item.textContent.trim())return '';
+  if(item.nodeType===1&&item.matches('.rec-reason-summary,.rec-reason-evidence'))return item.outerHTML;
   return '<div class="rec-reason-item">'+(item.nodeType===1?item.outerHTML:escapeHtml(item.textContent))+'</div>';
  }).join('');
  document.querySelector('.rec-reason-card').hidden=!source.textContent.trim();
 }
 function renderRecommendationReadiness(key){
+ document.querySelector('.rec-status-details').open=false;
+ document.querySelector('.rec-status-details').hidden=!key;
  const readiness=TODAY_READINESS[key];
  const fields=[['sleep','睡眠',5],['fatigue','疲劳',5],['soreness','酸痛',5],['pain','疼痛',10],['motivation','意愿',5]];
  document.getElementById('recReadinessValues').innerHTML=readiness?'<span>当次自评</span>'+fields.map(([field,label,scale])=>'<span>'+label+' <b>'+(Number.isFinite(readiness[field])?readiness[field]:'—')+'</b><small>/'+scale+'</small></span>').join(''):'<span>该次推荐未保留五项原始自评</span>';
@@ -113,6 +119,7 @@ function renderToday(pickedKey){
  renderRecommendationReadiness(recKey);
  const plan=(recKey&&TODAY_RECOMMENDATION[recKey])||[];
  renderRecommendationSlots(plan);
+ TrainingVisuals.renderRecommendation(meta);
  const skills=(recKey&&TODAY_SKILLS[recKey])||[];
  document.getElementById('todaySkills').innerHTML=skills.map(x=>'<div class="skill"><h4>'+x[0]+'</h4><p>'+x[1]+'</p></div>').join('');
  document.getElementById('recSkillsCard').hidden=skills.length===0;
@@ -148,9 +155,10 @@ function renderFormalMonth(){
   const number=document.createElement('span');number.className='monthly-day-number';number.textContent=day;content.append(number);
   if(offset>=0){const position=document.createElement('span');position.className='monthly-position';position.textContent=`W${Math.floor(offset/7)+1}D${offset%7+1}`;content.append(position)}
   if(record||isRest||offset>=0){const status=document.createElement('span');status.className='monthly-status';status.textContent=isRest?'休息':record?.label||(date==='2026-09-21'?'正式周期开始':'等待记录');content.append(status)}
-  cell.append(content);nodes.push(cell);
+  cell.append(content);decorateTrainingCalendarCell(cell,date,record,isRest);nodes.push(cell);
  }
  monthlyCalendar.replaceChildren(...nodes);
+ renderTrainingCalendarLegend(document.querySelector('.calendar-key'));
  const entries=Object.entries(FORMAL_RECORDS).filter(([date])=>date.startsWith(`${calendarMonth}-`)),training=entries.filter(([date,record])=>!FORMAL_REST_DAYS.includes(date)&&record.status==='training'),load=training.reduce((total,[,record])=>total+(record.sessionLoad||0),0);
  monthlySnapshotStatus.textContent=`${training.length} 个训练日 · ${load} AU`;
  const label=`${year} 年 ${monthNumber} 月`;
@@ -176,6 +184,7 @@ document.getElementById('recNext').addEventListener('click',()=>{const dates=rec
 document.getElementById('recLatest').addEventListener('click',()=>renderToday());
 document.getElementById('recExpandAll').addEventListener('click',()=>document.querySelectorAll('#sessionSlots details').forEach(slot=>slot.open=true));
 document.getElementById('recCollapseAll').addEventListener('click',()=>document.querySelectorAll('#sessionSlots details').forEach(slot=>slot.open=slot.hasAttribute('data-rec-pinned')));
+recViewBindNavigation();
 document.addEventListener('DOMContentLoaded',refresh);
 
 // 侧栏与内容滚动保持同步；不参与训练数据的读取或保存。

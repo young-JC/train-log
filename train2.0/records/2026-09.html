@@ -6,6 +6,7 @@
 <title>2026 年 9 月训练记录 · 2.0</title>
 <meta name="theme-color" content="#203d35">
 <link rel="stylesheet" href="../assets/records.css">
+<link rel="stylesheet" href="../assets/calendar-types.css">
 </head>
 <body>
 <a class="skip-link" href="#recordContent">跳到训练记录</a>
@@ -41,6 +42,7 @@
 
 <footer class="footer"><a class="footer-home" href="../dashboard.html">返回首页 <span aria-hidden="true">↗</span></a><p>每一次实绩，都值得认真留下。</p><p>数据源：train2.0/records/2026-09.md</p></footer>
 </main>
+<script src="../assets/calendar-types.js"></script>
 <script>
 const MONTH={year:2026,month:8,days:30,startOffset:1};
 const CYCLE_START='2026-09-21';
@@ -87,6 +89,7 @@ function dayContent(day){
  if(record||isRest){const status=document.createElement('span');status.className='day-status';status.textContent=isRest?'休息':record.label;content.append(status)}
  else if(position){const label=document.createElement('span');label.className='day-label';label.textContent=key===CYCLE_START?'正式周期开始':'等待记录';content.append(label)}
  cell.append(content);
+ decorateTrainingCalendarCell(cell,key,record,isRest);
  return cell;
 }
 function renderCalendar(){
@@ -103,8 +106,10 @@ function renderSummary(){
  sessionLoad.textContent=trainingRecords.reduce((total,[,record])=>total+(record.sessionLoad||0),0);
 }
 renderCalendar();
+renderTrainingCalendarLegend(document.querySelector('.legend'));
 renderSummary();
 </script>
+<script src="../assets/training-visuals.js"></script>
 <script src="../assets/records.js"></script>
 </body>
 </html>

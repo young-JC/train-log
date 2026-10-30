@@ -107,6 +107,37 @@ def check_page(connection: websocket.WebSocket) -> None:
     for width in widths:
         call('Emulation.setDeviceMetricsOverride', {
             'width': width, 'height': 900, 'deviceScaleFactor': 1, 'mobile': width <= 390})
+        # 新推荐按显式分类摘要展示；扩展依据可访问，停止条件不藏入折叠区。
+        assert evaluate("""(()=>{
+            renderToday('2026-10-30');
+            const cover=document.querySelector('.rec-overview');
+            const art=recArtwork.getBoundingClientRect();
+            if(cover.getBoundingClientRect().height>(innerWidth>760?270:340))return false;
+            if(cover.querySelector('.rec-status-details').open)return false;
+            if(cover.dataset.trainingVisual!=='recovery'||!recArtwork.src.endsWith('/training-recovery.svg'))return false;
+            if(art.width<80||art.right>innerWidth+1||art.left<0)return false;
+            const summary=todayReason.querySelector('.rec-reason-summary');
+            const evidence=todayReason.querySelector('.rec-reason-evidence');
+            if(!summary||!evidence||evidence.open)return false;
+            const topics=[...summary.querySelectorAll('.rec-reason-topic')];
+            if(topics.length!==3||summary.innerText.length>240)return false;
+            if(!summary.innerText.includes('膝痛增加')||!summary.innerText.includes('不憋气'))return false;
+            if(todayReason.innerText.includes('2026-10-25版本'))return false;
+            if(topics.some(topic=>{const box=topic.getBoundingClientRect();
+                return box.width<=0||box.left<0||box.right>innerWidth+1||topic.scrollWidth>topic.clientWidth+1;
+            }))return false;
+            evidence.open=true;
+            const expanded=todayReason.innerText.includes('2026-10-25版本')
+                &&todayReason.innerText.includes('1530 AU');
+            renderToday('2026-10-27');renderToday('2026-10-30');
+            return expanded&&!todayReason.querySelector('.rec-reason-evidence').open;
+        })()"""), width
+        if screenshot_folder and width in [1536, 390]:
+            evaluate("document.querySelector('.rec-reason-card').scrollIntoView({behavior:'instant',block:'start'})")
+            folder = Path(screenshot_folder)
+            folder.mkdir(parents=True, exist_ok=True)
+            result = call('Page.captureScreenshot', {'format': 'png', 'captureBeyondViewport': False})
+            (folder / ('recommendation-reasons-' + str(width) + '.png')).write_bytes(base64.b64decode(result['data']))
         if screenshot_folder and width in [1536, 390]:
             evaluate("renderToday();document.querySelector('#today').scrollIntoView({behavior:'instant',block:'start'})")
             folder = Path(screenshot_folder)
@@ -116,6 +147,16 @@ def check_page(connection: websocket.WebSocket) -> None:
             evaluate("document.querySelector('#sessionSlots details[open]').scrollIntoView({behavior:'instant',block:'start'})")
             result = call('Page.captureScreenshot', {'format': 'png', 'captureBeyondViewport': False})
             (folder / ('recommendation-options-' + str(width) + '.png')).write_bytes(base64.b64decode(result['data']))
+            evaluate("recRoute.scrollIntoView({behavior:'instant',block:'start'})")
+            result = call('Page.captureScreenshot', {'format': 'png', 'captureBeyondViewport': False})
+            (folder / ('recommendation-route-' + str(width) + '.png')).write_bytes(base64.b64decode(result['data']))
+            evaluate("renderToday('2026-10-27');document.querySelector('#sessionSlots details[open]').scrollIntoView({behavior:'instant',block:'start'})")
+            result = call('Page.captureScreenshot', {'format': 'png', 'captureBeyondViewport': False})
+            (folder / ('recommendation-tabs-' + str(width) + '.png')).write_bytes(base64.b64decode(result['data']))
+            evaluate("recRoute.scrollIntoView({behavior:'instant',block:'start'});recRoute.querySelector('[data-rec-phase=main] .rec-route-head').click()")
+            call('Runtime.evaluate', {'expression': 'new Promise(resolve=>setTimeout(resolve,300))', 'awaitPromise': True})
+            result = call('Page.captureScreenshot', {'format': 'png', 'captureBeyondViewport': False})
+            (folder / ('recommendation-bubble-' + str(width) + '.png')).write_bytes(base64.b64decode(result['data']))
         result = evaluate(r"""(()=>{
             recDateSelect.value='2026-10-27';recDateSelect.dispatchEvent(new Event('change'));
             const slots=[...document.querySelectorAll('#sessionSlots .rec-slot')];
@@ -127,6 +168,7 @@ def check_page(connection: websocket.WebSocket) -> None:
                 const cards=[...slot.querySelectorAll('.rec-candidate')];
                 if(cards.length!==3)return {error:'候选数量',index};
                 for(const [choice,block] of blocks.entries()){
+                    slot.querySelectorAll('.rec-option-switch [role="tab"]')[choice]?.click();
                     const expected=block.replace(/^[ABC][：:]\s*/,'');
                     const card=cards[choice],dose=card.querySelector('.rec-prescription');
                     if(!dose)return {error:'剂量缺失',index,choice};
@@ -148,9 +190,52 @@ def check_page(connection: websocket.WebSocket) -> None:
             return !document.querySelector('#sessionSlots details[open]')
                 &&rules.getBoundingClientRect().height>100
                 &&!rules.closest('details')
-                &&document.querySelectorAll('#recRoute a').length===4
+                &&document.querySelectorAll('#recRoute .rec-route-stage').length===4
                 &&!!document.querySelector('.rec-slot-optional .rec-optional-tag')
                 &&!document.querySelector('#todayReason details');
+        })()"""), width
+        # 流程内槽位可直达；前后浏览和方案标签只改变阅读状态。
+        assert evaluate("""(()=>{
+            renderToday('2026-10-27');
+            const slots=[...sessionSlots.querySelectorAll('.rec-slot')];
+            const links=[...recRoute.querySelectorAll('[data-rec-target]')];
+            if(links.length!==slots.length||links.some(link=>!document.querySelector(link.getAttribute('href'))))return false;
+            const heads=[...recRoute.querySelectorAll('.rec-route-head')];
+            if(recRoute.querySelector(':popover-open')||links.some(link=>link.getClientRects().length))return false;
+            heads[0].click();
+            const first=recRoute.querySelector(':popover-open');
+            if(!first||!first.contains(links[0]))return false;
+            const box=first.getBoundingClientRect();
+            if(box.left<0||box.right>innerWidth+1||box.top<0||box.bottom>innerHeight+1)return false;
+            heads[1].click();
+            if(first.matches(':popover-open')||recRoute.querySelectorAll(':popover-open').length!==1)return false;
+            document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+            if(recRoute.querySelector(':popover-open')||document.activeElement!==heads[1])return false;
+            heads[0].click();
+            links[1].click();
+            if(recRoute.querySelector(':popover-open'))return false;
+            if(recViewActiveIndex!==Number(slots[1].dataset.recIndex)||!slots[1].open)return false;
+            if(sessionSlots.querySelectorAll('details[open]').length!==1)return false;
+            recSlotNext.click();
+            if(recViewActiveIndex!==Number(slots[2].dataset.recIndex)||!slots[2].open)return false;
+            recSlotPrevious.click();
+            if(recViewActiveIndex!==Number(slots[1].dataset.recIndex))return false;
+            const withOptions=slots.find(slot=>slot.querySelector('.rec-option-switch'));
+            recViewSetActive(Number(withOptions.dataset.recIndex),true);
+            const tabs=[...withOptions.querySelectorAll('[role="tab"]')];
+            tabs[0].focus();tabs[0].dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
+            if(document.activeElement!==tabs[1]||tabs[1].getAttribute('aria-selected')!=='true')return false;
+            const panels=[...withOptions.querySelectorAll('[role="tabpanel"]')];
+            if(panels.filter(panel=>!panel.hidden).length!==1||panels[1].hidden)return false;
+            tabs[1].dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true}));
+            if(tabs[0].getAttribute('aria-selected')!=='true')return false;
+            links.at(-1).click();
+            if(!recSlotNext.disabled||!slots.at(-1).hasAttribute('data-rec-pinned'))return false;
+            if(slots.at(-1).closest('details')||slots.at(-1).getBoundingClientRect().height<100)return false;
+            const routesFit=[...recRoute.querySelectorAll('.rec-route-stage')].every(stage=>{
+                const box=stage.getBoundingClientRect();return box.width>0&&stage.scrollWidth<=stage.clientWidth+1;
+            });
+            return routesFit&&!recReaderNav.hidden&&document.documentElement.scrollWidth<=innerWidth;
         })()"""), width
         assert evaluate("""(()=>{
             recPrevious.click();const previous=recDateSelect.value;
@@ -166,10 +251,22 @@ def check_page(connection: websocket.WebSocket) -> None:
         })()""")
         assert evaluate("document.querySelector('#readiness').innerText") == readiness_panel
         assert evaluate("""(()=>{
+            document.querySelector('.rec-status-details').open=true;
             const values=recReadinessValues.innerText,r=TODAY_READINESS[recDateSelect.value];
             return ['sleep','fatigue','soreness','pain','motivation'].every(key=>values.includes(String(r[key])));
         })()"""), width
     # 全部历史均可阅读；不重写事实源，不补造旧推荐缺失的原始状态。
+    assert evaluate("""(()=>{
+        for(const [date,type,file] of [
+            ['2026-10-27','strength','training-strength.svg'],
+            ['2026-10-24','upper','training-upper.svg'],
+            ['2026-10-18','speed','training-speed.svg'],
+            ['2026-10-30','recovery','training-recovery.svg']]){
+            renderToday(date);
+            if(document.querySelector('.rec-overview').dataset.trainingVisual!==type||!recArtwork.src.endsWith('/'+file))return false;
+        }
+        return true;
+    })()""")
     assert evaluate("""(()=>{
         for(const date of recommendationDates()){
             renderToday(date);
@@ -219,6 +316,7 @@ def check_page(connection: websocket.WebSocket) -> None:
     assert not errors, errors
     print(json.dumps({'fileProtocol': True, 'widths': widths, 'slotsPerWidth': 10,
                       'allCandidateDosesComplete': True, 'historySwitching': 'OK',
+                      'categorizedReasons': 'OK', 'evidenceToggle': 'OK',
                       'formalStatsUnchanged': {'days': baseline['days'], 'load': baseline['load']},
                       'jsErrors': len(errors)}, ensure_ascii=False))
 

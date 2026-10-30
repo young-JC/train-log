@@ -1,0 +1,76 @@
+/* 延续墨绿卡片与橙色按钮的实色碰撞，两处月历共用配色。 */
+[data-training-type]{--calendar-ink:#fff8e9;--calendar-detail:#f4eddf}
+[data-training-type="lower"]{--calendar-fill:#203d35;--calendar-border:#203d35}
+[data-training-type="upper"]{--calendar-fill:#695176;--calendar-border:#695176}
+[data-training-type="speed"]{--calendar-ink:#322b1d;--calendar-detail:#3e3422;--calendar-fill:#c99b45;--calendar-border:#c99b45}
+[data-training-type="basketball"]{--calendar-ink:#33251e;--calendar-detail:#3d2c23;--calendar-fill:#f07848;--calendar-border:#f07848}
+[data-training-type="aerobic"]{--calendar-fill:#316579;--calendar-border:#316579}
+[data-training-type="recovery"]{--calendar-fill:#477365;--calendar-border:#477365}
+[data-training-type="assessment"]{--calendar-fill:#846043;--calendar-border:#846043}
+[data-training-type="training"]{--calendar-fill:#58664d;--calendar-border:#58664d}
+[data-training-type="readiness"]{--calendar-ink:#455e5c;--calendar-detail:#455e5c;--calendar-fill:#d8e4df;--calendar-border:#a5bdb3}
+[data-training-type="rest"]{--calendar-ink:#626358;--calendar-detail:#626358;--calendar-fill:#e6e4d9;--calendar-border:#c8c5b7}
+.monthly-day[data-training-type],.day[data-training-type]{color:var(--calendar-ink);background:var(--calendar-fill);border-color:var(--calendar-border);box-shadow:inset 0 1px 0 #ffffff30,inset 0 -3px 0 #00000016,0 3px 6px #203d3514}
+.monthly-day[data-training-type]:hover,.day[data-training-type]:hover{border-color:var(--calendar-ink)}
+.monthly-day[data-training-type] .monthly-day-number,.day[data-training-type] .day-number{color:var(--calendar-ink)}
+.monthly-day[data-training-type] .monthly-position,.day[data-training-type] .phase,.monthly-day[data-training-type] .monthly-status,.day[data-training-type] .day-status{color:var(--calendar-detail)}
+.monthly-day.cycle-start[data-training-type],.day.cycle-start[data-training-type]{outline:1px dashed var(--orange);outline-offset:2px}
+.calendar-type-label{display:block;margin-top:8px;font-size:10px;font-weight:650;line-height:1.5;color:var(--calendar-ink);overflow-wrap:anywhere}
+.monthly-day .monthly-status,.day .day-status{margin-top:5px}
+.calendar-key,.legend{gap:9px 16px;flex-wrap:wrap}
+.calendar-key>span,.legend>span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.calendar-key [data-training-type]>i,.legend [data-training-type]>i{display:inline-block;width:9px;height:9px;flex-shrink:0;border-radius:3px;background:var(--calendar-fill);border:1px solid var(--calendar-border)}
+@media(max-width:760px){.calendar-type-label{margin-top:18px;font-size:9px;line-height:1.4}.calendar-key,.legend{font-size:10px;gap:7px 12px}}
+
+/* 日期、周期和训练类型形成三层信息，内描边与底部阴影增加纸卡厚度。 */
+.monthly-day:not(.outside),.day:not(.outside){
+ min-height:122px;
+ border-radius:13px;
+ transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+.monthly-day:not(.outside)::after,.day:not(.outside)::after{
+ content:'';position:absolute;inset:3px;border:1px solid #203d3508;
+ border-radius:9px;pointer-events:none;
+}
+.monthly-day[data-training-type]::after,.day[data-training-type]::after{border-color:#ffffff20}
+.monthly-day .monthly-day-number,.day .day-number{
+ display:inline-flex;align-items:center;justify-content:center;
+ min-width:30px;height:30px;font-size:21px;line-height:1;font-weight:750;
+ font-variant-numeric:tabular-nums;letter-spacing:-.7px;
+}
+.monthly-day[data-training-type] .monthly-day-number,.day[data-training-type] .day-number{
+ border-radius:8px;background:#ffffff16;box-shadow:inset 0 1px 0 #ffffff18;
+}
+.monthly-day .monthly-position,.day .phase{
+ top:12px;right:9px;padding:2px 5px;border-radius:5px;
+ background:#203d3507;font-size:8px;font-weight:650;line-height:1.5;
+}
+.monthly-day[data-training-type] .monthly-position,.day[data-training-type] .phase{background:#ffffff14}
+.calendar-type-label{
+ margin-top:12px;padding-top:8px;border-top:1px solid #ffffff38;
+ font-size:11px;line-height:1.5;letter-spacing:.1px;
+}
+.monthly-day .monthly-status,.day .day-status{margin-top:6px;font-weight:400;line-height:1.6}
+.monthly-day[data-training-type="readiness"]::after,.day[data-training-type="readiness"]::after,
+.monthly-day[data-training-type="rest"]::after,.day[data-training-type="rest"]::after{border-color:#203d350c}
+.monthly-day:focus-within,.day:focus-within{outline:2px solid var(--orange);outline-offset:3px}
+@media(hover:hover){
+ .monthly-day:has(a):hover,.day:has(a):hover{
+  transform:translateY(-3px);
+  box-shadow:inset 0 1px 0 #ffffff30,inset 0 -3px 0 #00000016,0 7px 13px #203d3526;
+ }
+}
+@media(max-width:760px){
+ .monthly-day:not(.outside),.day:not(.outside){min-height:112px;border-radius:10px}
+ .monthly-day:not(.outside)::after,.day:not(.outside)::after{inset:2px;border-radius:7px}
+ .monthly-day .monthly-day-number,.day .day-number{min-width:24px;height:25px;font-size:17px;border-radius:6px}
+ .monthly-day .monthly-position,.day .phase{
+  position:static;display:block;width:fit-content;margin-top:5px;padding:1px 3px;font-size:7px;
+ }
+ .calendar-type-label{margin-top:7px;padding-top:6px;font-size:9px;letter-spacing:0}
+ .monthly-day .monthly-status,.day .day-status{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .monthly-day:not(.outside),.day:not(.outside){transition:none;transform:none}
+ .monthly-day:has(a):hover,.day:has(a):hover{transform:none}
+}

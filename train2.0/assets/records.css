@@ -185,3 +185,140 @@ main>.detail{margin-bottom:28px}
  html{scroll-behavior:auto}
  *,*::before,*::after{transition:none!important}
 }
+
+/* 详情内部：先读状态，再读动作与实绩，最后回看反馈。 */
+.detail-readable{padding:32px}
+.detail-cover{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:-32px -32px 28px;padding:28px 32px;background:#edf0e5;border-bottom:1px solid #d8dece;border-radius:20px 20px 0 0}
+.detail-heading{min-width:0;flex:1}
+.detail-kicker{display:flex;align-items:center;gap:9px;color:#5b7058;font-size:10px;font-weight:600;letter-spacing:1.8px;margin-bottom:12px}
+.detail-kicker:before{content:'';width:20px;height:1px;background:var(--accent)}
+.detail-cover h3{margin:0 0 15px;padding:0;font-size:25px;line-height:1.55;letter-spacing:-.7px;text-wrap:pretty}
+.detail-cover h3:before{display:none}
+.detail-cover .training-meta{margin:0;gap:7px}
+.detail-cover .training-tag{font-size:11px;background:#fffef9a8}
+.training-tag svg{width:13px;height:13px;flex-shrink:0;margin-right:5px}
+.detail-illustration{width:155px;flex-shrink:0;margin:0;transform:rotate(-3deg)}
+.detail-illustration img{display:block;width:100%;height:auto}
+.detail-cover[data-training-visual="strength"]{background:#e6ebde}
+.detail-cover[data-training-visual="upper"]{background:#ece7ee}
+.detail-cover[data-training-visual="speed"]{background:#f2ecd9}
+.detail-cover[data-training-visual="basketball"]{background:#f6eadf}
+.detail-cover[data-training-visual="recovery"]{background:#e7eee4}
+.detail-cover[data-training-visual="aerobic"]{background:#e3edf0}
+.detail-cover[data-training-visual="assessment"]{background:#eee9dd}
+.detail-readable img{max-width:100%;height:auto}
+.record-block{margin-top:30px;min-width:0}
+.record-block:first-of-type{margin-top:0}
+.detail-readable .detail-section-title{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700;letter-spacing:-.2px;border:0;padding:0;margin:0 0 18px;line-height:1.6}
+.detail-section-title svg{display:block;width:21px;height:21px;flex-shrink:0;color:#42664d}
+.record-block-power>.detail-section-title svg{color:var(--orange)}
+.record-block-attention>.detail-section-title svg{color:#8a641d}
+.detail-readable p{font-size:15px;line-height:2;color:#3b5146;max-width:80ch;margin:12px 0;letter-spacing:.1px}
+.record-prose-chunk{display:block}
+.record-prose-chunk+.record-prose-chunk{margin-top:15px}
+.record-block-note{padding:22px 24px;background:#f5f3e9;border:1px solid #e6e2d3;border-radius:16px}
+.record-block-note p:last-child{margin-bottom:0}
+.record-block>ul:not(.insight-list){padding-left:22px;margin:12px 0 0;font-size:15px;line-height:1.95;color:#3b5146;max-width:80ch}
+.record-block>ul:not(.insight-list)>li+li{margin-top:12px}
+.record-block-calendar{padding:20px 24px;border:1px dashed #cdd6c0;border-radius:16px;background:#f7f8f1}
+.record-block-calendar p:last-child{margin-bottom:0}
+.detail-readable .insight-list{gap:12px}
+.detail-readable .insight-list li{padding:16px 18px;font-size:14px;line-height:1.95}
+.detail-readable .feedback-grid{gap:14px}
+.detail-readable .feedback-card{padding:20px;border-radius:16px}
+.detail-readable .feedback-card strong{font-size:26px;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.detail-readable .feedback-card span{font-size:12px;line-height:1.9;margin-top:8px}
+.record-table{overflow:visible;border:0;border-radius:0;min-width:0}
+.record-table [hidden]{display:none!important}
+.record-view-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 12px;min-height:32px;color:var(--muted);font-size:11px}
+.record-view-toggle{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:6px 12px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:#52694b;font:inherit;font-size:12px;cursor:pointer;transition:.2s ease}
+.record-view-toggle:hover{border-color:#a7b59f;background:var(--panel-2)}
+.record-view-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.record-table.showing-table{overflow-x:auto;scrollbar-width:thin}
+.record-table.showing-table table{border:1px solid var(--line)}
+.detail-readable th{font-size:12px;padding:14px}
+.detail-readable td{font-size:14px;padding:15px 14px;line-height:1.95}
+.record-table-view{min-width:0}
+.record-table-view dl{margin:0}
+.record-table-view dt{font-size:11px;color:var(--muted);font-weight:400;line-height:1.7}
+.record-table-view dd{margin:6px 0 0;font-size:15px;color:var(--text);line-height:1.85;overflow-wrap:anywhere}
+.record-value{min-width:0;overflow-wrap:anywhere}
+.readiness-layout{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:14px;align-items:stretch}
+.readiness-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.readiness-metrics>div{padding:16px 12px;border:1px solid var(--line);background:#f7f8f1;border-radius:14px;min-width:0}
+.readiness-metrics dd{font-size:23px;font-weight:650;letter-spacing:-.6px;font-variant-numeric:tabular-nums;margin-top:12px;line-height:1.4}
+.readiness-result-card{display:grid;grid-template-columns:1.2fr 1fr;align-items:center;gap:10px;border-radius:15px;padding:18px;background:var(--text);color:var(--panel)}
+.readiness-result-card dt{color:#c0ceb5;font-size:11px}
+.readiness-result-card dd{color:var(--panel);font-size:13px}
+.readiness-result-card dd *{color:inherit!important}
+.readiness-result-card>div:first-child dd{font-size:27px;font-weight:700;letter-spacing:-1px;line-height:1.5}
+.readiness-result-card>div:last-child dd{font-weight:600}
+.detail-readable .record-block-readiness>p,.record-block-pain-note{position:relative;padding:12px 15px 12px 40px;border:1px solid #dce2d3;border-radius:12px;background:#f2f5eb}
+.detail-readable .record-block-readiness>p{margin:14px 0 0;max-width:none;font-size:12px;line-height:1.85;color:#627168;letter-spacing:0}
+.detail-readable .record-block-readiness>p:before,.record-block-pain-note:before{content:'i';position:absolute;left:14px;top:15px;display:grid;place-items:center;width:16px;height:16px;border:1px solid #8a9d83;border-radius:50%;font-size:11px;font-weight:600;font-style:normal;line-height:1;color:#6b8064}
+.detail-readable .record-block-pain-note{margin-top:14px}
+.detail-readable .record-block-pain-note>.detail-section-title{font-size:12px;font-weight:600;line-height:1.85;margin:0 0 5px;color:#52694b}
+.record-block-pain-note>.detail-section-title svg{display:none}
+.detail-readable .record-block-pain-note>p{font-size:12px;line-height:1.85;color:#627168;margin:0;max-width:none;letter-spacing:0}
+.record-block-readiness>p .record-prose-chunk+.record-prose-chunk,.record-block-pain-note .record-prose-chunk+.record-prose-chunk{margin-top:8px}
+.exercise-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:14px;align-items:start}
+.exercise-card{padding:20px;border:1px solid #dbe0d1;border-radius:16px;background:#fafbf5;min-width:0}
+.exercise-card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px}
+.exercise-card-number{display:grid;place-items:center;width:30px;min-height:30px;padding:4px;border-radius:9px;background:#e8eddf;color:#52694b;font-size:11px;font-weight:650;font-variant-numeric:tabular-nums;flex-shrink:0}
+.exercise-card h5{font-size:17px;font-weight:650;line-height:1.7;letter-spacing:-.2px;margin:0;min-width:0;overflow-wrap:anywhere}
+.exercise-card h5 strong{font-weight:650}
+.exercise-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,95px),1fr));gap:14px}
+.exercise-metrics>div{min-width:0}
+.exercise-metrics dd{font-size:15px;line-height:1.85;font-weight:600}
+.exercise-notes{border-top:1px solid #dde3d3;padding-top:14px!important;margin-top:16px!important}
+.exercise-notes>div+div{margin-top:12px}
+.exercise-notes dd{font-size:14px;font-weight:400;color:#435b4a;line-height:1.95}
+.exercise-notes .exercise-module{display:flex;align-items:baseline;flex-wrap:wrap;gap:10px}
+.exercise-module dd{margin:0;font-size:12px}
+.record-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.record-facts>div{padding:16px 18px;background:#f4f6ed;border:1px solid #dbe0d1;border-radius:13px;min-width:0}
+.record-facts dd{font-size:15px;line-height:1.9}
+@media(min-width:1100px) and (max-width:1250px){
+ .readiness-layout{grid-template-columns:minmax(0,1fr)}
+ .readiness-result-card{grid-template-columns:1fr 1fr}
+ .readiness-result-card>div{display:flex;align-items:center;justify-content:space-between;gap:12px}
+ .readiness-result-card dd{margin:0}
+}
+@media(max-width:760px){
+ .detail-readable{padding:22px 17px}
+ .detail-cover{gap:12px;padding:22px 18px;margin:-22px -17px 24px;align-items:flex-start}
+ .detail-kicker{font-size:8px;letter-spacing:1.2px;margin-bottom:10px;gap:6px}
+ .detail-kicker:before{width:12px}
+ .detail-cover h3{font-size:21px;line-height:1.65;margin-bottom:12px;letter-spacing:-.5px}
+ .detail-cover .training-meta{gap:6px}
+ .detail-cover .training-tag{font-size:10px;padding:4px 8px}
+ .detail-illustration{width:78px;margin-top:18px}
+ .detail-readable .detail-section-title{font-size:16px;gap:8px;margin-bottom:16px}
+ .detail-section-title svg{width:19px;height:19px}
+ .detail-readable p{font-size:14px;line-height:2}
+ .record-block>ul:not(.insight-list){font-size:14px;line-height:2;padding-left:18px}
+ .record-block{margin-top:27px}
+ .record-block-note,.record-block-calendar{padding:18px 16px}
+ .readiness-layout{grid-template-columns:minmax(0,1fr)}
+ .readiness-metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .readiness-metrics>div{padding:13px 12px}
+ .readiness-metrics dd{font-size:22px;margin-top:8px}
+ .readiness-result-card{grid-template-columns:1fr 1fr;grid-row:1;padding:16px 20px}
+ .readiness-result-card>div:first-child dd{font-size:30px}
+ .exercise-cards{grid-template-columns:minmax(0,1fr);gap:12px}
+ .exercise-card{padding:17px 16px}
+ .exercise-card-head{gap:10px;margin-bottom:17px}
+ .exercise-card h5{font-size:16px}
+ .exercise-metrics{grid-template-columns:repeat(auto-fit,minmax(min(100%,85px),1fr));gap:12px}
+ .exercise-metrics dd{font-size:14px}
+ .record-table-view dt{font-size:11px}
+ .exercise-notes dd{font-size:13px;line-height:1.95}
+ .record-facts{grid-template-columns:minmax(0,1fr)}
+ .record-facts dd{font-size:14px}
+ .detail-readable .feedback-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .detail-readable .feedback-card{padding:15px 12px}
+ .detail-readable .feedback-card strong{font-size:22px}
+ .detail-readable .feedback-card span{font-size:11px}
+ .detail-readable .insight-list li{font-size:13px;padding:14px 15px}
+ .record-view-toggle{min-height:40px}
+}

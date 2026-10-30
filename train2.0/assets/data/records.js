@@ -1,8 +1,10 @@
 // 本文件由 train2.0/dashboard.html 拆分而来，属于**只读展示层**；正式训练事实源见 CLAUDE.md。
 // 正式训练记录镜像（数据源：train2.0/records/YYYY-MM.md）。
 const FORMAL_MONTH={year:2026,month:'10',days:31,startOffset:3};
-const FORMAL_TODAY_READINESS={"date": "2026-10-27", "sleep": 4, "fatigue": 1, "soreness": 1, "pain": 0, "motivation": 5, "score": 96, "level": "绿色", "painNote": "训练前0/10；跳箱时右膝内侧轻微疼痛最高1/10，大部分跳跃不痛；训练后0/10；次日（10-28）待补充。训练前明确无异常；补充无肿胀、卡顿、不稳、跛行或疼痛持续加重。"};
+const FORMAL_TODAY_READINESS={"date": "2026-10-29", "sleep": 1, "fatigue": 1, "soreness": 3, "pain": 0, "motivation": 5, "score": 76, "level": "绿色", "painNote": "训练前、训练中及训练后均无痛（0/10）；次日（10-30）左右膝盖蹬伸时内外侧轻度疼痛1/10，右膝内侧最明显。训练前酸痛3/5为用户自述下肢力量训练后的腘绳肌延迟酸痛。"};
 const FORMAL_RECORDS={
+ "2026-10-29":{"status": "training", "label": "半场实战 · Ready 76 · 720 AU", "sessionLoad": 720, "maxPain": 0, "readiness": {"date": "2026-10-29", "sleep": 1, "fatigue": 1, "soreness": 3, "pain": 0, "motivation": 5, "score": 76, "level": "绿色", "painNote": "训练前、训练中及训练后均无痛（0/10）；次日（10-30）左右膝盖蹬伸时内外侧轻度疼痛1/10，右膝内侧最明显。训练前酸痛3/5为用户自述下肢力量训练后的腘绳肌延迟酸痛。"}},
+ "2026-10-28":{"status": "training", "label": "半场实战 · Ready 96 · 300 AU", "sessionLoad": 300, "maxPain": 0, "readiness": {"date": "2026-10-28", "sleep": 4, "fatigue": 1, "soreness": 1, "pain": 0, "motivation": 5, "score": 96, "level": "绿色", "painNote": "训练前、训练中及训练后均无痛（0/10）；次日（10-29）无痛（0/10）。"}},
  "2026-10-27":{"status": "training", "label": "D1 · Ready 96 · 510 AU", "sessionLoad": 510, "maxPain": 1, "readiness": {"date": "2026-10-27", "sleep": 4, "fatigue": 1, "soreness": 1, "pain": 0, "motivation": 5, "score": 96, "level": "绿色", "painNote": "训练前0/10；跳箱时右膝内侧轻微疼痛最高1/10，大部分跳跃不痛；训练后0/10；次日（10-28）待补充。训练前明确无异常；补充无肿胀、卡顿、不稳、跛行或疼痛持续加重。"}},
  "2026-10-25":{"status": "training", "label": "半场实战 · Ready 92 · 420 AU", "sessionLoad": 420, "maxPain": 1, "readiness": {"date": "2026-10-25", "sleep": 3, "fatigue": 1, "soreness": 1, "pain": 0, "motivation": 5, "score": 92, "level": "绿色", "painNote": "训练前0/10；半场实战中右膝内侧短暂1/10，触发动作及性质未记录；训练后0/10；次日（10-26）疼痛待补充"}},
  "2026-10-24":{"status": "training", "label": "D2 健身房部分 · Ready 92 · 480 AU", "sessionLoad": 480, "maxPain": 0, "readiness": {"date": "2026-10-24", "sleep": 3, "fatigue": 1, "soreness": 1, "pain": 0, "motivation": 5, "score": 92, "level": "绿色", "painNote": "训练前0/10（复用当天推荐）；训练中及训练后0/10（用户确认无痛）；次日（10-25）无痛（0/10，用户补充）"}},
